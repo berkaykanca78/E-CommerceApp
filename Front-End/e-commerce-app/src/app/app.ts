@@ -11,7 +11,7 @@ import { DataService, User } from './services';
 export class App implements OnInit {
   protected title = 'e-commerce-app';
   private readonly dataService = inject(DataService);
-  
+  public readonly currentYear = new Date().getFullYear();
   users: User[] = [];
 
   ngOnInit() {
