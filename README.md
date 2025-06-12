@@ -100,28 +100,6 @@ npm start
 
 Uygulama şu adreste çalışacak: `http://localhost:4200`
 
-## 📷 Ekran Görüntüsü Alma Rehberi
-
-README'de görüntülenen ekran görüntülerini güncellemek için:
-
-1. **Uygulamayı çalıştırın** - Hem backend hem frontend'i başlatın
-2. **Tarayıcıda açın** - `http://localhost:4200` adresine gidin
-3. **Ekran görüntüsü alın** - Her sayfanın screenshot'ını alın
-4. **Dosyaları kaydedin** - `images/` klasörüne PNG formatında kaydedin:
-   - Ana Sayfa → `homepage.png`
-   - Ürün Listesi → `product-list.png`
-   - Ürün Detayı → `product-detail.png`
-   - Sepet → `shopping-cart.png`
-   - Ödeme → `checkout.png`
-   - Kullanıcı Profili → `user-profile.png`
-   - Admin Paneli → `admin-dashboard.png`
-   - Mobil Görünüm → `mobile-view.png`
-   - Swagger API → `swagger-api.png` (localhost:5001/swagger)
-
-**Önerilen boyutlar:**
-- Desktop görünümler: 1920x1080 (800px width README'de)
-- Mobil görünüm: 375x812 (400px width README'de)
-
 ## 🛠️ Geliştirme Komutları
 
 ### Backend Komutları
