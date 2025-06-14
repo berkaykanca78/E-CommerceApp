@@ -1,1 +1,27 @@
 /* You can add global styles to this file, and also import other style files */
+.hover-card {
+    transition: transform 0.3s ease;
+  }
+  
+  .hover-card:hover {
+    transform: translateY(-5px);
+  }
+
+  /* Standart kart görsel boyutları */
+  .card-img-container {
+    height: 280px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .card-img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  /* Kategori kartları için özel yükseklik */
+  .category-card .card-img-container {
+    height: 200px;
+  }
