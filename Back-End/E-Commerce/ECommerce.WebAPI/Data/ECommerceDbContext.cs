@@ -69,7 +69,7 @@ namespace ECommerce.WebAPI.Data
                         Price = 45999.99m,
                         Stock = 50,
                         Category = "Electronics",
-                        ImageUrl = "https://example.com/images/iphone15pro.jpg",
+                        ImageUrl = "https://www.amazon.com/Apple-iPhone-15-Pro-Titanium/dp/B0CMYXFK3R",
                         IsActive = true,
                         CreatedDate = new DateTime(2024, 1, 15, 10, 0, 0)
                     },
@@ -81,7 +81,7 @@ namespace ECommerce.WebAPI.Data
                         Price = 42999.99m,
                         Stock = 30,
                         Category = "Electronics",
-                        ImageUrl = "https://example.com/images/galaxys24ultra.jpg",
+                        ImageUrl = "https://www.walmart.com/blocked?url=L2lwL1Zlcml6b24tU2Ftc3VuZy1HYWxheHktUzI0LVVsdHJhLVRpdGFuaXVtLUJsYWNrLTI1NkdCLzUzMzAxMjQ4NzY=&uuid=5f0fcf1a-48a1-11f0-99d1-cc61e3098599&vid=&g=b",
                         IsActive = true,
                         CreatedDate = new DateTime(2024, 1, 16, 14, 30, 0)
                     },
@@ -93,7 +93,7 @@ namespace ECommerce.WebAPI.Data
                         Price = 69999.99m,
                         Stock = 15,
                         Category = "Computers",
-                        ImageUrl = "https://example.com/images/macbookprom3.jpg",
+                        ImageUrl = "https://www.apple.com/newsroom/2023/09/apple-unveils-iphone-15-pro-and-iphone-15-pro-max/",
                         IsActive = true,
                         CreatedDate = new DateTime(2024, 1, 17, 9, 15, 0)
                     },
@@ -105,7 +105,7 @@ namespace ECommerce.WebAPI.Data
                         Price = 8999.99m,
                         Stock = 100,
                         Category = "Audio",
-                        ImageUrl = "https://example.com/images/airpodspro2.jpg",
+                        ImageUrl = "https://www.bare-cases.com/products/the-bare-case-for-iphone-15-pro-max",
                         IsActive = true,
                         CreatedDate = new DateTime(2024, 1, 18, 11, 45, 0)
                     },
@@ -117,7 +117,7 @@ namespace ECommerce.WebAPI.Data
                         Price = 18999.99m,
                         Stock = 25,
                         Category = "Gaming",
-                        ImageUrl = "https://example.com/images/ps5.jpg",
+                        ImageUrl = "https://www.amazon.com/Apple-iPhone-15-Pro-Titanium/dp/B0CMYXFK3R",
                         IsActive = true,
                         CreatedDate = new DateTime(2024, 1, 19, 16, 20, 0)
                     },
@@ -129,7 +129,7 @@ namespace ECommerce.WebAPI.Data
                         Price = 3499.99m,
                         Stock = 75,
                         Category = "Fashion",
-                        ImageUrl = "https://example.com/images/nikeairmax270.jpg",
+                        ImageUrl = "https://www.amazon.com/Apple-iPhone-15-Pro-Titanium/dp/B0CMYXFK3R",
                         IsActive = true,
                         CreatedDate = new DateTime(2024, 1, 20, 13, 10, 0)
                     },
@@ -141,7 +141,7 @@ namespace ECommerce.WebAPI.Data
                         Price = 24999.99m,
                         Stock = 12,
                         Category = "Electronics",
-                        ImageUrl = "https://example.com/images/samsungqledtv.jpg",
+                        ImageUrl = "https://www.amazon.com/Apple-iPhone-15-Pro-Titanium/dp/B0CMYXFK3R",
                         IsActive = true,
                         CreatedDate = new DateTime(2024, 1, 21, 8, 30, 0)
                     },
@@ -153,7 +153,7 @@ namespace ECommerce.WebAPI.Data
                         Price = 12999.99m,
                         Stock = 40,
                         Category = "Audio",
-                        ImageUrl = "https://example.com/images/bosequietcomfort45.jpg",
+                        ImageUrl = "https://www.amazon.com/Apple-iPhone-15-Pro-Titanium/dp/B0CMYXFK3R",
                         IsActive = true,
                         CreatedDate = new DateTime(2024, 1, 22, 15, 0, 0)
                     },
@@ -165,7 +165,7 @@ namespace ECommerce.WebAPI.Data
                         Price = 1299.99m,
                         Stock = 200,
                         Category = "Fashion",
-                        ImageUrl = "https://example.com/images/levis501.jpg",
+                        ImageUrl = "https://www.amazon.com/Apple-iPhone-15-Pro-Titanium/dp/B0CMYXFK3R",
                         IsActive = true,
                         CreatedDate = new DateTime(2024, 1, 23, 12, 0, 0)
                     },
@@ -177,7 +177,7 @@ namespace ECommerce.WebAPI.Data
                         Price = 15999.99m,
                         Stock = 8,
                         Category = "Home & Garden",
-                        ImageUrl = "https://example.com/images/dysonv15.jpg",
+                        ImageUrl = "https://www.amazon.com/Apple-iPhone-15-Pro-Titanium/dp/B0CMYXFK3R",
                         IsActive = true,
                         CreatedDate = new DateTime(2024, 1, 24, 10, 30, 0)
                     },
@@ -189,7 +189,7 @@ namespace ECommerce.WebAPI.Data
                         Price = 89999.99m,
                         Stock = 5,
                         Category = "Cameras",
-                        ImageUrl = "https://example.com/images/canoneosr6.jpg",
+                        ImageUrl = "https://www.amazon.com/Apple-iPhone-15-Pro-Titanium/dp/B0CMYXFK3R",
                         IsActive = true,
                         CreatedDate = new DateTime(2024, 1, 25, 14, 15, 0)
                     },
@@ -201,11 +201,12 @@ namespace ECommerce.WebAPI.Data
                         Price = 4999.99m,
                         Stock = 60,
                         Category = "Fashion",
-                        ImageUrl = "https://example.com/images/adidasultraboost.jpg",
+                        ImageUrl = "https://www.amazon.com/Apple-iPhone-15-Pro-Titanium/dp/B0CMYXFK3R",
                         IsActive = true,
                         CreatedDate = new DateTime(2024, 1, 26, 9, 45, 0)
                     }
                 );
+
             });
         }
     }

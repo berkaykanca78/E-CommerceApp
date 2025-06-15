@@ -31,9 +31,9 @@ export class ApiService {
   private log(message: string, data?: any): void {
     if (this.isBrowser() && typeof window !== 'undefined' && environment.enableLogging) {
       if (data) {
-        //console.log(message, data);
+        console.log(message, data);
       } else {
-        //console.log(message);
+        console.log(message);
       }
     }
   }
@@ -55,14 +55,9 @@ export class ApiService {
   }
 
   /**
-   * SSR sırasında dummy data döndür, browser'da gerçek istek at
+   * HTTP isteklerini çalıştır
    */
   private executeRequest<T>(requestFn: () => Observable<T>): Observable<T> {
-    if (!this.isBrowser()) {
-      // SSR sırasında sessizce boş array/object dön
-      return of([] as unknown as T);
-    }
-    
     return requestFn();
   }
 
@@ -192,7 +187,7 @@ export class ApiService {
 
     // Eğer response'da 'data' property'si varsa (wrapped response)
     if (response.hasOwnProperty('data')) {
-      //this.log('Wrapped response detected, extracting data:', response.data);
+      this.log('Wrapped response detected, extracting data:', response.data);
       return response.data;
     }
 

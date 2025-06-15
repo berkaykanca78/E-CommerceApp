@@ -45,10 +45,6 @@
     <PackageReference Include="Scalar.AspNetCore" Version="1.2.42" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
-
   <!-- Configuration-specific content files -->
   <ItemGroup Condition="'$(Configuration)' == 'Debug'">
     <Content Update="appsettings.Development.json">
@@ -79,7 +75,7 @@
     <PropertyGroup Condition="'$(Configuration)' == 'Production'">
       <ASPNETCORE_ENVIRONMENT>Production</ASPNETCORE_ENVIRONMENT>
     </PropertyGroup>
-    <Message Text="🎯 Configuration: $(Configuration) -> Environment: $(ASPNETCORE_ENVIRONMENT)" Importance="high" />
+    <Message Text="🎯 Configuration: $(Configuration) -&gt; Environment: $(ASPNETCORE_ENVIRONMENT)" Importance="high" />
   </Target>
 
 </Project>
