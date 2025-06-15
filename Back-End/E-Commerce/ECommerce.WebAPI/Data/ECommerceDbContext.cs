@@ -69,7 +69,7 @@ namespace ECommerce.WebAPI.Data
                         Price = 45999.99m,
                         Stock = 50,
                         Category = "Electronics",
-                        ImageUrl = "https://www.amazon.com/Apple-iPhone-15-Pro-Titanium/dp/B0CMYXFK3R",
+                        ImageUrl = "https://www.buseterim.com.tr/upload/default/2023/9/13/680.png",
                         IsActive = true,
                         CreatedDate = new DateTime(2024, 1, 15, 10, 0, 0)
                     },
@@ -81,7 +81,7 @@ namespace ECommerce.WebAPI.Data
                         Price = 42999.99m,
                         Stock = 30,
                         Category = "Electronics",
-                        ImageUrl = "https://www.walmart.com/blocked?url=L2lwL1Zlcml6b24tU2Ftc3VuZy1HYWxheHktUzI0LVVsdHJhLVRpdGFuaXVtLUJsYWNrLTI1NkdCLzUzMzAxMjQ4NzY=&uuid=5f0fcf1a-48a1-11f0-99d1-cc61e3098599&vid=&g=b",
+                        ImageUrl = "https://images.samsung.com/is/image/samsung/assets/tr/smartphones/galaxy-s24-ultra/buy/01_S24Ultra-Group-KV_MO_0527_final.jpg?imbypass=true",
                         IsActive = true,
                         CreatedDate = new DateTime(2024, 1, 16, 14, 30, 0)
                     },
@@ -93,7 +93,7 @@ namespace ECommerce.WebAPI.Data
                         Price = 69999.99m,
                         Stock = 15,
                         Category = "Computers",
-                        ImageUrl = "https://www.apple.com/newsroom/2023/09/apple-unveils-iphone-15-pro-and-iphone-15-pro-max/",
+                        ImageUrl = "https://www.notebookcheck-tr.com/fileadmin/_processed_/a/3/csm_IMG_1008_47c6b245b1.jpg",
                         IsActive = true,
                         CreatedDate = new DateTime(2024, 1, 17, 9, 15, 0)
                     },
@@ -105,7 +105,7 @@ namespace ECommerce.WebAPI.Data
                         Price = 8999.99m,
                         Stock = 100,
                         Category = "Audio",
-                        ImageUrl = "https://www.bare-cases.com/products/the-bare-case-for-iphone-15-pro-max",
+                        ImageUrl = "https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/MQD83",
                         IsActive = true,
                         CreatedDate = new DateTime(2024, 1, 18, 11, 45, 0)
                     },
@@ -117,7 +117,7 @@ namespace ECommerce.WebAPI.Data
                         Price = 18999.99m,
                         Stock = 25,
                         Category = "Gaming",
-                        ImageUrl = "https://www.amazon.com/Apple-iPhone-15-Pro-Titanium/dp/B0CMYXFK3R",
+                        ImageUrl = "https://cdn03.ciceksepeti.com/cicek/kcm69709524-1/XL/sony-playstation-5-slim-cdli-2.-pembedualsense-oyun-konsolu-kcm69709524-1-ebf5b4b58f924c3596c35c40ce35c862.jpg",
                         IsActive = true,
                         CreatedDate = new DateTime(2024, 1, 19, 16, 20, 0)
                     },
@@ -129,7 +129,7 @@ namespace ECommerce.WebAPI.Data
                         Price = 3499.99m,
                         Stock = 75,
                         Category = "Fashion",
-                        ImageUrl = "https://www.amazon.com/Apple-iPhone-15-Pro-Titanium/dp/B0CMYXFK3R",
+                        ImageUrl = "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/bc07f17b-640e-4ae9-b998-87b8793f5af7/air-max-270-mens-shoes-KkLcGR.png",
                         IsActive = true,
                         CreatedDate = new DateTime(2024, 1, 20, 13, 10, 0)
                     },
@@ -141,7 +141,7 @@ namespace ECommerce.WebAPI.Data
                         Price = 24999.99m,
                         Stock = 12,
                         Category = "Electronics",
-                        ImageUrl = "https://www.amazon.com/Apple-iPhone-15-Pro-Titanium/dp/B0CMYXFK3R",
+                        ImageUrl = "https://images.samsung.com/is/image/samsung/p6pim/tr/qe55q60dauxtk/gallery/tr-qled-q60d-504767-qe55q60dauxtk-541172747?$684_547_PNG$",
                         IsActive = true,
                         CreatedDate = new DateTime(2024, 1, 21, 8, 30, 0)
                     },
@@ -153,7 +153,7 @@ namespace ECommerce.WebAPI.Data
                         Price = 12999.99m,
                         Stock = 40,
                         Category = "Audio",
-                        ImageUrl = "https://www.amazon.com/Apple-iPhone-15-Pro-Titanium/dp/B0CMYXFK3R",
+                        ImageUrl = "https://static.ticimax.cloud/79/uploads/urunresimleri/buyuk/bose-quietcomfort-45-beyaz-gurultu-onl-2624-8.jpg",
                         IsActive = true,
                         CreatedDate = new DateTime(2024, 1, 22, 15, 0, 0)
                     },
@@ -165,7 +165,7 @@ namespace ECommerce.WebAPI.Data
                         Price = 1299.99m,
                         Stock = 200,
                         Category = "Fashion",
-                        ImageUrl = "https://www.amazon.com/Apple-iPhone-15-Pro-Titanium/dp/B0CMYXFK3R",
+                        ImageUrl = "https://lsco.scene7.com/is/image/lsco/005010114-front-pdp",
                         IsActive = true,
                         CreatedDate = new DateTime(2024, 1, 23, 12, 0, 0)
                     },
@@ -177,7 +177,7 @@ namespace ECommerce.WebAPI.Data
                         Price = 15999.99m,
                         Stock = 8,
                         Category = "Home & Garden",
-                        ImageUrl = "https://www.amazon.com/Apple-iPhone-15-Pro-Titanium/dp/B0CMYXFK3R",
+                        ImageUrl = "https://cdn.dsmcdn.com/ty1579/prod/QC/20241004/11/29ae1021-584f-3599-8dec-ddeccf7a0efc/1_org_zoom.jpg",
                         IsActive = true,
                         CreatedDate = new DateTime(2024, 1, 24, 10, 30, 0)
                     },
@@ -189,7 +189,7 @@ namespace ECommerce.WebAPI.Data
                         Price = 89999.99m,
                         Stock = 5,
                         Category = "Cameras",
-                        ImageUrl = "https://www.amazon.com/Apple-iPhone-15-Pro-Titanium/dp/B0CMYXFK3R",
+                        ImageUrl = "https://i1.adis.ws/i/canon/09_frontback-pro_0c048afdc81c488eb9e5592f9cccc06e",
                         IsActive = true,
                         CreatedDate = new DateTime(2024, 1, 25, 14, 15, 0)
                     },
@@ -201,7 +201,7 @@ namespace ECommerce.WebAPI.Data
                         Price = 4999.99m,
                         Stock = 60,
                         Category = "Fashion",
-                        ImageUrl = "https://www.amazon.com/Apple-iPhone-15-Pro-Titanium/dp/B0CMYXFK3R",
+                        ImageUrl = "https://cdn.modalite.net/img/bf/2f/bf2fa929-2d11-aeac-6a5d-ecbc9e83ea55.jpg",
                         IsActive = true,
                         CreatedDate = new DateTime(2024, 1, 26, 9, 45, 0)
                     }
