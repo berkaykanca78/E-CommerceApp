@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { filter } from 'rxjs/operators';
-import { DataService, User } from './services';
+import { DataService, Product, User } from './services';
 
 @Component({
   selector: 'app-root',
@@ -17,9 +17,10 @@ export class App implements OnInit {
   private readonly router = inject(Router);
   public readonly currentYear = new Date().getFullYear();
   users: User[] = [];
+  products: Product[] = [];
 
   ngOnInit() {
-    this.loadUsers();
+    //this.loadUsers();
     this.setupTitleChange();
   }
 

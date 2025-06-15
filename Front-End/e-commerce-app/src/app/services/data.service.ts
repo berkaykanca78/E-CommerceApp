@@ -14,8 +14,12 @@ export interface Product {
   name: string;
   description: string;
   price: number;
-  category: string;
   stock: number;
+  category?: string;
+  imageUrl?: string;
+  isActive: boolean;
+  createdDate: string;  // ISO date string
+  updatedDate?: string; // ISO date string, optional
 }
 
 @Injectable({
@@ -47,23 +51,23 @@ export class DataService {
 
   // Product endpoints
   getProducts(params?: { category?: string; search?: string; page?: number; limit?: number }): Observable<Product[]> {
-    return this.apiService.get<Product[]>('/products', params);
+    return this.apiService.get<Product[]>('/Product', params);
   }
 
   getProduct(id: number): Observable<Product> {
-    return this.apiService.get<Product>(`/products/${id}`);
+    return this.apiService.get<Product>(`/Product/${id}`);
   }
 
-  createProduct(product: Omit<Product, 'id'>): Observable<Product> {
-    return this.apiService.post<Product>('/products', product);
+  createProduct(product: Omit<Product, 'id' | 'createdDate' | 'updatedDate'>): Observable<Product> {
+    return this.apiService.post<Product>('/Product', product);
   }
 
-  updateProduct(id: number, product: Partial<Product>): Observable<Product> {
-    return this.apiService.put<Product>(`/products/${id}`, product);
+  updateProduct(id: number, product: Partial<Omit<Product, 'id' | 'createdDate'>>): Observable<Product> {
+    return this.apiService.put<Product>(`/Product/${id}`, { ...product, id });
   }
 
   deleteProduct(id: number): Observable<void> {
-    return this.apiService.delete<void>(`/products/${id}`);
+    return this.apiService.delete<void>(`/Product/${id}`);
   }
 
   // Auth endpoints

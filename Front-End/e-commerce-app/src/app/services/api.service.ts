@@ -31,9 +31,9 @@ export class ApiService {
   private log(message: string, data?: any): void {
     if (this.isBrowser() && typeof window !== 'undefined' && environment.enableLogging) {
       if (data) {
-        console.log(message, data);
+        //console.log(message, data);
       } else {
-        console.log(message);
+        //console.log(message);
       }
     }
   }
