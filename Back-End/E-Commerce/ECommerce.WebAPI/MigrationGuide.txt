@@ -1,0 +1,8 @@
+﻿# Database update
+$env:ASPNETCORE_ENVIRONMENT="Release"; dotnet ef database update
+
+# Yeni migration
+$env:ASPNETCORE_ENVIRONMENT="Release"; dotnet ef migrations add YeniMigrationAdi
+
+# Migration listesi
+$env:ASPNETCORE_ENVIRONMENT="Release"; dotnet ef migrations list
