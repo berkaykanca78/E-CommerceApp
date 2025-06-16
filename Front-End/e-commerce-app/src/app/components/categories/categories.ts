@@ -1,29 +1,27 @@
 import { ChangeDetectorRef, Component, inject, signal } from '@angular/core';
-import { Category, DataService, Product } from '../../services';
+import { Category, DataService } from '../../services';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-categories',
   imports: [CommonModule],
-  templateUrl: './home.html',
-  styleUrl: './home.scss'
+  templateUrl: './categories.html',
+  styleUrl: './categories.scss'
 })
-export class Home {
-  products = signal<Product[]>([]);
+export class Categories {
   categories = signal<Category[]>([]);
   private readonly dataService = inject(DataService);
   private readonly cdr = inject(ChangeDetectorRef);
 
   ngOnInit() {
     this.loadCategories();
-    this.loadProducts();
   }
 
   private loadCategories(): void {
     this.dataService.getCategories().subscribe({
       next: (categories) => {
         if (categories && categories.length > 0) {
-          this.categories.set(categories.slice(0, 4));
+          this.categories.set(categories);
         }
       },
       error: (error) => {
@@ -32,26 +30,7 @@ export class Home {
     });
   }
 
-  private loadProducts(): void {
-    this.dataService.getProducts().subscribe({
-      next: (products) => {
-        if (products && products.length > 0) {
-          this.products.set(products.slice(0, 4));
-        }
-      },
-      error: (error) => {
-        console.error('Error loading products:', error);
-      }
-    });
-  }
-
-  trackByProductId = (index: number, product: Product): number => {
-    return product.id;
-  }
-
   trackByCategoryId = (index: number, category: Category): number => {
     return category.id;
   }
-
-
 }

@@ -4,6 +4,7 @@ using ECommerce.WebAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECommerce.WebAPI.Migrations
 {
     [DbContext(typeof(ECommerceDbContext))]
-    partial class ECommerceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250616210237_AddCategories")]
+    partial class AddCategories
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,10 +43,6 @@ namespace ECommerce.WebAPI.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<string>("ImageUrl")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -67,7 +66,6 @@ namespace ECommerce.WebAPI.Migrations
                             Id = 1,
                             CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Electronic devices and gadgets",
-                            ImageUrl = "https://images.unsplash.com/photo-1550009158-9ebf69173e03?q=80&w=1000",
                             IsActive = true,
                             Name = "Electronics"
                         },
@@ -76,7 +74,6 @@ namespace ECommerce.WebAPI.Migrations
                             Id = 2,
                             CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Computers and accessories",
-                            ImageUrl = "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1000",
                             IsActive = true,
                             Name = "Computers"
                         },
@@ -85,7 +82,6 @@ namespace ECommerce.WebAPI.Migrations
                             Id = 3,
                             CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Audio devices and accessories",
-                            ImageUrl = "https://images.unsplash.com/photo-1545127398-14699f92334b?q=80&w=1000",
                             IsActive = true,
                             Name = "Audio"
                         },
@@ -94,7 +90,6 @@ namespace ECommerce.WebAPI.Migrations
                             Id = 4,
                             CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Gaming consoles and accessories",
-                            ImageUrl = "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1000",
                             IsActive = true,
                             Name = "Gaming"
                         },
@@ -103,7 +98,6 @@ namespace ECommerce.WebAPI.Migrations
                             Id = 5,
                             CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Clothing and fashion accessories",
-                            ImageUrl = "https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=1000",
                             IsActive = true,
                             Name = "Fashion"
                         },
@@ -112,7 +106,6 @@ namespace ECommerce.WebAPI.Migrations
                             Id = 6,
                             CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Home and garden products",
-                            ImageUrl = "https://images.unsplash.com/photo-1484154218962-a197022b5858?q=80&w=1000",
                             IsActive = true,
                             Name = "Home & Garden"
                         },
@@ -121,7 +114,6 @@ namespace ECommerce.WebAPI.Migrations
                             Id = 7,
                             CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Cameras and photography equipment",
-                            ImageUrl = "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=1000",
                             IsActive = true,
                             Name = "Cameras"
                         });

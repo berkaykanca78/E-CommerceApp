@@ -22,8 +22,12 @@ namespace ECommerce.WebAPI.Entities
         [Required]
         public int Stock { get; set; }
 
-        [StringLength(100)]
-        public string? Category { get; set; }
+        // Foreign key for Category
+        public int? CategoryId { get; set; }
+
+        // Navigation property
+        [ForeignKey("CategoryId")]
+        public virtual Category? Category { get; set; }
 
         [StringLength(500)]
         public string? ImageUrl { get; set; }

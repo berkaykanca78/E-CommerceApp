@@ -22,6 +22,16 @@ export interface Product {
   updatedDate?: string; // ISO date string, optional
 }
 
+export interface Category {
+  id: number;
+  name: string;
+  description: string;
+  imageUrl?: string;
+  isActive: boolean;
+  createdDate: string;
+  updatedDate?: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -68,6 +78,11 @@ export class DataService {
 
   deleteProduct(id: number): Observable<void> {
     return this.apiService.delete<void>(`/Product/${id}`);
+  }
+
+  // Category endpoints
+  getCategories(): Observable<Category[]> {
+    return this.apiService.get<Category[]>('/Category');
   }
 
   // Auth endpoints
