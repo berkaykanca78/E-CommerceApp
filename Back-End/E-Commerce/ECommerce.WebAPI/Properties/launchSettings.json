@@ -16,7 +16,7 @@
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "api/info",
-      "applicationUrl": "http://localhost:5213",
+      "applicationUrl": "http://localhost:5212",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Release"
       }
