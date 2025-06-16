@@ -104,7 +104,6 @@ app.MapGet("/api/info", () => new
     Environment = app.Environment.EnvironmentName,
     ApplicationName = builder.Configuration["ApplicationSettings:ApplicationName"],
     Version = builder.Configuration["ApplicationSettings:Version"],
-    IsProduction = app.Environment.IsProduction(),
     IsDevelopment = app.Environment.IsDevelopment()
 }).WithTags("System").WithSummary("Get application environment information");
 
