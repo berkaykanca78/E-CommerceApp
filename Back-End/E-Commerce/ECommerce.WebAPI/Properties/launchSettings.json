@@ -21,16 +21,6 @@
         "ASPNETCORE_ENVIRONMENT": "Release"
       }
     },
-    "Production": {
-      "commandName": "Project",
-      "dotnetRunMessages": true,
-      "launchBrowser": true,
-      "launchUrl": "api/info",
-      "applicationUrl": "https://localhost:7001",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Production"
-      }
-    },
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,

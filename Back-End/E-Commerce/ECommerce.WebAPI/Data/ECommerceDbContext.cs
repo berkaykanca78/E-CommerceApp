@@ -136,7 +136,7 @@ namespace ECommerce.WebAPI.Data
                 
                 entity.Property(e => e.Price)
                     .IsRequired()
-                    .HasColumnType("decimal(18,2)");
+                    .HasPrecision(18, 2);
                 
                 entity.Property(e => e.Stock)
                     .IsRequired();
