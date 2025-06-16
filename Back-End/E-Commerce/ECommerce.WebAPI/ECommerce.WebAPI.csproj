@@ -24,15 +24,6 @@
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
 
-  <!-- Production Configuration = Production Environment -->
-  <PropertyGroup Condition="'$(Configuration)' == 'Production'">
-    <EnvironmentName>Production</EnvironmentName>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugSymbols>false</DebugSymbols>
-    <DebugType>none</DebugType>
-  </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
@@ -58,12 +49,6 @@
     </Content>
   </ItemGroup>
 
-  <ItemGroup Condition="'$(Configuration)' == 'Production'">
-    <Content Update="appsettings.Production.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
   <!-- Set ASPNETCORE_ENVIRONMENT based on Configuration -->
   <Target Name="SetEnvironmentVariable" BeforeTargets="Build">
     <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
@@ -71,9 +56,6 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)' == 'Release'">
       <ASPNETCORE_ENVIRONMENT>Release</ASPNETCORE_ENVIRONMENT>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)' == 'Production'">
-      <ASPNETCORE_ENVIRONMENT>Production</ASPNETCORE_ENVIRONMENT>
     </PropertyGroup>
     <Message Text="🎯 Configuration: $(Configuration) -&gt; Environment: $(ASPNETCORE_ENVIRONMENT)" Importance="high" />
   </Target>
