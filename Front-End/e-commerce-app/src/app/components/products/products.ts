@@ -1,36 +1,56 @@
 import { Component, inject, OnInit, ChangeDetectorRef, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DataService, Product } from '../../services';
+import { Product } from '../../services';
+import { ProductService } from '../../services/product.service';
+import { PaginationComponent } from '../shared/pagination/pagination.';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-products',
-  imports: [CommonModule],
+  imports: [CommonModule, PaginationComponent],
   templateUrl: './products.html',
   styleUrl: './products.scss'
 })
 export class Products implements OnInit {
   products = signal<Product[]>([]);
-  private readonly dataService = inject(DataService);
+  currentPage = 1;
+  pageSize = 4;
+  totalPages = 1;
+  hasNextPage = false;
+  hasPreviousPage = false;
+  searchTerm = '';
+  private readonly productService = inject(ProductService);
   private readonly cdr = inject(ChangeDetectorRef);
+  private searchSubject = new Subject<string>();
+
 
   ngOnInit() {
     this.loadProducts();
   }
 
   private loadProducts(): void {
-    this.dataService.getProducts().subscribe({
-      next: (products) => {
-        if (products && products.length > 0) {
-          this.products.set(products);
-        }
-      },
-      error: (error) => {
-        console.error('Error loading products:', error);
+    this.productService.getProducts(this.currentPage, this.pageSize, this.searchTerm)
+    .subscribe(response => {
+      if (response && response.items.length > 0) {
+        this.products.set(response.items);
       }
+      this.totalPages = response.totalPages;
+      this.hasNextPage = response.hasNextPage;
+      this.hasPreviousPage = response.hasPreviousPage;
     });
   }
 
   trackByProductId = (index: number, product: Product): number => {
     return product.id;
+  }
+
+  onSearch(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    this.searchSubject.next(value);
+  }
+
+  onPageChange(page: number) {
+    this.currentPage = page;
+    this.loadProducts();
   }
 }

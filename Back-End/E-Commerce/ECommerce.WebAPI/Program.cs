@@ -1,4 +1,5 @@
 using ECommerce.WebAPI.Data;
+using ECommerce.WebAPI.Services;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using System.Text.Json;
@@ -43,6 +44,10 @@ builder.Services.AddDbContext<ECommerceDbContext>(options =>
         options.LogTo(Console.WriteLine, LogLevel.Information);
     }
 });
+
+// Register services
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 // CORS configuration - Environment-specific origins
 var corsOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() 

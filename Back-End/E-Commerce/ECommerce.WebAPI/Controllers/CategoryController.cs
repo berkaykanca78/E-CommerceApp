@@ -1,7 +1,7 @@
-using ECommerce.WebAPI.Data;
 using ECommerce.WebAPI.Entities;
+using ECommerce.WebAPI.Models;
+using ECommerce.WebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce.WebAPI.Controllers
 {
@@ -9,18 +9,21 @@ namespace ECommerce.WebAPI.Controllers
     [Route("api/[controller]")]
     public class CategoryController : ControllerBase
     {
-        private readonly ECommerceDbContext _context;
+        private readonly ICategoryService _categoryService;
 
-        public CategoryController(ECommerceDbContext context)
+        public CategoryController(ICategoryService categoryService)
         {
-            _context = context;
+            _categoryService = categoryService;
         }
 
         // GET: api/Category
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+        public async Task<ActionResult<PaginationModel<Category>>> GetCategories(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 4)
         {
-            return await _context.Categories.Where(p => p.IsActive).ToListAsync();
+            var result = await _categoryService.GetPaginatedCategoriesAsync(pageNumber, pageSize);
+            return Ok(result);
         }
     }
 } 

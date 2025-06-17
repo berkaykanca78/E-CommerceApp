@@ -1,5 +1,7 @@
 using ECommerce.WebAPI.Data;
 using ECommerce.WebAPI.Entities;
+using ECommerce.WebAPI.Models;
+using ECommerce.WebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,17 +12,23 @@ namespace ECommerce.WebAPI.Controllers
     public class ProductController : ControllerBase
     {
         private readonly ECommerceDbContext _context;
+        private readonly IProductService _productService;
 
-        public ProductController(ECommerceDbContext context)
+        public ProductController(ECommerceDbContext context, IProductService productService)
         {
             _context = context;
+            _productService = productService;
         }
 
         // GET: api/Product
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<ActionResult<PaginationModel<Product>>> GetProducts(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 4,
+            [FromQuery] string? searchTerm = null)
         {
-            return await _context.Products.Where(p => p.IsActive).ToListAsync();
+            var result = await _productService.GetPaginatedProductsAsync(pageNumber, pageSize, searchTerm);
+            return Ok(result);
         }
 
         // GET: api/Product/5
