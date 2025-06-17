@@ -1,10 +1,72 @@
 <section class="py-5 bg-light">
   <div class="container mt-4">
     <div class="row">
-      <div class="col-12">
-        <h1 class="text-center mb-4">Products</h1>
+      <!-- Filter Sidebar -->
+      <div class="col-lg-3">
+        <div class="card shadow-sm mb-4">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Filters</h5>
+          </div>
+          <div class="card-body">
+            <nav class="nav flex-column">
+              <!-- Categories -->
+              <div class="mb-3">
+                <h6 class="fw-bold">Categories</h6>
+                <div class="nav flex-column">
+                  <a class="nav-link" href="#">Electronics</a>
+                  <a class="nav-link" href="#">Clothing</a>
+                  <a class="nav-link" href="#">Books</a>
+                  <a class="nav-link" href="#">Home & Garden</a>
+                </div>
+              </div>
+              
+              <!-- Price Range -->
+              <div class="mb-3">
+                <h6 class="fw-bold">Price Range</h6>
+                <div class="nav flex-column">
+                  <a class="nav-link" href="#">Under $50</a>
+                  <a class="nav-link" href="#">$50 - $100</a>
+                  <a class="nav-link" href="#">$100 - $200</a>
+                  <a class="nav-link" href="#">Over $200</a>
+                </div>
+              </div>
+
+              <!-- Ratings -->
+              <div class="mb-3">
+                <h6 class="fw-bold">Ratings</h6>
+                <div class="nav flex-column">
+                  <a class="nav-link" href="#">
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                  </a>
+                  <a class="nav-link" href="#">
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="far fa-star text-warning"></i>
+                  </a>
+                  <a class="nav-link" href="#">
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="far fa-star text-warning"></i>
+                    <i class="far fa-star text-warning"></i>
+                  </a>
+                </div>
+              </div>
+            </nav>
+          </div>
+        </div>
+      </div>
+
+      <!-- Products Grid -->
+      <div class="col-lg-9">
         <div class="row g-4">
-          <div class="col-lg-3 col-md-4 col-sm-6" *ngFor="let product of products(); trackBy: trackByProductId">
+          <div class="col-lg-6 col-md-6 col-sm-12" *ngFor="let product of products(); trackBy: trackByProductId">
             <div class="card h-100 shadow-sm hover-card">
               <div class="badge bg-danger position-absolute top-0 end-0 m-2 z-1">Sale</div>
               <div class="card-img-container">
@@ -30,10 +92,10 @@
             </div>
           </div>
         </div>
+        <app-pagination [currentPage]="currentPage" [totalPages]="totalPages" [hasPreviousPage]="hasPreviousPage"
+          [hasNextPage]="hasNextPage" (pageChange)="onPageChange($event)">
+        </app-pagination>
       </div>
     </div>
-    <app-pagination [currentPage]="currentPage" [totalPages]="totalPages" [hasPreviousPage]="hasPreviousPage"
-    [hasNextPage]="hasNextPage" (pageChange)="onPageChange($event)">
-  </app-pagination>
   </div>
 </section>

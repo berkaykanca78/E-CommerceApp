@@ -21,13 +21,14 @@ namespace ECommerce.WebAPI.Services
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
                 searchTerm = searchTerm.ToLower();
-                query = query.Where(p => 
-                    p.Name.ToLower().Contains(searchTerm) || 
+                query = query.Where(p =>
+                    p.Name.ToLower().Contains(searchTerm) ||
                     p.Description.ToLower().Contains(searchTerm));
             }
 
             var totalItems = await query.CountAsync();
             var items = await query
+                .OrderByDescending(p => p.CreatedDate)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -40,6 +41,34 @@ namespace ECommerce.WebAPI.Services
                 PageSize = pageSize,
                 TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize)
             };
+        }
+
+        public async Task<List<Product>> SearchProductsAsync(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+                return await _context.Products
+                    .Include(p => p.Category)
+                    .Where(p => p.IsActive)
+                    .ToListAsync();
+
+            return await _context.Products
+                .Include(p => p.Category)
+                .Where(p => p.IsActive &&
+                    (p.Name.Contains(query) ||
+                     p.Description.Contains(query)))
+                .ToListAsync();
+        }
+
+        public async Task<Product> GetProductAsync(int id)
+        {
+            Product? product = await _context.Products
+                .Include(p => p.Category)
+                .FirstOrDefaultAsync(p => p.Id == id && p.IsActive);
+            if (product == null)
+            {
+                throw new KeyNotFoundException($"Product with ID {id} not found.");
+            }
+            return product;
         }
     }
 } 

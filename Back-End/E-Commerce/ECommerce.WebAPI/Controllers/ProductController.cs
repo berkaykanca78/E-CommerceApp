@@ -20,6 +20,30 @@ namespace ECommerce.WebAPI.Controllers
             _productService = productService;
         }
 
+        // GET: api/Product/search?query=keyword
+        [HttpGet("search")]
+        public async Task<ActionResult<ApiResponse<List<Product>>>> Search([FromQuery] string? query)
+        {
+            try
+            {
+                var products = await _productService.SearchProductsAsync(query ?? string.Empty);
+                return Ok(new ApiResponse<List<Product>>
+                {
+                    Success = true,
+                    Data = products,
+                    Message = "Products retrieved successfully."
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<List<Product>>
+                {
+                    Success = false,
+                    Error = "An error occurred while searching products: " + ex.Message
+                });
+            }
+        }
+
         // GET: api/Product
         [HttpGet]
         public async Task<ActionResult<PaginationModel<Product>>> GetProducts(
@@ -27,22 +51,16 @@ namespace ECommerce.WebAPI.Controllers
             [FromQuery] int pageSize = 4,
             [FromQuery] string? searchTerm = null)
         {
-            var result = await _productService.GetPaginatedProductsAsync(pageNumber, pageSize, searchTerm);
+            PaginationModel<Product> result = await _productService.GetPaginatedProductsAsync(pageNumber, pageSize, searchTerm);
             return Ok(result);
         }
 
         // GET: api/Product/5
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            var product = await _context.Products.FindAsync(id);
-
-            if (product == null || !product.IsActive)
-            {
-                return NotFound();
-            }
-
-            return product;
+            Product result = await _productService.GetProductAsync(id);
+            return Ok(result);
         }
 
         // POST: api/Product
@@ -57,7 +75,7 @@ namespace ECommerce.WebAPI.Controllers
         }
 
         // PUT: api/Product/5
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> PutProduct(int id, Product product)
         {
             if (id != product.Id)
@@ -88,7 +106,7 @@ namespace ECommerce.WebAPI.Controllers
         }
 
         // DELETE: api/Product/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
             var product = await _context.Products.FindAsync(id);

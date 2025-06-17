@@ -13,7 +13,7 @@ namespace ECommerce.WebAPI.Entities
         public string Name { get; set; } = string.Empty;
 
         [StringLength(1000)]
-        public string? Description { get; set; }
+        public string Description { get; set; } = string.Empty;
 
         [Required]
         [Column(TypeName = "decimal(18,2)")]
@@ -23,14 +23,14 @@ namespace ECommerce.WebAPI.Entities
         public int Stock { get; set; }
 
         // Foreign key for Category
-        public int? CategoryId { get; set; }
+        public int CategoryId { get; set; }
 
         // Navigation property
         [ForeignKey("CategoryId")]
-        public virtual Category? Category { get; set; }
+        public virtual Category Category { get; set; }
 
         [StringLength(500)]
-        public string? ImageUrl { get; set; }
+        public string ImageUrl { get; set; } = string.Empty;
 
         public bool IsActive { get; set; } = true;
 

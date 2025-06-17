@@ -18,6 +18,7 @@ namespace ECommerce.WebAPI.Services
         {
             var totalItems = await _context.Categories.CountAsync();
             var items = await _context.Categories
+                .OrderByDescending(p => p.CreatedDate)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();

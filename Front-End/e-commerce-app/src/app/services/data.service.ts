@@ -64,6 +64,10 @@ export class DataService {
     return this.apiService.get<Product[]>('/Product', params);
   }
 
+  searchProducts(query: string): Observable<Product[]> {
+    return this.apiService.get<Product[]>('/Product/search', { query });
+  }
+
   getProduct(id: number): Observable<Product> {
     return this.apiService.get<Product>(`/Product/${id}`);
   }

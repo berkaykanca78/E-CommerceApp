@@ -1,61 +1,66 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { Product, Category } from './services/data.service';
+import { signal } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { filter } from 'rxjs/operators';
-import { DataService, Product, User } from './services';
+import { Product as ProductService } from './services/product';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  standalone: true,
+  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, FormsModule],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
 export class App implements OnInit {
   protected title = 'e-commerce-app';
-  private readonly dataService = inject(DataService);
   private readonly titleService = inject(Title);
   private readonly router = inject(Router);
-  public readonly currentYear = new Date().getFullYear();
-  users: User[] = [];
-  products: Product[] = [];
+  private readonly productService = inject(ProductService);
+  searchQuery: string = '';
+  public products = signal<Product[]>([]);
+  public categories = signal<Category[]>([]);
+  currentYear = new Date().getFullYear();
 
   ngOnInit() {
-    //this.loadUsers();
     this.setupTitleChange();
   }
 
-  private setupTitleChange(): void {
-    this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe((event: NavigationEnd) => {
-        this.updateTitle(event.urlAfterRedirects);
-      });
-    
-    // İlk sayfa yüklendiğinde title'ı ayarla
-    this.updateTitle(this.router.url);
-  }
-
-  private updateTitle(url: string): void {
-    let pageTitle = 'E-Ticaret';
-    
-    if (url.includes('/home') || url === '/') {
-      pageTitle = 'Ana Sayfa - E-Ticaret';
-    } else if (url.includes('/products')) {
-      pageTitle = 'Ürünler - E-Ticaret';
-    }
-    
-    this.titleService.setTitle(pageTitle);
-  }
-
-  private loadUsers(): void {
-    this.dataService.getUsers().subscribe({
-      next: (users) => {
-        this.users = users;
-        console.log('Kullanıcılar yüklendi:', users);
-      },
-      error: (error) => {
-        console.error('Kullanıcılar yüklenirken hata oluştu:', error);
-      }
+  private setupTitleChange() {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      const title = this.getPageTitle();
+      this.titleService.setTitle(title);
     });
+  }
+
+  private getPageTitle(): string {
+    const path = this.router.url.split('/')[1];
+    return path ? `${path.charAt(0).toUpperCase() + path.slice(1)} - E-Commerce Store` : 'E-Commerce Store';
+  }
+
+  searchProducts(): void {
+    const query = this.searchQuery.trim();
+    if (query) {
+      this.productService.searchProducts(query).subscribe({
+        next: (products) => {
+          if (products && products.data["$values"].length > 0) {
+            console.log('Search Products:', products.data["$values"]);
+            this.products.set(products.data["$values"]);
+            this.router.navigate(['/products'], { queryParams: { search: query } });
+          }
+        },
+        error: (error) => {
+          console.error('Error searching products:', error);
+        }
+      });
+    } else {
+      this.router.navigate(['/products']);
+    }
   }
 }
