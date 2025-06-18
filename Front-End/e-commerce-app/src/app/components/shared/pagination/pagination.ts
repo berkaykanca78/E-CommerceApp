@@ -11,10 +11,10 @@ import { FormsModule } from '@angular/forms';
       <div class="d-flex align-items-center">
         <span class="me-2">Show</span>
         <select class="form-select form-select-sm" style="width: 70px" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
-          <option [value]="4">4</option>
-          <option [value]="8">8</option>
+          <option [value]="3">3</option>
+          <option [value]="6">6</option>
+          <option [value]="9">9</option>
           <option [value]="12">12</option>
-          <option [value]="16">16</option>
         </select>
         <span class="ms-2">entries</span>
       </div>

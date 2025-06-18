@@ -18,7 +18,7 @@ export class Products implements OnInit, OnChanges {
   categories = signal<Category[]>([]);
   selectedCategory: number | null = null;
   currentPage = 1;
-  pageSize = 4;
+  pageSize = 3;
   totalItems = 0;
   totalPages = 0;
   hasNextPage = false;
