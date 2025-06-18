@@ -1,5 +1,5 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
-import { Category, Product } from '../../services';
+import { Category, Product } from '../../models';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Product as ProductService } from '../../services/product';
@@ -49,8 +49,8 @@ export class Home implements OnInit {
   private loadCategories() {
     this.categoryService.getCategories(this.currentPage, this.pageSize)
       .subscribe(response => {
-        if (response && response.items["$values"].length > 0) {
-          this.categories.set(response.items["$values"]);
+        if (response && response["$values"].length > 0) {
+          this.categories.set(response["$values"].slice(0, 4));
         }
       });
   }

@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, inject, signal } from '@angular/core';
-import { Category, DataService } from '../../services';
+import { Category } from '../../models';
 import { CommonModule } from '@angular/common';
+import { Category as CategoryService } from '../../services/category';
 
 @Component({
   selector: 'app-categories',
@@ -10,7 +11,7 @@ import { CommonModule } from '@angular/common';
 })
 export class Categories {
   categories = signal<Category[]>([]);
-  private readonly dataService = inject(DataService);
+  private readonly dataService = inject(CategoryService);
   private readonly cdr = inject(ChangeDetectorRef);
 
   ngOnInit() {
@@ -18,10 +19,10 @@ export class Categories {
   }
 
   private loadCategories(): void {
-    this.dataService.getCategories().subscribe({
-      next: (categories) => {
-        if (categories && categories.length > 0) {
-          this.categories.set(categories);
+    this.dataService.getCategories(1, 10).subscribe({
+      next: (response) => {
+        if (response && response["$values"].length > 0) {
+          this.categories.set(response["$values"]);
         }
       },
       error: (error) => {

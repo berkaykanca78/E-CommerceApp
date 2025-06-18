@@ -1,7 +1,8 @@
-using ECommerce.WebAPI.Entities;
-using ECommerce.WebAPI.Models;
-using ECommerce.WebAPI.Services;
+using ECommerce.WebAPI.Data;
+using ECommerce.WebAPI.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace ECommerce.WebAPI.Controllers
 {
@@ -9,21 +10,42 @@ namespace ECommerce.WebAPI.Controllers
     [Route("api/[controller]")]
     public class CategoryController : ControllerBase
     {
-        private readonly ICategoryService _categoryService;
+        private readonly ECommerceDbContext _context;
+        private readonly ILogger<CategoryController> _logger;
 
-        public CategoryController(ICategoryService categoryService)
+        public CategoryController(ECommerceDbContext context, ILogger<CategoryController> logger)
         {
-            _categoryService = categoryService;
+            _context = context;
+            _logger = logger;
         }
 
-        // GET: api/Category
         [HttpGet]
-        public async Task<ActionResult<PaginationModel<Category>>> GetCategories(
-            [FromQuery] int pageNumber = 1,
-            [FromQuery] int pageSize = 4)
+        [ProducesResponseType(typeof(List<CategoryDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<List<CategoryDto>>> GetCategories()
         {
-            var result = await _categoryService.GetPaginatedCategoriesAsync(pageNumber, pageSize);
-            return Ok(result);
+            try
+            {
+                _logger.LogInformation("Getting all categories");
+                
+                var categories = await _context.Categories
+                    .Where(c => c.IsActive)
+                    .Select(c => new CategoryDto
+                    {
+                        Id = c.Id,
+                        Name = c.Name,
+                        Description = c.Description,
+                        ImageUrl = c.ImageUrl,
+                    })
+                    .ToListAsync();
+
+                return Ok(categories);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting categories");
+                return StatusCode(500, "An error occurred while retrieving categories");
+            }
         }
     }
 } 

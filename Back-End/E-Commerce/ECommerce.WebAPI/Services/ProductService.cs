@@ -1,6 +1,8 @@
 using ECommerce.WebAPI.Data;
 using ECommerce.WebAPI.Entities;
+using ECommerce.WebAPI.Helpers;
 using ECommerce.WebAPI.Models;
+using ECommerce.WebAPI.Models.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce.WebAPI.Services
@@ -14,61 +16,87 @@ namespace ECommerce.WebAPI.Services
             _context = context;
         }
 
-        public async Task<PaginationModel<Product>> GetPaginatedProductsAsync(int pageNumber, int pageSize, string? searchTerm = null)
+        public async Task<PaginatedResult<ProductDto>> GetProductsAsync(int page, int pageSize, string searchTerm = "")
         {
-            var query = _context.Products.AsQueryable();
+            var query = _context.Products
+                .Include(p => p.Category)
+                .Where(p => p.IsActive);
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                searchTerm = searchTerm.ToLower();
-                query = query.Where(p =>
-                    p.Name.ToLower().Contains(searchTerm) ||
-                    p.Description.ToLower().Contains(searchTerm));
+                query = query.Where(p => 
+                    p.Name.Contains(searchTerm) || 
+                    p.Description.Contains(searchTerm));
             }
 
-            var totalItems = await query.CountAsync();
-            var items = await query
-                .OrderByDescending(p => p.CreatedDate)
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
+            query = query.OrderByDescending(p => p.CreatedDate);
 
-            return new PaginationModel<Product>
+            var paginatedQuery = query.Select(p => new ProductDto
             {
-                Items = items,
-                TotalItems = totalItems,
-                PageNumber = pageNumber,
-                PageSize = pageSize,
-                TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize)
-            };
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Price = p.Price,
+                Stock = p.Stock,
+                CategoryId = p.CategoryId,
+                Category = p.Category != null ? new CategoryDto
+                {
+                    Id = p.Category.Id,
+                    Name = p.Category.Name,
+                    Description = p.Category.Description
+                } : null,
+                ImageUrl = p.ImageUrl,
+                IsActive = p.IsActive,
+                CreatedDate = p.CreatedDate,
+                UpdatedDate = p.UpdatedDate
+            });
+
+            return await PaginationHelper.CreatePaginatedResult(paginatedQuery, page, pageSize);
+        }
+
+        public async Task<PaginatedResult<ProductDto>> GetProductsByCategoryAsync(int categoryId, int page, int pageSize)
+        {
+            var query = _context.Products
+                .Include(p => p.Category)
+                .Where(p => p.CategoryId == categoryId && p.IsActive);
+
+            var paginatedQuery = query.Select(p => new ProductDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Price = p.Price,
+                Stock = p.Stock,
+                CategoryId = p.CategoryId,
+                Category = p.Category != null ? new CategoryDto
+                {
+                    Id = p.Category.Id,
+                    Name = p.Category.Name,
+                    Description = p.Category.Description
+                } : null,
+                ImageUrl = p.ImageUrl,
+                IsActive = p.IsActive,
+                CreatedDate = p.CreatedDate,
+                UpdatedDate = p.UpdatedDate
+            });
+
+            return await PaginationHelper.CreatePaginatedResult(paginatedQuery, page, pageSize);
         }
 
         public async Task<List<Product>> SearchProductsAsync(string query)
         {
-            if (string.IsNullOrWhiteSpace(query))
-                return await _context.Products
-                    .Include(p => p.Category)
-                    .Where(p => p.IsActive)
-                    .ToListAsync();
-
             return await _context.Products
                 .Include(p => p.Category)
-                .Where(p => p.IsActive &&
-                    (p.Name.Contains(query) ||
-                     p.Description.Contains(query)))
+                .Where(p => p.IsActive && 
+                    (p.Name.Contains(query) || p.Description.Contains(query)))
                 .ToListAsync();
         }
 
         public async Task<Product> GetProductAsync(int id)
         {
-            Product? product = await _context.Products
+            return await _context.Products
                 .Include(p => p.Category)
                 .FirstOrDefaultAsync(p => p.Id == id && p.IsActive);
-            if (product == null)
-            {
-                throw new KeyNotFoundException($"Product with ID {id} not found.");
-            }
-            return product;
         }
     }
 } 

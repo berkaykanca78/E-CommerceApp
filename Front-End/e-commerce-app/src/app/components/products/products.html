@@ -12,11 +12,16 @@
               <!-- Categories -->
               <div class="mb-3">
                 <h6 class="fw-bold">Categories</h6>
-                <div class="nav flex-column">
-                  <a class="nav-link" href="#">Electronics</a>
-                  <a class="nav-link" href="#">Clothing</a>
-                  <a class="nav-link" href="#">Books</a>
-                  <a class="nav-link" href="#">Home & Garden</a>
+                <div class="nav flex-column nav-pills" role="tablist">
+                  <a class="nav-link" [class.active]="!selectedCategory" (click)="onCategorySelect(null)" style="cursor: pointer;">All Categories</a>
+                  @for (category of categories(); track category.id) {
+                    <a class="nav-link" 
+                       [class.active]="selectedCategory === category.id" 
+                       (click)="onCategorySelect(category.id)"
+                       style="cursor: pointer;">
+                      {{category.name}}
+                    </a>
+                  }
                 </div>
               </div>
               
@@ -35,27 +40,34 @@
               <div class="mb-3">
                 <h6 class="fw-bold">Ratings</h6>
                 <div class="nav flex-column">
-                  <a class="nav-link" href="#">
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="fas fa-star text-warning"></i>
-                  </a>
-                  <a class="nav-link" href="#">
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="far fa-star text-warning"></i>
-                  </a>
-                  <a class="nav-link" href="#">
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="far fa-star text-warning"></i>
-                    <i class="far fa-star text-warning"></i>
-                  </a>
+                  <div class="rating-range">
+                    <div class="mb-3">
+                      <label for="minRatingRange" class="form-label">Min Rating: <span id="minRatingValue">1</span> stars</label>
+                      <input type="range" class="form-range" id="minRatingRange" min="1" max="5" step="1" value="1">
+                    </div>
+                    <div class="mb-3">
+                      <label for="maxRatingRange" class="form-label">Max Rating: <span id="maxRatingValue">5</span> stars</label>
+                      <input type="range" class="form-range" id="maxRatingRange" min="1" max="5" step="1" value="5">
+                    </div>
+                    <div class="stars-display mt-2">
+                      <div class="min-stars">
+                        <small class="text-muted">Min:</small>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="far fa-star text-warning"></i>
+                        <i class="far fa-star text-warning"></i>
+                        <i class="far fa-star text-warning"></i>
+                        <i class="far fa-star text-warning"></i>
+                      </div>
+                      <div class="max-stars">
+                        <small class="text-muted">Max:</small>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </nav>
@@ -87,14 +99,25 @@
                     <i class="fas fa-star-half-alt"></i>
                   </div>
                 </div>
-                <button class="btn btn-primary w-100 mt-3">Add to Cart</button>
+                <div class="card-footer bg-white border-top-0">
+                  <button class="btn btn-primary w-100">
+                    <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <app-pagination [currentPage]="currentPage" [totalPages]="totalPages" [hasPreviousPage]="hasPreviousPage"
-          [hasNextPage]="hasNextPage" (pageChange)="onPageChange($event)">
-        </app-pagination>
+        <app-pagination
+        [currentPage]="currentPage"
+        [totalItems]="totalItems"
+        [pageSize]="pageSize"
+        [totalPages]="totalPages"
+        [hasNextPage]="hasNextPage"
+        [hasPreviousPage]="hasPreviousPage"
+        (pageChange)="onPageChange($event)"
+        (pageSizeChange)="onPageSizeChange($event)">
+      </app-pagination>
       </div>
     </div>
   </div>

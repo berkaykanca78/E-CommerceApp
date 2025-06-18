@@ -1,35 +1,13 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
+import { Product, Category } from '../models';
 
 export interface User {
   id: number;
   name: string;
   email: string;
   created_at?: string;
-}
-
-export interface Product {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  stock: number;
-  category?: string;
-  imageUrl?: string;
-  isActive: boolean;
-  createdDate: string;  // ISO date string
-  updatedDate?: string; // ISO date string, optional
-}
-
-export interface Category {
-  id: number;
-  name: string;
-  description: string;
-  imageUrl?: string;
-  isActive: boolean;
-  createdDate: string;
-  updatedDate?: string;
 }
 
 @Injectable({

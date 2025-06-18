@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Product, Category } from './services/data.service';
+import { Product, Category } from './models';
 import { signal } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { Title } from '@angular/platform-browser';
@@ -49,9 +49,9 @@ export class App implements OnInit {
     if (query) {
       this.productService.searchProducts(query).subscribe({
         next: (products) => {
-          if (products && products.data["$values"].length > 0) {
-            console.log('Search Products:', products.data["$values"]);
-            this.products.set(products.data["$values"]);
+          if (products && products["$values"].length > 0) {
+            console.log('Search Products:', products["$values"]);
+            this.products.set(products["$values"]);
             this.router.navigate(['/products'], { queryParams: { search: query } });
           }
         },
