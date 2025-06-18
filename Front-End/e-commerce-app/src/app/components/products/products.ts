@@ -1,62 +1,51 @@
 import { Component, inject, OnInit, signal, SimpleChanges, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { PaginationComponent } from '../shared/pagination/pagination';
 import { Product, Category } from '../../models';
 import { Product as ProductService } from '../../services/product';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { App } from '../../app';
+import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
   selector: 'app-products',
-  imports: [CommonModule, PaginationComponent],
+  imports: [CommonModule, PaginationComponent, FormsModule],
   templateUrl: './products.html',
   styleUrl: './products.scss'
 })
-export class Products implements OnInit, OnChanges {
-  searchTerm: string = '';
+export class Products implements OnInit {
   products = signal<Product[]>([]);
   categories = signal<Category[]>([]);
   selectedCategory: number | null = null;
   currentPage = 1;
-  pageSize = 3;
+  pageSize = 6;
   totalItems = 0;
   totalPages = 0;
   hasNextPage = false;
   hasPreviousPage = false;
+  searchQuery: string = '';
   private readonly productService = inject(ProductService);
   private readonly route = inject(ActivatedRoute);
   private readonly app = inject(App);
 
   ngOnInit() {
-    this.loadProducts();
     this.loadCategories();
     this.setupRatingRange();
     // Check if there's a search query parameter
     this.route.queryParams.subscribe(params => {
       const searchQuery = params['search'];
       const categoryId = params['category'];
-      
+      this.searchQuery = searchQuery || '';
       if (categoryId) {
         this.selectedCategory = Number(categoryId);
         this.loadProductsByCategory(this.selectedCategory);
       } else if (searchQuery) {
-        this.searchTerm = searchQuery;
         this.searchProducts(searchQuery);
       } else {
         this.loadProducts();
       }
     });
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['searchTerm']) {
-      console.log('Search Term:', this.searchTerm);
-      if (this.searchTerm) {
-        this.products.set(this.app.products());
-      } else {
-        this.loadProducts();
-      }
-    }
   }
 
   private loadCategories(): void {
@@ -73,18 +62,31 @@ export class Products implements OnInit, OnChanges {
   }
 
   private loadProducts(): void {
-    this.productService.getProducts(this.currentPage, this.pageSize, this.searchTerm).subscribe({
+    this.productService.getProducts(this.currentPage, this.pageSize, this.searchQuery).subscribe({
       next: (response) => {
         if (response && response.items["$values"]) {
-          this.products.set(response.items["$values"]);
-          this.totalItems = response.totalItems;
-          this.totalPages = response.totalPages;
-          this.hasNextPage = response.hasNextPage;
-          this.hasPreviousPage = response.hasPreviousPage;
+          const validProducts = response.items["$values"].filter((product: Product & { $ref?: string }) =>
+            product && product.name && !product.$ref
+          );
+          this.products.set(validProducts);
+          this.totalItems = response.totalItems || validProducts.length;
+          this.totalPages = response.totalPages || Math.ceil(this.totalItems / this.pageSize);
+          this.hasNextPage = response.hasNextPage ?? (this.currentPage < this.totalPages);
+          this.hasPreviousPage = response.hasPreviousPage ?? (this.currentPage > 1);
+        } else {
+          this.products.set([]);
+          this.totalItems = 0;
+          this.totalPages = 0;
+          this.hasNextPage = false;
+          this.hasPreviousPage = false;
         }
       },
       error: (error) => {
-        console.error('Error loading products:', error);
+        this.products.set([]);
+        this.totalItems = 0;
+        this.totalPages = 0;
+        this.hasNextPage = false;
+        this.hasPreviousPage = false;
       }
     });
   }
@@ -106,18 +108,32 @@ export class Products implements OnInit, OnChanges {
   }
 
   private searchProducts(query: string): void {
-    this.productService.searchProducts(query).subscribe({
+    this.productService.getProducts(this.currentPage, this.pageSize, query).subscribe({
       next: (response) => {
-        if (response && response["$values"]) {
-          this.products.set(response["$values"]);
-          this.totalItems = response["$values"].length;
-          this.totalPages = Math.ceil(this.totalItems / this.pageSize);
-          this.hasNextPage = this.currentPage < this.totalPages;
-          this.hasPreviousPage = this.currentPage > 1;
+        if (response && response.items["$values"]) {
+          const validProducts = response.items["$values"].filter((product: Product & { $ref?: string }) =>
+            product && product.name && !product.$ref
+          );
+          this.products.set(validProducts);
+          this.totalItems = response.totalItems || validProducts.length;
+          this.totalPages = response.totalPages || Math.ceil(this.totalItems / this.pageSize);
+          this.hasNextPage = response.hasNextPage ?? (this.currentPage < this.totalPages);
+          this.hasPreviousPage = response.hasPreviousPage ?? (this.currentPage > 1);
+        } else {
+          this.products.set([]);
+          this.totalItems = 0;
+          this.totalPages = 0;
+          this.hasNextPage = false;
+          this.hasPreviousPage = false;
         }
       },
       error: (error) => {
         console.error('Error searching products:', error);
+        this.products.set([]);
+        this.totalItems = 0;
+        this.totalPages = 0;
+        this.hasNextPage = false;
+        this.hasPreviousPage = false;
       }
     });
   }
@@ -141,10 +157,8 @@ export class Products implements OnInit, OnChanges {
 
   onPageChange(page: number) {
     this.currentPage = page;
-    if (this.selectedCategory) {
-      this.loadProductsByCategory(this.selectedCategory);
-    } else if (this.searchTerm) {
-      this.searchProducts(this.searchTerm);
+    if (this.searchQuery) {
+      this.searchProducts(this.searchQuery);
     } else {
       this.loadProducts();
     }
@@ -152,14 +166,13 @@ export class Products implements OnInit, OnChanges {
 
   onPageSizeChange(newPageSize: number): void {
     this.pageSize = newPageSize;
-    this.currentPage = 1; 
-    if (this.selectedCategory) {
-      this.loadProductsByCategory(this.selectedCategory);
-    } else if (this.searchTerm) {
-      this.searchProducts(this.searchTerm);
+    this.currentPage = 1;
+    if (this.searchQuery) {
+      this.searchProducts(this.searchQuery);
     } else {
       this.loadProducts();
-    }  }
+    }
+  }
 
   private setupRatingRange() {
     const minRatingRange = document.getElementById('minRatingRange') as HTMLInputElement;

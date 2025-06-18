@@ -77,6 +77,7 @@ export class PaginationComponent {
   @Input() totalPages: number = 0;
   @Input() hasNextPage: boolean = false;
   @Input() hasPreviousPage: boolean = false;
+  @Input() searchQuery: string = '';
   @Output() pageChange = new EventEmitter<number>();
   @Output() pageSizeChange = new EventEmitter<number>();
 
@@ -101,6 +102,7 @@ export class PaginationComponent {
 
   onPageChange(page: number): void {
     if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
       this.pageChange.emit(page);
     }
   }

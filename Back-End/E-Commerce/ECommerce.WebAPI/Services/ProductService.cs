@@ -25,8 +25,7 @@ namespace ECommerce.WebAPI.Services
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
                 query = query.Where(p => 
-                    p.Name.Contains(searchTerm) || 
-                    p.Description.Contains(searchTerm));
+                    p.Name.Contains(searchTerm));
             }
 
             query = query.OrderByDescending(p => p.CreatedDate);
@@ -88,7 +87,7 @@ namespace ECommerce.WebAPI.Services
             return await _context.Products
                 .Include(p => p.Category)
                 .Where(p => p.IsActive && 
-                    (p.Name.Contains(query) || p.Description.Contains(query)))
+                    (p.Name.Contains(query)))
                 .ToListAsync();
         }
 

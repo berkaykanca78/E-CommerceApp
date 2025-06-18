@@ -110,11 +110,12 @@
         </div>
         <app-pagination
         [currentPage]="currentPage"
-        [totalItems]="totalItems"
         [pageSize]="pageSize"
+        [totalItems]="totalItems"
         [totalPages]="totalPages"
         [hasNextPage]="hasNextPage"
         [hasPreviousPage]="hasPreviousPage"
+        [searchQuery]="searchQuery"
         (pageChange)="onPageChange($event)"
         (pageSizeChange)="onPageSizeChange($event)">
       </app-pagination>

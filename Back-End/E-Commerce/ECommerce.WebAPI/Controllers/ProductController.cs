@@ -5,7 +5,6 @@ using ECommerce.WebAPI.Models.DTOs;
 using ECommerce.WebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace ECommerce.WebAPI.Controllers
 {
@@ -29,7 +28,7 @@ namespace ECommerce.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<PaginatedResult<ProductDto>>> GetProducts(
             [FromQuery] int page = 1,
-            [FromQuery] int pageSize = 10,
+            [FromQuery] int pageSize = 3,
             [FromQuery] string searchTerm = "")
         {
             try
@@ -53,7 +52,7 @@ namespace ECommerce.WebAPI.Controllers
         public async Task<ActionResult<PaginatedResult<ProductDto>>> GetProductsByCategory(
             int categoryId,
             [FromQuery] int page = 1,
-            [FromQuery] int pageSize = 10)
+            [FromQuery] int pageSize = 3)
         {
             try
             {
@@ -73,7 +72,11 @@ namespace ECommerce.WebAPI.Controllers
         [HttpGet("search")]
         [ProducesResponseType(typeof(List<Product>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<List<Product>>> SearchProducts([FromQuery] string query)
+        public async Task<ActionResult<List<Product>>> SearchProducts(
+            [FromQuery] string query, 
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 3,
+            [FromQuery] string searchTerm = "")
         {
             try
             {

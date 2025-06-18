@@ -8,6 +8,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { filter } from 'rxjs/operators';
 import { Product as ProductService } from './services/product';
+import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -21,6 +22,7 @@ export class App implements OnInit {
   private readonly titleService = inject(Title);
   private readonly router = inject(Router);
   private readonly productService = inject(ProductService);
+  private searchSubject = new Subject<string>();
   searchQuery: string = '';
   public products = signal<Product[]>([]);
   public categories = signal<Category[]>([]);
@@ -28,6 +30,27 @@ export class App implements OnInit {
 
   ngOnInit() {
     this.setupTitleChange();
+    this.setupSearch();
+  }
+
+  private setupSearch() {
+    this.searchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(query => {
+      this.searchQuery = query;
+      if (query.trim()) {
+        this.searchProducts();
+      } else {
+        this.products.set([]);
+        this.router.navigate(['/products']);
+      }
+    });
+  }
+
+  onSearch(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    this.searchSubject.next(value);
   }
 
   private setupTitleChange() {
@@ -49,17 +72,26 @@ export class App implements OnInit {
     if (query) {
       this.productService.searchProducts(query).subscribe({
         next: (products) => {
-          if (products && products["$values"].length > 0) {
-            console.log('Search Products:', products["$values"]);
-            this.products.set(products["$values"]);
+          if (products && products["$values"]) {
+            const validProducts = products["$values"].filter((product: Product & { $ref?: string }) => 
+              product && 
+              product.name && 
+              !product.$ref && 
+              product.name.toLowerCase().includes(query.toLowerCase())
+            );
+            this.products.set(validProducts);
             this.router.navigate(['/products'], { queryParams: { search: query } });
+          } else {
+            this.products.set([]);
           }
         },
         error: (error) => {
           console.error('Error searching products:', error);
+          this.products.set([]);
         }
       });
     } else {
+      this.products.set([]);
       this.router.navigate(['/products']);
     }
   }
