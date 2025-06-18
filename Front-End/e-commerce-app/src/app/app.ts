@@ -9,6 +9,7 @@ import { Title } from '@angular/platform-browser';
 import { filter } from 'rxjs/operators';
 import { Product as ProductService } from './services/product';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
+import { CartItem, Cart as CartService } from './services/cart';
 
 @Component({
   selector: 'app-root',
@@ -22,15 +23,37 @@ export class App implements OnInit {
   private readonly titleService = inject(Title);
   private readonly router = inject(Router);
   private readonly productService = inject(ProductService);
+  private readonly cartService = inject(CartService);
   private searchSubject = new Subject<string>();
   searchQuery: string = '';
   public products = signal<Product[]>([]);
   public categories = signal<Category[]>([]);
   currentYear = new Date().getFullYear();
+  cartCount: number = 0;
+  cartItems: CartItem[] = [];
+  showCartPopover: boolean = false;
 
   ngOnInit() {
     this.setupTitleChange();
     this.setupSearch();
+    this.getCartInfo();
+  }
+
+  private getCartInfo() {
+    this.cartService.cartCount$.subscribe(count => {
+      this.cartCount = count;
+    });
+    this.cartService.cartItems$.subscribe(items => {
+      this.cartItems = items;
+    });
+  }
+
+  toggleCartPopover() {
+    this.showCartPopover = !this.showCartPopover;
+  }
+
+  getTotalPrice(): number {
+    return this.cartService.getTotalPrice();
   }
 
   private setupSearch() {

@@ -1,12 +1,11 @@
-import { Component, inject, OnInit, signal, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PaginationComponent } from '../shared/pagination/pagination';
 import { Product, Category } from '../../models';
 import { Product as ProductService } from '../../services/product';
-import { ActivatedRoute, Router } from '@angular/router';
-import { App } from '../../app';
-import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { Cart as CartService } from '../../services/cart';
 
 @Component({
   selector: 'app-products',
@@ -27,8 +26,7 @@ export class Products implements OnInit {
   searchQuery: string = '';
   private readonly productService = inject(ProductService);
   private readonly route = inject(ActivatedRoute);
-  private readonly app = inject(App);
-
+  private readonly cartService = inject(CartService);
   ngOnInit() {
     this.loadCategories();
     this.setupRatingRange();
@@ -245,5 +243,9 @@ export class Products implements OnInit {
     // Implement your rating range filter logic here
     // For example:
     // this.products = this.allProducts.filter(p => p.rating >= minRating && p.rating <= maxRating);
+  }
+
+  addToCart(product: { id: number; name: string; price: number }) {
+    this.cartService.addToCart(product);
   }
 }

@@ -1,102 +1,130 @@
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm">
-  <div class="container">
-    <a class="navbar-brand fw-bold text-primary" href="#">E-Commerce Store</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav me-auto">
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/home" routerLinkActive="active">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/products" routerLinkActive="active">Products</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/categories" routerLinkActive="active">Categories</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">About</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Contact</a>
-        </li>
-      </ul>
-      <div class="d-flex align-items-center">
-        <div class="input-group me-3">
-          <input type="text" class="form-control" placeholder="Search products..." [(ngModel)]="searchQuery" (input)="onSearch($event)">
-          <button class="btn btn-outline-primary" type="button">
-            <i class="fas fa-search"></i>
-          </button>
-        </div>
-        <a href="#" class="btn btn-outline-primary position-relative me-2">
-          <i class="fas fa-shopping-cart"></i>
-          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-            3
-          </span>
-        </a>
-        <a href="#" class="btn btn-outline-primary">
-          <i class="fas fa-user"></i>
-        </a>
-      </div>
-    </div>
-  </div>
-</nav>
-
-<router-outlet />
-
-<!-- Footer -->
-<footer class="bg-dark text-light py-5">
-  <div class="container">
-    <div class="row g-4">
-      <div class="col-lg-3 col-md-6">
-        <h5 class="mb-4">About Us</h5>
-        <p>Your trusted online shopping destination for quality products and excellent service.</p>
-        <div class="social-links mt-3">
-          <a href="#" class="btn btn-outline-light me-2"><i class="fab fa-facebook"></i></a>
-          <a href="#" class="btn btn-outline-light me-2"><i class="fab fa-twitter"></i></a>
-          <a href="#" class="btn btn-outline-light me-2"><i class="fab fa-instagram"></i></a>
-          <a href="#" class="btn btn-outline-light"><i class="fab fa-youtube"></i></a>
+<div class="page-container">
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold text-primary" href="#">E-Commerce Store</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/home" routerLinkActive="active">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/products" routerLinkActive="active">Products</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/categories" routerLinkActive="active">Categories</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contact</a>
+          </li>
+        </ul>
+        <div class="d-flex align-items-center">
+          <div class="input-group me-3">
+            <input type="text" class="form-control" placeholder="Search products..." [(ngModel)]="searchQuery"
+              (input)="onSearch($event)">
+            <button class="btn btn-outline-primary" type="button">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+          <a routerLink="/cart" class="btn btn-outline-primary position-relative me-2">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              {{cartCount}}
+            </span>
+          </a>
+          <a href="#" class="btn btn-outline-primary">
+            <i class="fas fa-user"></i>
+          </a>
         </div>
       </div>
-      <div class="col-lg-3 col-md-6">
-        <h5 class="mb-4">Quick Links</h5>
-        <ul class="list-unstyled">
-          <li><a href="#" class="text-light text-decoration-none mb-2 d-block">Home</a></li>
-          <li><a href="#" class="text-light text-decoration-none mb-2 d-block">Shop</a></li>
-          <li><a href="#" class="text-light text-decoration-none mb-2 d-block">Categories</a></li>
-          <li><a href="#" class="text-light text-decoration-none mb-2 d-block">Contact</a></li>
-        </ul>
-      </div>
-      <div class="col-lg-3 col-md-6">
-        <h5 class="mb-4">Customer Service</h5>
-        <ul class="list-unstyled">
-          <li><a href="#" class="text-light text-decoration-none mb-2 d-block">FAQ</a></li>
-          <li><a href="#" class="text-light text-decoration-none mb-2 d-block">Shipping Info</a></li>
-          <li><a href="#" class="text-light text-decoration-none mb-2 d-block">Returns</a></li>
-          <li><a href="#" class="text-light text-decoration-none mb-2 d-block">Track Order</a></li>
-        </ul>
-      </div>
-      <div class="col-lg-3 col-md-6">
-        <h5 class="mb-4">Contact Us</h5>
-        <ul class="list-unstyled">
-          <li class="mb-2"><i class="fas fa-phone me-2"></i> (555) 123-4567</li>
-          <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> 123 Store St, City</li>
-        </ul>
-      </div>
     </div>
-    <hr class="my-4">
-    <div class="row">
-      <div class="col-md-6 text-center text-md-start">
-        <p class="mb-0">&copy; {{currentYear}} E-Commerce Store. All rights reserved.</p>
-      </div>
-      <div class="col-md-6 text-center text-md-end">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/100px-Visa_Inc._logo.svg.png" alt="Visa" class="me-2" style="height: 30px;">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/100px-Mastercard-logo.svg.png" alt="Mastercard" class="me-2" style="height: 30px;">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/100px-PayPal.svg.png" alt="PayPal" class="me-2" style="height: 30px;">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/American_Express_logo_%282018%29.svg/100px-American_Express_logo_%282018%29.svg.png" alt="American Express" style="height: 30px;">
-      </div>
-    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <router-outlet />
   </div>
-</footer>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-light py-5">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-3 col-md-6">
+          <h5 class="mb-4">About Us</h5>
+          <p>Your trusted online shopping destination for quality products and excellent service.</p>
+          <div class="social-links mt-3">
+            <a href="#" class="btn btn-outline-light me-2"><i class="fab fa-facebook"></i></a>
+            <a href="#" class="btn btn-outline-light me-2"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="btn btn-outline-light me-2"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="btn btn-outline-light"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <h5 class="mb-4">Quick Links</h5>
+          <ul class="list-unstyled">
+            <li><a href="#" class="text-light text-decoration-none mb-2 d-block">Home</a></li>
+            <li><a href="#" class="text-light text-decoration-none mb-2 d-block">Shop</a></li>
+            <li><a href="#" class="text-light text-decoration-none mb-2 d-block">Categories</a></li>
+            <li><a href="#" class="text-light text-decoration-none mb-2 d-block">Contact</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <h5 class="mb-4">Customer Service</h5>
+          <ul class="list-unstyled">
+            <li><a href="#" class="text-light text-decoration-none mb-2 d-block">FAQ</a></li>
+            <li><a href="#" class="text-light text-decoration-none mb-2 d-block">Shipping Info</a></li>
+            <li><a href="#" class="text-light text-decoration-none mb-2 d-block">Returns</a></li>
+            <li><a href="#" class="text-light text-decoration-none mb-2 d-block">Track Order</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <h5 class="mb-4">Contact Us</h5>
+          <ul class="list-unstyled">
+            <li class="mb-2"><i class="fas fa-phone me-2"></i> (555) 123-4567</li>
+            <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> 123 Store St, City</li>
+          </ul>
+        </div>
+      </div>
+      <hr class="my-4">
+      <div class="row">
+        <div class="col-md-6 text-center text-md-start">
+          <p class="mb-0">&copy; {{currentYear}} E-Commerce Store. All rights reserved.</p>
+        </div>
+        <div class="col-md-6 text-center text-md-end">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/100px-Visa_Inc._logo.svg.png"
+            alt="Visa" class="me-2" style="height: 30px;">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/100px-Mastercard-logo.svg.png"
+            alt="Mastercard" class="me-2" style="height: 30px;">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/100px-PayPal.svg.png"
+            alt="PayPal" class="me-2" style="height: 30px;">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/American_Express_logo_%282018%29.svg/100px-American_Express_logo_%282018%29.svg.png"
+            alt="American Express" style="height: 30px;">
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<style>
+.page-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-wrapper {
+  flex: 1 0 auto;
+}
+
+footer {
+  flex-shrink: 0;
+}
+</style>
