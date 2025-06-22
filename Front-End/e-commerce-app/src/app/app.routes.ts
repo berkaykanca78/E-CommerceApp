@@ -3,6 +3,7 @@ import { Home } from './components/home/home';
 import { Products } from './components/products/products';
 import { Categories } from './components/categories/categories';
 import { Cart } from './components/cart/cart';
+import { AlertDemoComponent } from './components/alert-demo/alert-demo.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -10,5 +11,6 @@ export const routes: Routes = [
   { path: 'products', component: Products },
   { path: 'categories', component: Categories },
   { path: 'cart', component: Cart },
+  { path: 'alert-demo', component: AlertDemoComponent },
   { path: '**', redirectTo: '/home' }
 ];

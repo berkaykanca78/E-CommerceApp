@@ -10,11 +10,12 @@ import { filter } from 'rxjs/operators';
 import { Product as ProductService } from './services/product';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { CartItem, Cart as CartService } from './services/cart';
+import { AlertContainer } from './components/shared/alert-container/alert-container';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, FormsModule],
+  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, FormsModule, AlertContainer],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
