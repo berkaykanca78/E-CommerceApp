@@ -12,11 +12,13 @@ export interface CartItem {
   providedIn: 'root'
 })
 export class Cart {
-  private cartCount = new BehaviorSubject<number>(0);
-  private cartItems = new BehaviorSubject<CartItem[]>([]);
+  private readonly cartCount = new BehaviorSubject<number>(0);
+  private readonly cartItems = new BehaviorSubject<CartItem[]>([]);
+  private readonly _totalPrice = new BehaviorSubject<number>(0);
   
-  cartCount$ = this.cartCount.asObservable();
-  cartItems$ = this.cartItems.asObservable();
+  readonly cartCount$ = this.cartCount.asObservable();
+  readonly cartItems$ = this.cartItems.asObservable();
+  readonly totalPrice$ = this._totalPrice.asObservable();
 
   constructor() {
     // Initialize cart from localStorage if available
@@ -29,6 +31,7 @@ export class Cart {
     if (savedItems) {
       this.cartItems.next(JSON.parse(savedItems));
     }
+    this.updateTotal();
   }
 
   addToCart(product: { id: number; name: string; price: number }) {
@@ -45,9 +48,7 @@ export class Cart {
     const newCount = this.cartCount.value + 1;
     this.cartCount.next(newCount);
     
-    // Save to localStorage
-    localStorage.setItem('cartCount', newCount.toString());
-    localStorage.setItem('cartItems', JSON.stringify(this.cartItems.value));
+    this.saveCart();
   }
 
   updateQuantity(item: CartItem, change: number) {
@@ -60,13 +61,13 @@ export class Cart {
         currentItems[itemIndex].quantity = newQuantity;
         this.cartItems.next([...currentItems]);
         
-        // Update cart count
         const newCount = this.cartCount.value + change;
         this.cartCount.next(newCount);
         
-        // Save to localStorage
-        localStorage.setItem('cartCount', newCount.toString());
-        localStorage.setItem('cartItems', JSON.stringify(currentItems));
+        this.saveCart();
+      } else {
+        // If quantity becomes 0, remove the item
+        this.removeItem(item);
       }
     }
   }
@@ -76,13 +77,29 @@ export class Cart {
     const newItems = currentItems.filter(i => i.id !== item.id);
     this.cartItems.next(newItems);
     
-    // Update cart count
     const newCount = this.cartCount.value - item.quantity;
     this.cartCount.next(newCount);
     
-    // Save to localStorage
-    localStorage.setItem('cartCount', newCount.toString());
-    localStorage.setItem('cartItems', JSON.stringify(newItems));
+    this.saveCart();
+  }
+
+  private saveCart(): void {
+    const items = this.cartItems.value;
+    const count = items.reduce((sum, item) => sum + item.quantity, 0);
+    
+    this.cartCount.next(count);
+    localStorage.setItem('cartCount', count.toString());
+    localStorage.setItem('cartItems', JSON.stringify(items));
+    this.updateTotal();
+  }
+
+  private updateTotal(): void {
+    const total = this.cartItems.value.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    this._totalPrice.next(total);
+  }
+
+  getTotalPrice(): number {
+    return this._totalPrice.value;
   }
 
   getCartCount(): number {
@@ -91,9 +108,5 @@ export class Cart {
 
   getCartItems(): CartItem[] {
     return this.cartItems.value;
-  }
-
-  getTotalPrice(): number {
-    return this.cartItems.value.reduce((total, item) => total + (item.price * item.quantity), 0);
   }
 } 

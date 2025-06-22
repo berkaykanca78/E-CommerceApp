@@ -1,0 +1,139 @@
+<div class="profile-container container-fluid my-5">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-lg-3">
+      <div class="card profile-sidebar">
+        <div class="card-body text-center">
+          <img [src]="user.avatar" alt="User Avatar" class="profile-avatar rounded-circle mb-3">
+          <h4 class="card-title">{{ user.name }}</h4>
+          <p class="text-muted">{{ user.email }}</p>
+          <hr>
+          <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
+            <button class="nav-link text-start" [class.active]="activeTab === 'profile'" (click)="setActiveTab('profile')">
+              <i class="fas fa-user-edit me-2"></i>Profile Information
+            </button>
+            <button class="nav-link text-start" [class.active]="activeTab === 'orders'" (click)="setActiveTab('orders')">
+              <i class="fas fa-receipt me-2"></i>Order History
+            </button>
+            <button class="nav-link text-start" [class.active]="activeTab === 'settings'" (click)="setActiveTab('settings')">
+              <i class="fas fa-cog me-2"></i>Settings
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-lg-9">
+      <div class="card profile-content">
+        <div class="card-body">
+          <!-- Profile Information Tab -->
+          <div class="tab-pane" [class.active]="activeTab === 'profile'">
+            <h3 class="mb-4 border-bottom pb-3">Edit Profile</h3>
+            <form (ngSubmit)="saveProfile()">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="fullName" class="form-label">Full Name</label>
+                  <input type="text" id="fullName" class="form-control" [(ngModel)]="user.name" name="name">
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="email" class="form-label">Email Address</label>
+                  <input type="email" id="email" class="form-control" [(ngModel)]="user.email" name="email" readonly>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="bio" class="form-label">Short Bio</label>
+                <textarea id="bio" class="form-control" [(ngModel)]="user.bio" name="bio" rows="3"></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="address" class="form-label">Address</label>
+                <input type="text" id="address" class="form-control" [(ngModel)]="user.address" name="address">
+              </div>
+              <div class="mb-4">
+                <label for="phone" class="form-label">Phone Number</label>
+                <input type="tel" id="phone" class="form-control" [(ngModel)]="user.phone" name="phone">
+              </div>
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save me-2"></i>Save Changes
+              </button>
+            </form>
+          </div>
+
+          <!-- Order History Tab -->
+          <div class="tab-pane" [class.active]="activeTab === 'orders'">
+            <h3 class="mb-4 border-bottom pb-3">Order History</h3>
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th scope="col">Order ID</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Status</th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let order of orders">
+                    <td class="fw-bold">{{ order.id }}</td>
+                    <td>{{ order.date | date: 'mediumDate' }}</td>
+                    <td>{{ order.total | currency }}</td>
+                    <td>
+                      <span class="badge" [ngClass]="{
+                        'bg-success-light text-success': order.status === 'Delivered',
+                        'bg-info-light text-info': order.status === 'Shipped',
+                        'bg-warning-light text-warning': order.status === 'Processing'
+                      }">{{ order.status }}</span>
+                    </td>
+                    <td>
+                      <button class="btn btn-sm btn-outline-primary">View Details</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Settings Tab -->
+          <div class="tab-pane" [class.active]="activeTab === 'settings'">
+            <h3 class="mb-4 border-bottom pb-3">Account Settings</h3>
+            
+            <!-- Change Password -->
+            <h5 class="mt-4 mb-3">Change Password</h5>
+            <form (ngSubmit)="saveSettings()">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="newPassword" class="form-label">New Password</label>
+                  <input type="password" id="newPassword" class="form-control" [(ngModel)]="settings.newPassword" name="newPassword">
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                  <input type="password" id="confirmPassword" class="form-control" [(ngModel)]="settings.confirmPassword" name="confirmPassword">
+                </div>
+              </div>
+              
+              <!-- Notification Settings -->
+              <h5 class="mt-4 mb-3">Notification Preferences</h5>
+              <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="emailNotifications" [(ngModel)]="settings.notifications.email" name="emailNotifications">
+                <label class="form-check-label" for="emailNotifications">Email Notifications</label>
+              </div>
+              <div class="form-check form-switch mb-2">
+                <input class="form-check-input" type="checkbox" id="smsNotifications" [(ngModel)]="settings.notifications.sms" name="smsNotifications">
+                <label class="form-check-label" for="smsNotifications">SMS Alerts</label>
+              </div>
+              <div class="form-check form-switch mb-4">
+                <input class="form-check-input" type="checkbox" id="pushNotifications" [(ngModel)]="settings.notifications.push" name="pushNotifications">
+                <label class="form-check-label" for="pushNotifications">Push Notifications</label>
+              </div>
+
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save me-2"></i>Save Settings
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

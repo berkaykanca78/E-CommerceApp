@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AlertService } from '../../services/alert';
+import { AlertService } from '../../../services/alert';
 
 @Component({
   selector: 'app-alert-demo',
@@ -148,7 +148,7 @@ import { AlertService } from '../../services/alert';
     }
   `]
 })
-export class AlertDemoComponent {
+export class AlertDemo {
   private alertService = inject(AlertService);
   currentAlertCount = 0;
 
