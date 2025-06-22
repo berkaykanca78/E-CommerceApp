@@ -6,6 +6,7 @@ import { Product, Category } from '../../models';
 import { Product as ProductService } from '../../services/product';
 import { ActivatedRoute } from '@angular/router';
 import { Cart as CartService } from '../../services/cart';
+import { AlertService } from '../../services/alert';
 
 @Component({
   selector: 'app-products',
@@ -27,6 +28,7 @@ export class Products implements OnInit {
   private readonly productService = inject(ProductService);
   private readonly route = inject(ActivatedRoute);
   private readonly cartService = inject(CartService);
+  private readonly alertService = inject(AlertService);
   ngOnInit() {
     this.loadCategories();
     this.setupRatingRange();
@@ -247,5 +249,6 @@ export class Products implements OnInit {
 
   addToCart(product: { id: number; name: string; price: number }) {
     this.cartService.addToCart(product);
+    this.alertService.success(`${product.name} has been added to your cart.`);
   }
 }

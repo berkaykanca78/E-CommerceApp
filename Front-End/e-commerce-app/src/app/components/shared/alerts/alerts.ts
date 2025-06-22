@@ -4,7 +4,7 @@ import { AlertService, Alert } from '../../../services/alert';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-alert-container',
+  selector: 'app-alerts',
   standalone: true,
   imports: [CommonModule],
   template: `
@@ -44,10 +44,12 @@ import { Subscription } from 'rxjs';
           <button 
             *ngIf="alert.options.dismissible"
             type="button" 
-            class="btn-close" 
+            class="alert-close-btn" 
             (click)="closeAlert(alert.id)"
             aria-label="Close"
-          ></button>
+          >
+            <i class="fas fa-times"></i>
+          </button>
         </div>
       </div>
     </div>
@@ -88,10 +90,12 @@ import { Subscription } from 'rxjs';
           <button 
             *ngIf="alert.options.dismissible"
             type="button" 
-            class="btn-close" 
+            class="alert-close-btn" 
             (click)="closeAlert(alert.id)"
             aria-label="Close"
-          ></button>
+          >
+            <i class="fas fa-times"></i>
+          </button>
         </div>
       </div>
     </div>
@@ -132,10 +136,12 @@ import { Subscription } from 'rxjs';
           <button 
             *ngIf="alert.options.dismissible"
             type="button" 
-            class="btn-close" 
+            class="alert-close-btn" 
             (click)="closeAlert(alert.id)"
             aria-label="Close"
-          ></button>
+          >
+            <i class="fas fa-times"></i>
+          </button>
         </div>
       </div>
     </div>
@@ -176,10 +182,12 @@ import { Subscription } from 'rxjs';
           <button 
             *ngIf="alert.options.dismissible"
             type="button" 
-            class="btn-close" 
+            class="alert-close-btn" 
             (click)="closeAlert(alert.id)"
             aria-label="Close"
-          ></button>
+          >
+            <i class="fas fa-times"></i>
+          </button>
         </div>
       </div>
     </div>
@@ -220,10 +228,12 @@ import { Subscription } from 'rxjs';
           <button 
             *ngIf="alert.options.dismissible"
             type="button" 
-            class="btn-close" 
+            class="alert-close-btn" 
             (click)="closeAlert(alert.id)"
             aria-label="Close"
-          ></button>
+          >
+            <i class="fas fa-times"></i>
+          </button>
         </div>
       </div>
     </div>
@@ -264,10 +274,12 @@ import { Subscription } from 'rxjs';
           <button 
             *ngIf="alert.options.dismissible"
             type="button" 
-            class="btn-close" 
+            class="alert-close-btn" 
             (click)="closeAlert(alert.id)"
             aria-label="Close"
-          ></button>
+          >
+            <i class="fas fa-times"></i>
+          </button>
         </div>
       </div>
     </div>
@@ -410,22 +422,19 @@ import { Subscription } from 'rxjs';
       flex-shrink: 0;
     }
 
-    .btn-close {
-      background: transparent;
+    .alert-close-btn {
+      background: none;
       border: none;
-      font-size: 18px;
-      cursor: pointer;
       padding: 0;
-      width: 20px;
-      height: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0.7;
-      transition: opacity 0.2s;
+      font-size: 1.2rem;
+      color: inherit;
+      opacity: 0.6;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+      align-self: flex-start;
     }
 
-    .btn-close:hover {
+    .alert-close-btn:hover {
       opacity: 1;
     }
 
@@ -482,7 +491,7 @@ import { Subscription } from 'rxjs';
     }
   `]
 })
-export class AlertContainer implements OnInit, OnDestroy {
+export class Alerts implements OnInit, OnDestroy {
   private alertService = inject(AlertService);
   private subscription?: Subscription;
   
