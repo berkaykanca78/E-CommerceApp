@@ -70,7 +70,7 @@ import { FormsModule } from '@angular/forms';
     }
   `]
 })
-export class PaginationComponent {
+export class Pagination {
   @Input() currentPage: number = 1;
   @Input() totalItems: number = 0;
   @Input() pageSize: number = 4;

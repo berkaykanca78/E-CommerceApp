@@ -1,0 +1,27 @@
+
+.navbar .nav-link.active {
+    font-weight: bold;
+    color: #0d6efd !important;
+  }
+  .hover-lift:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .hover-scale:hover {
+    transform: scale(1.08);
+    transition: transform 0.2s;
+  }
+  .animate-slide-in-top {
+    animation: slideInTop 0.7s cubic-bezier(.25,.46,.45,.94) both;
+  }
+  @keyframes slideInTop {
+    0% {transform: translateY(-100px); opacity: 0;}
+    100% {transform: translateY(0); opacity: 1;}
+  }
+  .animate-float {
+    animation: float 2s ease-in-out infinite alternate;
+  }
+  @keyframes float {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-8px); }
+  }

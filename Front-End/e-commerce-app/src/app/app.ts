@@ -1,6 +1,6 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Product, Category } from './models';
 import { signal } from '@angular/core';
@@ -11,20 +11,22 @@ import { Product as ProductService } from './services/product';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { CartItem, Cart as CartService } from './services/cart';
 import { Alerts } from './components/shared/alerts/alerts';
+import { AuthService } from './services/auth';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, FormsModule, Alerts],
+  imports: [CommonModule, RouterOutlet, FormsModule, Alerts],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
-export class App implements OnInit {
+export class App implements OnInit, AfterViewInit {
   protected title = 'e-commerce-app';
   private readonly titleService = inject(Title);
   private readonly router = inject(Router);
   private readonly productService = inject(ProductService);
   private readonly cartService = inject(CartService);
+  private readonly authService = inject(AuthService);
   private searchSubject = new Subject<string>();
   searchQuery: string = '';
   public products = signal<Product[]>([]);
@@ -33,11 +35,15 @@ export class App implements OnInit {
   cartCount: number = 0;
   cartItems: CartItem[] = [];
   showCartPopover: boolean = false;
+  isAuthenticated = false;
+  user: any = null;
 
   ngOnInit() {
     this.setupTitleChange();
     this.setupSearch();
     this.getCartInfo();
+    this.isAuthenticated = this.authService.isAuthenticated();
+    this.user = this.authService.getUser();
   }
 
   private getCartInfo() {
@@ -119,4 +125,12 @@ export class App implements OnInit {
       this.router.navigate(['/products']);
     }
   }
+
+  logout() {
+    this.authService.logout();
+    this.isAuthenticated = false;
+    this.user = null;
+  }
+
+  ngAfterViewInit() {}
 }

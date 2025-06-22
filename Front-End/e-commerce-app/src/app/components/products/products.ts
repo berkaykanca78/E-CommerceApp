@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { PaginationComponent } from '../shared/pagination/pagination';
+import { Pagination } from '../shared/pagination/pagination';
 import { Product, Category } from '../../models';
 import { Product as ProductService } from '../../services/product';
 import { ActivatedRoute } from '@angular/router';
@@ -10,7 +10,7 @@ import { AlertService } from '../../services/alert';
 
 @Component({
   selector: 'app-products',
-  imports: [CommonModule, PaginationComponent, FormsModule],
+  imports: [CommonModule, Pagination, FormsModule],
   templateUrl: './products.html',
   styleUrl: './products.scss'
 })

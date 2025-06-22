@@ -1,0 +1,45 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm animate-slide-in-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold text-primary hover-scale" routerLink="/home" style="font-size: 1.5rem;">
+        <i class="fas fa-shopping-bag me-2 animate-float"></i>E-Commerce Store
+      </a>
+      <button class="navbar-toggler hover-lift" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link hover-lift" routerLink="/home" routerLinkActive="active">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link hover-lift" routerLink="/products" routerLinkActive="active">Products</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link hover-lift" routerLink="/categories" routerLinkActive="active">Categories</a>
+          </li>
+        </ul>
+        <div class="d-flex align-items-center">
+          <div class="input-group me-3 animate-fade-in-right">
+            <input type="text" class="form-control hover-glow" placeholder="Search products..." [(ngModel)]="searchQuery"
+              (input)="onSearch($event)">
+            <button class="btn btn-outline-primary hover-lift" type="button">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+          <a routerLink="/cart" class="btn btn-outline-primary position-relative me-2 hover-lift animate-bounce-in">
+            <i class="fas fa-shopping-cart"></i>
+            <span *ngIf="cartCount > 0" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger animate-pulse">
+              {{ cartCount }}
+            </span>
+          </a>
+          <a routerLink="/login" class="btn btn-outline-primary ms-1 me-2 hover-lift">
+            <i class="fas fa-sign-in-alt"></i>
+          </a>
+          <a routerLink="/profile" class="btn btn-outline-primary ms-1 me-2 hover-lift">
+            <i class="fas fa-user"></i>
+          </a>
+          <a (click)="goDashboard()" class="btn btn-outline-primary me-2 hover-lift">Dashboard</a>
+        </div>
+      </div>
+    </div>
+  </nav>

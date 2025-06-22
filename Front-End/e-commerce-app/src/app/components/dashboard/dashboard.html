@@ -1,0 +1,62 @@
+<div class="admin-layout" [class.sidebar-collapsed]="sidebarCollapsed">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <i class="fas fa-bolt"></i>
+      <span class="brand"><small>E-Commerce Admin</small></span>
+    </div>
+    <ul class="sidebar-menu">
+      <li [class.active]="tab==='home'" (click)="setTab('home')">
+        <span class="icon-wrap"><i class="fas fa-home"></i></span> <span class="menu-label">Home</span>
+      </li>
+      <li class="dropdown" [class.active]="datasOpen || tab==='products' || tab==='categories'"
+        (click)="toggleDropdown('datas', $event)">
+        <span class="icon-wrap"><i class="fas fa-database"></i></span> <span class="menu-label">Datas</span>
+        <i class="fas fa-chevron-right dropdown-arrow" [class.open]="datasOpen"></i>
+      </li>
+      <ul class="dropdown-menu" *ngIf="datasOpen">
+        <li [class.active]="tab==='products'" (click)="setTab('products', $event)">
+          <span class="icon-wrap"><i class="fas fa-box"></i></span> <span class="menu-label">Products</span>
+        </li>
+        <li [class.active]="tab==='categories'" (click)="setTab('categories', $event)">
+          <span class="icon-wrap"><i class="fas fa-tags"></i></span> <span class="menu-label">Categories</span>
+        </li>
+      </ul>
+      <li class="dropdown" [class.active]="componentsOpen || tab==='alerts' || tab==='pagination'"
+        (click)="toggleDropdown('components', $event)">
+        <span class="icon-wrap"><i class="fas fa-cubes"></i></span> <span class="menu-label">Components</span>
+        <i class="fas fa-chevron-right dropdown-arrow" [class.open]="componentsOpen"></i>
+      </li>
+      <ul class="dropdown-menu" *ngIf="componentsOpen">
+        <li [class.active]="tab==='alerts'" (click)="setTab('alerts', $event)">
+          <span class="icon-wrap"><i class="fas fa-bell"></i></span> <span class="menu-label"><a
+              routerLink="/dashboard/alert-demo" class="sidebar-link">Alert</a></span>
+        </li>
+        <li [class.active]="tab==='pagination'" (click)="setTab('pagination', $event)">
+          <span class="icon-wrap"><i class="fas fa-ellipsis-h"></i></span> <span class="menu-label"><a
+            routerLink="/dashboard/pagination-demo" class="sidebar-link">Pagination</a></span>
+        </li>
+      </ul>
+    </ul>
+  </aside>
+  <div class="main-content">
+    <header class="appbar">
+      <button class="sidebar-toggle icon-btn" (click)="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="search-box">
+        <input type="text" placeholder="Search..." />
+        <i class="fas fa-search"></i>
+      </div>
+      <div class="appbar-actions">
+        <button class="icon-btn"><i class="fas fa-bell"></i></button>
+        <button class="icon-btn"><i class="fas fa-user-circle"></i></button>
+        <button class="icon-btn" routerLink="/home" title="Logout">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
+      </div>
+    </header>
+    <div class="content-area">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
