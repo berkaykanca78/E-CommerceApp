@@ -48,4 +48,11 @@ export class Dashboard {
   ];
   sidebarCollapsed = false;
   toggleSidebar() { this.sidebarCollapsed = !this.sidebarCollapsed; }
+
+  get isMobile() {
+    return window.innerWidth <= 900;
+  }
+  closeSidebar() {
+    this.sidebarCollapsed = false;
+  }
 } 

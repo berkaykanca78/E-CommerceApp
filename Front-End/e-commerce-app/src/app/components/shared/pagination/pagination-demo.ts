@@ -10,9 +10,6 @@ import { Pagination } from './pagination';
     <div class="container mt-5">
       <h2 class="mb-4">Pagination Demo</h2>
       <p class="text-muted mb-4">Bu sayfa pagination component'inin kullanımını göstermek için oluşturulmuştur.</p>
-      <ul class="list-group mb-4">
-        <li class="list-group-item" *ngFor="let item of pagedItems">{{ item }}</li>
-      </ul>
       <app-pagination
         [currentPage]="currentPage"
         [totalItems]="items.length"
@@ -20,6 +17,8 @@ import { Pagination } from './pagination';
         [totalPages]="totalPages"
         [hasNextPage]="hasNextPage"
         [hasPreviousPage]="hasPreviousPage"
+        [columns]="columns"
+        [rows]="pagedRows"
         (pageChange)="onPageChange($event)"
         (pageSizeChange)="onPageSizeChange($event)">
       </app-pagination>
@@ -27,9 +26,14 @@ import { Pagination } from './pagination';
   `
 })
 export class PaginationDemo {
-  items = Array.from({ length: 42 }, (_, i) => `Item #${i + 1}`);
+  items = Array.from({ length: 42 }, (_, i) => ({ id: i + 1, name: `Item #${i + 1}`, desc: `Açıklama ${i + 1}` }));
   itemsPerPage = 9;
   currentPage = 1;
+  columns = [
+    { key: 'id', label: 'ID' },
+    { key: 'name', label: 'İsim' },
+    { key: 'desc', label: 'Açıklama' }
+  ];
 
   get totalPages() {
     return Math.ceil(this.items.length / this.itemsPerPage);
@@ -43,7 +47,7 @@ export class PaginationDemo {
     return this.currentPage > 1;
   }
 
-  get pagedItems() {
+  get pagedRows() {
     const start = (this.currentPage - 1) * this.itemsPerPage;
     return this.items.slice(start, start + this.itemsPerPage);
   }

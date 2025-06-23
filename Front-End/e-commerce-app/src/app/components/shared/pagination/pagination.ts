@@ -7,23 +7,32 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="d-flex justify-content-between align-items-center mt-3">
+  <div class="table-responsive mb-2">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th *ngFor="let col of columns">{{ col.label }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of rows">
+            <td *ngFor="let col of columns">{{ row[col.key] }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="d-flex justify-content-between align-items-center mt-3 mb-2">
       <div class="d-flex align-items-center">
         <span class="me-2">Show</span>
         <select class="form-select form-select-sm" style="width: 70px" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
-          <option [value]="3">3</option>
-          <option [value]="6">6</option>
-          <option [value]="9">9</option>
-          <option [value]="12">12</option>
+          <option *ngFor="let option of pageSizeOptions" [value]="option">{{ option }}</option>
         </select>
         <span class="ms-2">entries</span>
       </div>
-
       <div class="d-flex align-items-center">
         <span class="me-3">
           Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ Math.min(currentPage * pageSize, totalItems) }} of {{ totalItems }} entries
         </span>
-
         <nav aria-label="Page navigation">
           <ul class="pagination mb-0">
             <li class="page-item" [class.disabled]="currentPage === 1">
@@ -68,6 +77,45 @@ import { FormsModule } from '@angular/forms';
       padding: 0.25rem 0.5rem;
       font-size: 0.875rem;
     }
+    @media (max-width: 900px) {
+      .d-flex.justify-content-between.align-items-center.mt-3.mb-2 {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.7rem;
+      }
+      .d-flex.align-items-center {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+    }
+    @media (max-width: 600px) {
+      .d-flex.justify-content-between.align-items-center.mt-3.mb-2 {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+        margin-top: 0.7rem !important;
+        margin-bottom: 0.5rem !important;
+      }
+      .d-flex.align-items-center {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.3rem;
+      }
+      .table-responsive {
+        font-size: 0.93rem;
+      }
+      .form-select-sm {
+        width: 100% !important;
+        min-width: 0;
+      }
+      .pagination {
+        flex-wrap: wrap;
+      }
+      .page-link {
+        font-size: 0.95rem;
+        padding: 0.25rem 0.5rem;
+      }
+    }
   `]
 })
 export class Pagination {
@@ -78,6 +126,9 @@ export class Pagination {
   @Input() hasNextPage: boolean = false;
   @Input() hasPreviousPage: boolean = false;
   @Input() searchQuery: string = '';
+  @Input() columns: { key: string, label: string }[] = [];
+  @Input() rows: any[] = [];
+  @Input() pageSizeOptions: number[] = [3, 6, 9, 12];
   @Output() pageChange = new EventEmitter<number>();
   @Output() pageSizeChange = new EventEmitter<number>();
 

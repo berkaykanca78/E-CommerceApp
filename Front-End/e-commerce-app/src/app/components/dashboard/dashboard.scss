@@ -194,6 +194,79 @@
   .admin-layout.sidebar-collapsed .sidebar { width: 56px; }
 }
 
+// MOBILE RESPONSIVE
+@media (max-width: 600px) {
+  .admin-layout { flex-direction: column; }
+  .sidebar {
+    width: 100%;
+    min-width: 0;
+    flex-direction: row;
+    padding: 0.5rem 0.2rem 0.5rem 0.2rem;
+    font-size: 0.95rem;
+  }
+  .sidebar-header {
+    display: none;
+  }
+  .sidebar-menu {
+    flex-direction: row;
+    gap: 0.2rem;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .sidebar-menu li, .sidebar-menu .dropdown-toggle {
+    padding: 0.3rem 0.3rem;
+    font-size: 0.93rem;
+    min-height: 32px;
+  }
+  .sidebar-menu .menu-label {
+    display: none;
+  }
+  .main-content {
+    padding: 0;
+  }
+  .appbar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0.5rem 0.5rem;
+    min-height: unset;
+    gap: 0.5rem;
+  }
+  .sidebar-toggle {
+    margin-right: 0.7rem;
+    font-size: 1.1rem;
+  }
+  .search-box {
+    margin-left: 0;
+    margin-bottom: 0.5rem;
+    width: 100%;
+    padding: 0.15rem 0.5rem;
+  }
+  .search-box input {
+    font-size: 0.92rem;
+  }
+  .appbar-actions {
+    margin-left: 0;
+    justify-content: flex-end;
+    gap: 0.2rem;
+  }
+  .appbar-actions .icon-btn {
+    margin-left: 0.2rem;
+    font-size: 1.05rem;
+    padding: 0.18rem 0.22rem;
+  }
+  .content-area {
+    padding: 0.4rem;
+  }
+  .stats-row {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .stat-card {
+    padding: 0.6rem 0.7rem;
+    font-size: 0.95rem;
+  }
+}
+
 body, html {
   overflow-x: hidden;
 }

@@ -32,4 +32,11 @@ export class Navbar {
   goDashboard() {
     this.router.navigate(['/dashboard']);
   }
+
+  closeNavbar() {
+    const navbarCollapse = document.getElementById('navbarNav');
+    if (navbarCollapse && navbarCollapse.classList.contains('show')) {
+      navbarCollapse.classList.remove('show');
+    }
+  }
 }

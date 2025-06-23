@@ -49,10 +49,13 @@ import { Component } from '@angular/core';
             <p class="mb-0">&copy; {{year}} E-Commerce Store. All rights reserved.</p>
           </div>
           <div class="col-md-6 text-center text-md-end">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/100px-Visa_Inc._logo.svg.png" alt="Visa" class="me-2" style="height: 30px;">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/100px-Mastercard-logo.svg.png" alt="Mastercard" class="me-2" style="height: 30px;">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/100px-PayPal.svg.png" alt="PayPal" class="me-2" style="height: 30px;">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/American_Express_logo_%282018%29.svg/100px-American_Express_logo_%282018%29.svg.png" alt="American Express" style="height: 30px;">
+            <div class="footer-payments d-inline-flex align-items-center gap-2 gap-md-3">
+              <span class="footer-payments-label text-secondary me-2">We Accept</span>
+              <span class="payment-icon visa" title="Visa"><i class="fab fa-cc-visa fa-2x"></i></span>
+              <span class="payment-icon mastercard" title="Mastercard"><i class="fab fa-cc-mastercard fa-2x"></i></span>
+              <span class="payment-icon paypal" title="PayPal"><i class="fab fa-cc-paypal fa-2x"></i></span>
+              <span class="payment-icon amex" title="American Express"><i class="fab fa-cc-amex fa-2x"></i></span>
+            </div>
           </div>
         </div>
       </div>
@@ -69,6 +72,51 @@ import { Component } from '@angular/core';
     }
     .social-links a:hover {
       transform: scale(1.15);
+    }
+    .footer-payments {
+      background: rgba(255,255,255,0.04);
+      border-radius: 2rem;
+      padding: 0.35rem 1.1rem 0.35rem 0.9rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      border: 1px solid rgba(255,255,255,0.07);
+      gap: 0.7rem;
+    }
+    .footer-payments-label {
+      font-size: 1.02rem;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      color: #bfc3c9 !important;
+      margin-right: 0.7rem;
+      opacity: 0.85;
+      transition: color 0.2s;
+    }
+    .footer-payments:hover .footer-payments-label {
+      color: #fff !important;
+      opacity: 1;
+    }
+    .footer-payments:hover .payment-icon {
+      color: #fff !important;
+      filter: none;
+    }
+    .payment-icon {
+      color: #bfc3c9;
+      transition: color 0.2s, transform 0.2s;
+      cursor: pointer;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.12));
+      &:hover { transform: translateY(-4px) scale(1.12); }
+    }
+    .payment-icon.visa:hover { color: #1a1f71; }
+    .payment-icon.mastercard:hover { color: #eb001b; }
+    .payment-icon.paypal:hover { color: #003087; }
+    .payment-icon.amex:hover { color: #2e77bb; }
+    @media (max-width: 900px) {
+      .footer-payments { padding: 0.25rem 0.7rem; gap: 0.5rem; }
+      .footer-payments-label { font-size: 0.97rem; margin-right: 0.4rem; }
+    }
+    @media (max-width: 600px) {
+      .footer-payments { padding: 0.18rem 0.3rem; gap: 0.3rem; }
+      .footer-payments-label { font-size: 0.92rem; margin-right: 0.2rem; }
+      .payment-icon i { font-size: 1.3rem !important; }
     }
   `]
 })
