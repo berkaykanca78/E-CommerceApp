@@ -10,7 +10,7 @@ Bu proje, **Full-Stack** mimarisinde geliştirilmiş olup iki ana bileşenden ol
 - **Framework:** .NET 9.0
 - **Architecture:** RESTful Web API
 - **Features:**
-  - OpenAPI/Swagger desteği
+  - OpenAPI/Scalar desteği
   - CORS yapılandırması
   - Modern C# özellikleri (Nullable Reference Types, Implicit Usings)
   - Güvenli HTTPS yönlendirmesi
@@ -18,7 +18,6 @@ Bu proje, **Full-Stack** mimarisinde geliştirilmiş olup iki ana bileşenden ol
 ### 🎨 Frontend (Angular 20)
 - **Framework:** Angular 20.0.0
 - **Features:**
-  - Server-Side Rendering (SSR) desteği
   - Modern TypeScript 5.8
   - Responsive tasarım
   - Production-ready build konfigürasyonu

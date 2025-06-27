@@ -24,10 +24,12 @@
     }
 
     .hero-title {
-      font-size: 3.5rem;
+      font-size: clamp(2rem, 5vw, 3.5rem);
       font-weight: 700;
       margin-bottom: 1rem;
       animation: fadeInUp 0.8s ease-out;
+      line-height: 1.1;
+      text-align: center;
     }
 
     .hero-subtitle {
@@ -40,21 +42,25 @@
     .policy-highlights {
       display: flex;
       flex-wrap: wrap;
-      gap: 2rem;
+      gap: 1.5rem;
       animation: fadeInUp 0.8s ease-out 0.4s both;
+      justify-content: center;
 
       .highlight-item {
         display: flex;
         align-items: center;
         gap: 0.5rem;
+        min-width: 180px;
 
         i {
           font-size: 1.25rem;
           color: #ffd700;
+          flex-shrink: 0;
         }
 
         span {
           font-weight: 500;
+          font-size: 0.95rem;
         }
       }
     }
@@ -473,31 +479,72 @@
   // Responsive Design
   @media (max-width: 768px) {
     .hero-section {
-      padding: 60px 0;
+      padding: 60px 0 40px;
+      text-align: center;
 
       .hero-title {
-        font-size: 2.5rem;
+        font-size: clamp(1.8rem, 6vw, 2.5rem);
+        margin-bottom: 0.8rem;
+      }
+
+      .hero-subtitle {
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
       }
 
       .policy-highlights {
         flex-direction: column;
         gap: 1rem;
+        align-items: center;
+
+        .highlight-item {
+          min-width: auto;
+          justify-content: center;
+        }
       }
 
       .hero-image .hero-icon {
-        font-size: 5rem;
+        font-size: 4rem;
+        margin-top: 1rem;
       }
     }
 
     .return-process {
+      padding: 50px 0;
+
+      .section-header h2 {
+        font-size: clamp(1.8rem, 5vw, 2rem);
+      }
+
       .process-timeline {
         .timeline-item {
           flex-direction: column;
           text-align: center;
+          gap: 1rem;
+
+          .timeline-marker {
+            width: 50px;
+            height: 50px;
+
+            .step-number {
+              font-size: 1.1rem;
+            }
+          }
 
           .timeline-content {
             flex-direction: column;
             text-align: center;
+            padding: 1.5rem;
+
+            .step-icon {
+              font-size: 1.8rem;
+              margin-bottom: 0.5rem;
+            }
+
+            h3 {
+              font-size: 1.3rem;
+              margin-bottom: 0.8rem;
+            }
           }
         }
       }
@@ -507,21 +554,111 @@
     .return-policy,
     .faq-section,
     .help-section {
-      padding: 60px 0;
+      padding: 50px 0;
     }
 
     .section-header h2 {
-      font-size: 2rem;
+      font-size: clamp(1.8rem, 5vw, 2rem);
+      margin-bottom: 0.8rem;
+    }
+
+    .section-header p {
+      font-size: 1rem;
+    }
+
+    .form-card {
+      .form-header {
+        padding: 1.5rem;
+
+        h2 {
+          font-size: 1.8rem;
+        }
+      }
+
+      form {
+        padding: 1.5rem;
+
+        .row {
+          margin: 0;
+
+          .col-md-6 {
+            padding: 0 0 1rem 0;
+          }
+        }
+      }
+    }
+
+    .policy-card {
+      margin-bottom: 1.5rem;
+      text-align: center;
+
+      i {
+        font-size: 2.5rem;
+      }
+
+      h3 {
+        font-size: 1.3rem;
+      }
     }
 
     .help-content {
       h2 {
-        font-size: 2rem;
+        font-size: clamp(1.8rem, 5vw, 2rem);
+        margin-bottom: 0.8rem;
+      }
+
+      p {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
       }
 
       .help-buttons {
         flex-direction: column;
         align-items: center;
+        gap: 0.8rem;
+
+        .btn {
+          width: 100%;
+          max-width: 280px;
+          padding: 14px 30px;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    .hero-section {
+      padding: 40px 0 30px;
+
+      .policy-highlights {
+        .highlight-item {
+          span {
+            font-size: 0.9rem;
+          }
+        }
+      }
+    }
+
+    .return-process,
+    .return-form-section,
+    .return-policy,
+    .faq-section,
+    .help-section {
+      padding: 40px 0;
+    }
+
+    .faq-accordion .faq-item {
+      .faq-question {
+        padding: 1.2rem;
+        
+        h4 {
+          font-size: 1.1rem;
+        }
+      }
+
+      .faq-answer p {
+        padding: 1.2rem;
+        font-size: 0.95rem;
       }
     }
   }
