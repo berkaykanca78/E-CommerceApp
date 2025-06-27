@@ -74,7 +74,7 @@
             <!-- Billing Address -->
             <div class="form-check">
               <input type="checkbox" class="form-check-input" id="sameAddress" [(ngModel)]="useSameAddress"
-                [ngModelOptions]="{standalone: true}" (change)="toggleBillingAddressValidators()">
+                (change)="toggleBillingAddressValidators()">
               <label class="form-check-label" for="sameAddress">Billing address is the same as my shipping
                 address</label>
             </div>

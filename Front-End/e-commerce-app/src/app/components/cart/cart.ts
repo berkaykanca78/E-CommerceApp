@@ -7,8 +7,7 @@ import { RouterModule } from '@angular/router';
   selector: 'app-cart',
   templateUrl: './cart.html',
   styleUrls: ['./cart.scss'],
-  imports: [CommonModule, RouterModule],
-  standalone: true
+  imports: [CommonModule, RouterModule]
 })
 export class Cart implements OnInit {
   cartItems: CartItem[] = [];

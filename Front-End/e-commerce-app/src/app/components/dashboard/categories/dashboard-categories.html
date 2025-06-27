@@ -1,0 +1,74 @@
+<div class="dashboard-content">
+    <div class="content-body">
+      <!-- Pagination Component with Custom Grid Template -->
+      <app-pagination
+        [data]="categories"
+        [columns]="columns"
+        [viewMode]="viewMode"
+        [showViewToggle]="true"
+        [title]="'Category Management'"
+        [pageSizeOptions]="[6, 12, 18, 24]"
+        [totalItems]="categories.length"
+        [showAddButton]="true"
+        [addButtonIcon]="'fas fa-plus'"
+        (viewModeChange)="onViewModeChange($event)"
+        (paginatedDataChange)="onPaginatedDataChange($event)"
+        (addButtonClick)="addCategory()"
+        [showCategoryFilter]="false"
+        [loading]="loading"
+        [error]="error"
+        [loadingText]="'Loading categories...'"
+        [searchPlaceholder]="'Search categories...'"
+        [emptyStateIcon]="'fas fa-tags'"
+        [emptyStateTitle]="'No categories found'"
+        [emptyStateMessage]="'Try adjusting your search or filter criteria'"
+        [paginationLabel]="'Categories pagination'"
+        (editItem)="editCategory($event)"
+        (toggleStatus)="toggleStatus($event)"
+        (deleteItem)="deleteCategory($event)">
+        
+        <!-- Custom Grid Template -->
+        <div grid-template class="row g-4 mb-4">
+          <div class="col-lg-4 col-md-6 col-sm-12" *ngFor="let category of paginatedCategories; trackBy: trackByCategoryId">
+            <div class="card h-100 shadow-sm hover-card">
+              <div class="badge position-absolute top-0 end-0 m-2 z-1" 
+                   [class.bg-success]="category.isActive" 
+                   [class.bg-danger]="!category.isActive">
+                {{category.isActive ? 'Active' : 'Inactive'}}
+              </div>
+              <div class="card-img-container">
+                <img [src]="category.imageUrl || 'https://via.placeholder.com/300x200'" [alt]="category.name">
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">{{category.name}}</h5>
+                <p class="card-text text-muted">{{category.description}}</p>
+                <div class="mt-auto">
+                  <small class="text-muted">Created: {{category.createdDate | date:'dd/MM/yyyy'}}</small>
+                </div>
+              </div>
+              <div class="card-footer bg-white border-top-0">
+                <div class="btn-group w-100" role="group">
+                  <button class="btn btn-outline-primary btn-sm" (click)="editCategory(category)">
+                    <i class="fas fa-edit"></i> Edit
+                  </button>
+                  <button class="btn btn-sm" 
+                          [class.btn-outline-success]="!category.isActive"
+                          [class.btn-outline-warning]="category.isActive"
+                          (click)="toggleStatus(category)">
+                    <i class="fas" 
+                       [class.fa-eye]="!category.isActive"
+                       [class.fa-eye-slash]="category.isActive"></i>
+                    {{category.isActive ? 'Deactivate' : 'Activate'}}
+                  </button>
+                  <button class="btn btn-outline-danger btn-sm" (click)="deleteCategory(category)">
+                    <i class="fas fa-trash"></i> Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </app-pagination>
+    </div>
+  </div>

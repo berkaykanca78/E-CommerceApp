@@ -1,140 +1,264 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
+export interface TableColumn {
+  key: string;
+  label: string;
+  type?: 'text' | 'badge' | 'image' | 'product-name' | 'price' | 'stock' | 'date' | 'status';
+  sortable?: boolean;
+  badgeConfig?: { [key: string]: { class: string; text: string } };
+  descriptionKey?: string;
+  altKey?: string;
+}
+
 @Component({
   selector: 'app-pagination',
-  standalone: true,
   imports: [CommonModule, FormsModule],
-  template: `
-  <div class="table-responsive mb-2">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th *ngFor="let col of columns">{{ col.label }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let row of rows">
-            <td *ngFor="let col of columns">{{ row[col.key] }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="d-flex justify-content-between align-items-center mt-3 mb-2">
-      <div class="d-flex align-items-center">
-        <span class="me-2">Show</span>
-        <select class="form-select form-select-sm" style="width: 70px" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
-          <option *ngFor="let option of pageSizeOptions" [value]="option">{{ option }}</option>
-        </select>
-        <span class="ms-2">entries</span>
-      </div>
-      <div class="d-flex align-items-center">
-        <span class="me-3">
-          Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ Math.min(currentPage * pageSize, totalItems) }} of {{ totalItems }} entries
-        </span>
-        <nav aria-label="Page navigation">
-          <ul class="pagination mb-0">
-            <li class="page-item" [class.disabled]="currentPage === 1">
-              <a class="page-link" (click)="onPageChange(1)" style="cursor: pointer">
-                <i class="fas fa-angle-double-left"></i>
-              </a>
-            </li>
-            <li class="page-item" [class.disabled]="!hasPreviousPage">
-              <a class="page-link" (click)="onPageChange(currentPage - 1)" style="cursor: pointer">
-                <i class="fas fa-angle-left"></i>
-              </a>
-            </li>
-            <li class="page-item" *ngFor="let page of pages" [class.active]="page === currentPage">
-              <a class="page-link" (click)="onPageChange(page)" style="cursor: pointer">{{page}}</a>
-            </li>
-            <li class="page-item" [class.disabled]="!hasNextPage">
-              <a class="page-link" (click)="onPageChange(currentPage + 1)" style="cursor: pointer">
-                <i class="fas fa-angle-right"></i>
-              </a>
-            </li>
-            <li class="page-item" [class.disabled]="currentPage === totalPages">
-              <a class="page-link" (click)="onPageChange(totalPages)" style="cursor: pointer">
-                <i class="fas fa-angle-double-right"></i>
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </div>
-    </div>
-  `,
-  styles: [`
-    .pagination {
-      margin-bottom: 0;
-    }
-    .page-link {
-      padding: 0.375rem 0.75rem;
-    }
-    .page-item.disabled .page-link {
-      cursor: not-allowed;
-    }
-    .form-select-sm {
-      padding: 0.25rem 0.5rem;
-      font-size: 0.875rem;
-    }
-    @media (max-width: 900px) {
-      .d-flex.justify-content-between.align-items-center.mt-3.mb-2 {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0.7rem;
-      }
-      .d-flex.align-items-center {
-        flex-wrap: wrap;
-        gap: 0.5rem;
-      }
-    }
-    @media (max-width: 600px) {
-      .d-flex.justify-content-between.align-items-center.mt-3.mb-2 {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0.5rem;
-        margin-top: 0.7rem !important;
-        margin-bottom: 0.5rem !important;
-      }
-      .d-flex.align-items-center {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.3rem;
-      }
-      .table-responsive {
-        font-size: 0.93rem;
-      }
-      .form-select-sm {
-        width: 100% !important;
-        min-width: 0;
-      }
-      .pagination {
-        flex-wrap: wrap;
-      }
-      .page-link {
-        font-size: 0.95rem;
-        padding: 0.25rem 0.5rem;
-      }
-    }
-  `]
+  templateUrl: './pagination.html',
+  styleUrls: ['./pagination.scss']
 })
-export class Pagination {
+export class Pagination implements OnInit, OnChanges {
+  // Data Properties
+  @Input() data: any[] = [];
+  @Input() columns: TableColumn[] = [];
+  
+  // View Mode Properties
+  @Input() viewMode: 'grid' | 'table' = 'grid';
+  @Input() showViewToggle: boolean = true;
+  @Input() title: string = ''; // Title to display between view mode buttons
+  @Input() showAddButton: boolean = false; // Show add button
+  @Input() addButtonText: string = 'Add'; // Add button text
+  @Input() addButtonIcon: string = 'fas fa-plus'; // Add button icon
+  @Output() viewModeChange = new EventEmitter<'grid' | 'table'>();
+  @Output() addButtonClick = new EventEmitter<void>(); // Add button click event
+  
+  // Pagination Properties
   @Input() currentPage: number = 1;
+  @Input() itemsPerPage: number = 6;
+  @Input() pageSizeOptions: number[] = [6, 12, 18, 24];
   @Input() totalItems: number = 0;
-  @Input() pageSize: number = 4;
-  @Input() totalPages: number = 0;
-  @Input() hasNextPage: boolean = false;
-  @Input() hasPreviousPage: boolean = false;
-  @Input() searchQuery: string = '';
-  @Input() columns: { key: string, label: string }[] = [];
-  @Input() rows: any[] = [];
-  @Input() pageSizeOptions: number[] = [3, 6, 9, 12];
+  @Input() serverSidePagination: boolean = false; // For API pagination
+  
+  // Search and Filter Properties
+  @Input() searchTerm: string = '';
+  @Input() searchPlaceholder: string = 'Search...';
+  @Input() statusFilter: string = 'all';
+  @Input() categoryFilter: string = 'all';
+  @Input() categories: string[] = [];
+  
+  // Filter Controls
+  @Input() showStatusFilter: boolean = true;
+  @Input() showCategoryFilter: boolean = true;
+  @Input() showSearchAndFilters: boolean = false;
+  
+  // Sorting Properties
+  @Input() sortField: string = '';
+  @Input() sortDirection: 'asc' | 'desc' = 'asc';
+  
+  // Actions Properties
+  @Input() showActions: boolean = true;
+  @Input() actions: string[] = ['edit', 'toggle', 'delete'];
+  @Input() statusKey: string = 'isActive';
+  
+  // State Properties
+  @Input() loading: boolean = false;
+  @Input() error: string = '';
+  @Input() loadingText: string = 'Loading...';
+  
+  // Empty State Properties
+  @Input() emptyStateIcon: string = 'fas fa-inbox';
+  @Input() emptyStateTitle: string = 'No data found';
+  @Input() emptyStateMessage: string = 'Try adjusting your search or filter criteria';
+  
+  // Pagination Label
+  @Input() paginationLabel: string = 'Data pagination';
+  
+  // Hide table (show only controls) - deprecated, use viewMode instead
+  @Input() hideTable: boolean = false;
+  
+  // Events
   @Output() pageChange = new EventEmitter<number>();
   @Output() pageSizeChange = new EventEmitter<number>();
+  @Output() searchChange = new EventEmitter<string>();
+  @Output() statusFilterChange = new EventEmitter<string>();
+  @Output() categoryFilterChange = new EventEmitter<string>();
+  @Output() sortChange = new EventEmitter<{ field: string; direction: 'asc' | 'desc' }>();
+  @Output() editItem = new EventEmitter<any>();
+  @Output() toggleStatus = new EventEmitter<any>();
+  @Output() deleteItem = new EventEmitter<any>();
+  @Output() paginatedDataChange = new EventEmitter<any[]>();
+
+  // Computed Properties
+  filteredData: any[] = [];
+  paginatedData: any[] = [];
+  totalPages: number = 0;
 
   Math = Math;
 
-  get pages(): number[] {
+  ngOnInit() {
+    this.updateData();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['data'] || changes['searchTerm'] || changes['statusFilter'] || changes['categoryFilter'] || changes['totalItems'] || changes['currentPage'] || changes['serverSidePagination']) {
+      this.updateData();
+    }
+  }
+
+  updateData() {
+    // Handle empty data
+    if (!this.data || this.data.length === 0) {
+      this.filteredData = [];
+      this.paginatedData = [];
+      // Use input totalItems if provided, otherwise 0
+      if (!this.totalItems) {
+        this.totalItems = 0;
+      }
+      this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
+      this.paginatedDataChange.emit(this.paginatedData);
+      return;
+    }
+
+    // Apply filters
+    this.filteredData = this.data.filter(item => {
+      // Search filter
+      const matchesSearch = this.searchTerm === '' || 
+        this.columns.some(col => {
+          const value = item[col.key];
+          if (col.type === 'product-name' && col.descriptionKey) {
+            return String(value).toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+                   String(item[col.descriptionKey]).toLowerCase().includes(this.searchTerm.toLowerCase());
+          }
+          return String(value).toLowerCase().includes(this.searchTerm.toLowerCase());
+        });
+
+      // Status filter
+      const matchesStatus = this.statusFilter === 'all' || 
+        (this.statusFilter === 'active' && item[this.statusKey]) ||
+        (this.statusFilter === 'inactive' && !item[this.statusKey]);
+
+      // Category filter
+      const matchesCategory = this.categoryFilter === 'all' || 
+        item.category === this.categoryFilter;
+
+      return matchesSearch && matchesStatus && matchesCategory;
+    });
+
+    // Apply sorting
+    if (this.sortField) {
+      this.filteredData.sort((a, b) => {
+        const aVal = a[this.sortField];
+        const bVal = b[this.sortField];
+        
+        let comparison = 0;
+        if (aVal > bVal) comparison = 1;
+        if (aVal < bVal) comparison = -1;
+        
+        return this.sortDirection === 'desc' ? -comparison : comparison;
+      });
+    }
+
+    // Use input totalItems if provided and no filters are applied, otherwise use filtered data length
+    if (this.totalItems > 0 && this.searchTerm === '' && this.statusFilter === 'all' && this.categoryFilter === 'all') {
+      // Use input totalItems from API
+      this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
+    } else {
+      // Use filtered data length for local filtering
+      this.totalItems = this.filteredData.length;
+      this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
+    }
+
+    // Ensure current page is valid
+    if (this.currentPage > this.totalPages && this.totalPages > 0) {
+      this.currentPage = 1;
+    }
+
+    // Apply pagination
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    
+    if (this.serverSidePagination) {
+      // For API pagination, data is already paginated
+      this.paginatedData = this.filteredData;
+    } else {
+      // For local pagination, slice the data
+      this.paginatedData = this.filteredData.slice(startIndex, endIndex);
+    }
+    
+    // Emit paginated data
+    this.paginatedDataChange.emit(this.paginatedData);
+  }
+
+  // Event Handlers
+  onSearch() {
+    this.currentPage = 1;
+    this.updateData();
+    this.searchChange.emit(this.searchTerm);
+  }
+
+  onStatusFilterChange() {
+    this.currentPage = 1;
+    this.updateData();
+    this.statusFilterChange.emit(this.statusFilter);
+  }
+
+  onCategoryFilterChange() {
+    this.currentPage = 1;
+    this.updateData();
+    this.categoryFilterChange.emit(this.categoryFilter);
+  }
+
+  onItemsPerPageChange() {
+    this.currentPage = 1;
+    this.updateData();
+    this.pageSizeChange.emit(this.itemsPerPage);
+  }
+
+  onSort(field: string) {
+    if (this.sortField === field) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortField = field;
+      this.sortDirection = 'asc';
+    }
+    this.updateData();
+    this.sortChange.emit({ field: this.sortField, direction: this.sortDirection });
+  }
+
+  onPageChange(page: number) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.updateData();
+      this.pageChange.emit(page);
+    }
+  }
+
+  // View Mode Handler
+  onViewModeChange(mode: 'grid' | 'table') {
+    this.viewMode = mode;
+    this.viewModeChange.emit(mode);
+  }
+
+  onAddButtonClick() {
+    this.addButtonClick.emit();
+  }
+
+  // Action Handlers
+  onEdit(item: any) {
+    this.editItem.emit(item);
+  }
+
+  onToggleStatus(item: any) {
+    this.toggleStatus.emit(item);
+  }
+
+  onDelete(item: any) {
+    this.deleteItem.emit(item);
+  }
+
+  // Helper Methods
+  getPaginationArray(): number[] {
     const pages: number[] = [];
     const maxPagesToShow = 5;
     let startPage = Math.max(1, this.currentPage - Math.floor(maxPagesToShow / 2));
@@ -151,14 +275,43 @@ export class Pagination {
     return pages;
   }
 
-  onPageChange(page: number): void {
-    if (page >= 1 && page <= this.totalPages) {
-      this.currentPage = page;
-      this.pageChange.emit(page);
-    }
+  trackByFn(index: number, item: any): any {
+    return item.id || index;
   }
 
-  onPageSizeChange(): void {
-    this.pageSizeChange.emit(this.pageSize);
+  // Badge Helpers
+  getBadgeClass(value: any, config?: { [key: string]: { class: string; text: string } }): string {
+    if (config && config[value]) {
+      return config[value].class;
+    }
+    return 'bg-secondary';
+  }
+
+  getBadgeText(value: any, config?: { [key: string]: { class: string; text: string } }): string {
+    if (config && config[value]) {
+      return config[value].text;
+    }
+    return String(value);
+  }
+
+  // Stock Helpers
+  getStockBadgeClass(stock: number): string {
+    if (stock === 0) return 'bg-danger';
+    if (stock <= 10) return 'bg-warning';
+    return 'bg-success';
+  }
+
+  getStockText(stock: number): string {
+    if (stock === 0) return 'Out of Stock';
+    if (stock <= 10) return 'Low Stock';
+    return 'In Stock';
+  }
+
+  // Price Formatter
+  formatPrice(price: number): string {
+    return new Intl.NumberFormat('tr-TR', {
+      style: 'currency',
+      currency: 'TRY'
+    }).format(price);
   }
 } 

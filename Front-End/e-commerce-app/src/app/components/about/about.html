@@ -1,0 +1,187 @@
+<div class="about-container">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="row align-items-center min-vh-75">
+        <div class="col-lg-6">
+          <h1 class="display-4 fw-bold text-white mb-4 animate-fade-in-left">
+            About Us
+          </h1>
+          <p class="lead text-white mb-4 animate-fade-in-left-delay">
+            We work to provide innovative solutions in the e-commerce world and elevate 
+            our customers' shopping experience to the highest level.
+          </p>
+          <p class="text-white-75 animate-fade-in-left-delay-2">
+            Since 2020, we have become one of the leading e-commerce platforms by combining 
+            technology and customer satisfaction.
+          </p>
+        </div>
+        <div class="col-lg-6">
+          <div class="hero-image-container animate-fade-in-right">
+            <div class="hero-image-placeholder">
+              <i class="fas fa-store fa-5x text-white"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mission & Vision Section -->
+  <section class="mission-vision-section py-5">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="card h-100 border-0 shadow-sm hover-lift animate-fade-in-up">
+            <div class="card-body text-center p-4">
+              <div class="icon-container mb-3">
+                <i class="fas fa-bullseye fa-3x text-white"></i>
+              </div>
+              <h3 class="card-title fw-bold mb-3">Our Mission</h3>
+              <p class="card-text text-muted">
+                To provide our customers with the highest quality products at the most 
+                affordable prices, making shopping easier and ensuring their satisfaction.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card h-100 border-0 shadow-sm hover-lift animate-fade-in-up-delay">
+            <div class="card-body text-center p-4">
+              <div class="icon-container mb-3">
+                <i class="fas fa-eye fa-3x text-white"></i>
+              </div>
+              <h3 class="card-title fw-bold mb-3">Our Vision</h3>
+              <p class="card-text text-muted">
+                To become the most trusted and preferred e-commerce platform, 
+                leading the industry with technological innovations.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team Section -->
+  <section class="team-section py-5 bg-light">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="display-5 fw-bold text-primary mb-3 animate-fade-in-up">Our Team</h2>
+        <p class="lead text-muted animate-fade-in-up-delay">
+          The strong team behind our success
+        </p>
+      </div>
+      <div class="row g-4">
+        <div class="col-lg-4 col-md-6" *ngFor="let member of teamMembers">
+          <div class="card team-card border-0 shadow-sm hover-lift animate-fade-in-up">
+            <div class="card-body text-center p-4">
+              <div class="team-member-image mb-3">
+                <div class="image-placeholder">
+                  <i class="fas fa-user fa-3x text-white"></i>
+                </div>
+              </div>
+              <h4 class="card-title fw-bold mb-2">{{ member.name }}</h4>
+              <p class="text-primary fw-semibold mb-2">{{ member.position }}</p>
+              <p class="card-text text-muted">{{ member.description }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Milestones Section -->
+  <section class="milestones-section py-5">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="display-5 fw-bold text-primary mb-3 animate-fade-in-up">Our Journey</h2>
+        <p class="lead text-muted animate-fade-in-up-delay">
+          The story of our success
+        </p>
+      </div>
+      <div class="timeline">
+        <div class="row g-4">
+          <div class="col-lg-6" *ngFor="let milestone of milestones; let i = index">
+            <div class="milestone-card" [class.animate-fade-in-left]="i % 2 === 0" [class.animate-fade-in-right]="i % 2 === 1">
+              <div class="milestone-year">{{ milestone.year }}</div>
+              <div class="milestone-content">
+                <h4 class="fw-bold mb-2">{{ milestone.title }}</h4>
+                <p class="text-muted">{{ milestone.description }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Values Section -->
+  <section class="values-section py-5 bg-light">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="display-5 fw-bold text-primary mb-3 animate-fade-in-up">Our Values</h2>
+        <p class="lead text-muted animate-fade-in-up-delay">
+          The core values that make us who we are
+        </p>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-3">
+          <div class="value-card text-center animate-fade-in-up">
+            <div class="value-icon mb-3">
+              <i class="fas fa-heart fa-2x text-white"></i>
+            </div>
+            <h5 class="fw-bold mb-2">Customer Focus</h5>
+            <p class="text-muted small">Customer satisfaction is always our priority</p>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="value-card text-center animate-fade-in-up-delay">
+            <div class="value-icon mb-3">
+              <i class="fas fa-shield-alt fa-2x text-white"></i>
+            </div>
+            <h5 class="fw-bold mb-2">Reliability</h5>
+            <p class="text-muted small">We provide secure and transparent transactions</p>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="value-card text-center animate-fade-in-up-delay-2">
+            <div class="value-icon mb-3">
+              <i class="fas fa-lightbulb fa-2x text-white"></i>
+            </div>
+            <h5 class="fw-bold mb-2">Innovation</h5>
+            <p class="text-muted small">We are in pursuit of continuous development and innovation</p>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="value-card text-center animate-fade-in-up-delay-3">
+            <div class="value-icon mb-3">
+              <i class="fas fa-handshake fa-2x text-white"></i>
+            </div>
+            <h5 class="fw-bold mb-2">Quality</h5>
+            <p class="text-muted small">Service at the highest quality standards</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section py-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+          <h2 class="display-6 fw-bold text-white mb-4 animate-fade-in-up">
+            Get In Touch With Us
+          </h2>
+          <p class="lead text-white-50 mb-4 animate-fade-in-up-delay">
+            Contact us for your questions, we are happy to help you.
+          </p>
+          <a routerLink="/contact" class="btn btn-light btn-lg px-4 py-2 hover-lift animate-fade-in-up-delay-2">
+            <i class="fas fa-envelope me-2"></i>Contact
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div> 

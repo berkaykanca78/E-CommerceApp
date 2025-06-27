@@ -6,7 +6,6 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-navbar',
-  standalone: true,
   imports: [RouterLink, RouterLinkActive, CommonModule, FormsModule],
   templateUrl: './navbar.html',
   styleUrls: ['./navbar.scss']

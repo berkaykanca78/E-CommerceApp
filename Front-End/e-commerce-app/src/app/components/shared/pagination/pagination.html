@@ -1,0 +1,239 @@
+  <!-- View Mode Toggle -->
+  <div class="pagination-header-minimal" *ngIf="showViewToggle">
+    <div class="d-flex justify-content-between align-items-center">
+      <span *ngIf="title" class="title-minimal">{{ title }}</span>
+      
+      <div class="d-flex align-items-center gap-2">
+        <button *ngIf="showAddButton" class="btn btn-add-minimal" (click)="onAddButtonClick()">
+          <i [class]="addButtonIcon"></i>
+        </button>
+        <div class="btn-group view-toggle-minimal" role="group">
+          <button type="button" class="btn btn-view-minimal" [class.active]="viewMode === 'grid'"
+            (click)="onViewModeChange('grid')">
+            <i class="fas fa-th"></i>
+          </button>
+          <button type="button" class="btn btn-view-minimal" [class.active]="viewMode === 'table'"
+            (click)="onViewModeChange('table')">
+            <i class="fas fa-list"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Search and Filters -->
+<div class="card mb-4" *ngIf="showSearchAndFilters">
+  <div class="card-body">
+    <div class="row g-3">
+      <div class="col-md-3">
+        <div class="input-group">
+          <span class="input-group-text">
+            <i class="fas fa-search"></i>
+          </span>
+          <input type="text" class="form-control" [placeholder]="searchPlaceholder" [(ngModel)]="searchTerm"
+            (input)="onSearch()">
+        </div>
+      </div>
+      <div class="col-md-2" *ngIf="showStatusFilter">
+        <select class="form-select" [(ngModel)]="statusFilter" (change)="onStatusFilterChange()">
+          <option value="all">All Status</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+      </div>
+      <div class="col-md-2" *ngIf="showCategoryFilter">
+        <select class="form-select" [(ngModel)]="categoryFilter" (change)="onCategoryFilterChange()">
+          <option value="all">All Categories</option>
+          <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading State -->
+<div *ngIf="loading" class="text-center py-5">
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+  <p class="mt-2 text-muted">{{ loadingText }}</p>
+</div>
+
+<!-- Error State -->
+<div *ngIf="error" class="alert alert-danger">
+  <i class="fas fa-exclamation-triangle me-2"></i>
+  {{ error }}
+</div>
+
+<!-- Custom Grid Content (Projected from parent) -->
+<div *ngIf="viewMode === 'grid' && !loading && !error">
+  <ng-content select="[grid-template]"></ng-content>
+</div>
+
+<!-- Data Table -->
+<div class="card" *ngIf="!loading && !error && (viewMode === 'table' || !hideTable) && viewMode !== 'grid'">
+  <div class="table-responsive">
+    <table class="table table-hover mb-0">
+      <thead class="table-light">
+        <tr>
+          <th *ngFor="let column of columns" scope="col" [class.sortable]="column.sortable !== false"
+            (click)="column.sortable !== false ? onSort(column.key) : null">
+            {{ column.label }}
+            <i *ngIf="column.sortable !== false" class="fas fa-sort ms-1"
+              [class.fa-sort-up]="sortField === column.key && sortDirection === 'asc'"
+              [class.fa-sort-down]="sortField === column.key && sortDirection === 'desc'"></i>
+          </th>
+          <th *ngIf="showActions" scope="col" class="text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of paginatedData; trackBy: trackByFn" class="align-middle">
+          <td *ngFor="let column of columns">
+            <ng-container [ngSwitch]="column.type">
+              <!-- Badge Type -->
+              <span *ngSwitchCase="'badge'" class="badge"
+                [ngClass]="getBadgeClass(row[column.key], column.badgeConfig)">
+                {{ getBadgeText(row[column.key], column.badgeConfig) }}
+              </span>
+
+              <!-- Image Type -->
+              <img *ngSwitchCase="'image'" [src]="row[column.key]" [alt]="column.altKey ? row[column.altKey] : 'Image'"
+                class="table-image rounded" onerror="this.src='https://via.placeholder.com/50x50?text=No+Image'">
+
+              <!-- Product Name with Description -->
+              <div *ngSwitchCase="'product-name'" class="product-info">
+                <div class="fw-semibold">{{ row[column.key] }}</div>
+                <small *ngIf="column.descriptionKey" class="text-muted text-truncate d-block product-description">
+                  {{ row[column.descriptionKey] }}
+                </small>
+              </div>
+
+              <!-- Price Type -->
+              <span *ngSwitchCase="'price'" class="fw-bold text-success">
+                {{ formatPrice(row[column.key]) }}
+              </span>
+
+              <!-- Stock Type -->
+              <span *ngSwitchCase="'stock'" class="badge" [ngClass]="getStockBadgeClass(row[column.key])">
+                {{ row[column.key] }} - {{ getStockText(row[column.key]) }}
+              </span>
+
+              <!-- Date Type -->
+              <small *ngSwitchCase="'date'" class="text-muted">
+                {{ row[column.key] | date:'dd/MM/yyyy' }}
+              </small>
+
+              <!-- Boolean Status -->
+              <span *ngSwitchCase="'status'" class="badge" [class.bg-success]="row[column.key]"
+                [class.bg-danger]="!row[column.key]">
+                {{ row[column.key] ? 'Active' : 'Inactive' }}
+              </span>
+
+              <!-- Default Text -->
+              <span *ngSwitchDefault>{{ row[column.key] }}</span>
+            </ng-container>
+          </td>
+
+          <!-- Actions Column -->
+          <td *ngIf="showActions" class="text-center">
+            <div class="btn-group" role="group">
+              <button *ngIf="actions.includes('edit')" class="btn btn-sm btn-outline-primary" (click)="onEdit(row)"
+                title="Edit">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button *ngIf="actions.includes('toggle')" class="btn btn-sm"
+                [class.btn-outline-success]="!row[statusKey]" [class.btn-outline-warning]="row[statusKey]"
+                (click)="onToggleStatus(row)" [title]="row[statusKey] ? 'Deactivate' : 'Activate'">
+                <i class="fas" [class.fa-eye]="!row[statusKey]" [class.fa-eye-slash]="row[statusKey]"></i>
+              </button>
+              <button *ngIf="actions.includes('delete')" class="btn btn-sm btn-outline-danger" (click)="onDelete(row)"
+                title="Delete">
+                <i class="fas fa-trash"></i>
+              </button>
+              <button *ngIf="actions.includes('cart')" class="btn btn-sm btn-outline-success" (click)="onEdit(row)"
+                title="Add to Cart">
+                <i class="fas fa-shopping-cart"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="paginatedData.length === 0" class="text-center py-5">
+    <i [class]="emptyStateIcon" class="fa-3x text-muted mb-3"></i>
+    <h5 class="text-muted">{{ emptyStateTitle }}</h5>
+    <p class="text-muted">{{ emptyStateMessage }}</p>
+  </div>
+</div>
+
+<!-- Empty State for Grid View -->
+<div *ngIf="viewMode === 'grid' && paginatedData.length === 0 && !loading && !error" class="text-center py-5">
+  <i [class]="emptyStateIcon" class="fa-3x text-muted mb-3"></i>
+  <h5 class="text-muted">{{ emptyStateTitle }}</h5>
+  <p class="text-muted">{{ emptyStateMessage }}</p>
+</div>
+
+<!-- Empty State for Hidden Table (backward compatibility) -->
+<div *ngIf="hideTable && paginatedData.length === 0 && !loading && !error && viewMode !== 'grid'"
+  class="text-center py-5">
+  <i [class]="emptyStateIcon" class="fa-3x text-muted mb-3"></i>
+  <h5 class="text-muted">{{ emptyStateTitle }}</h5>
+  <p class="text-muted">{{ emptyStateMessage }}</p>
+</div>
+
+<!-- Pagination Controls -->
+<div class="d-flex justify-content-between align-items-center mt-4" *ngIf="!loading && !error">
+  <!-- Left Side: Show X entries -->
+  <div class="d-flex align-items-center gap-2">
+    <span class="text-muted">Show</span>
+    <select class="form-select form-select-sm" style="width: auto;" [(ngModel)]="itemsPerPage"
+      (change)="onItemsPerPageChange()">
+      <option *ngFor="let option of pageSizeOptions" [value]="option">{{ option }}</option>
+    </select>
+    <span class="text-muted">entries</span>
+  </div>
+
+  <!-- Right Side: Showing info and Pagination Controls -->
+  <div class="d-flex align-items-center gap-3">
+    <div class="text-muted">
+      Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to
+      {{ Math.min(currentPage * itemsPerPage, totalItems) }} of
+      {{ totalItems }} entries
+    </div>
+
+    <nav [attr.aria-label]="paginationLabel" *ngIf="totalPages > 1">
+      <ul class="pagination mb-0 pagination-sm">
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <button class="page-link" (click)="onPageChange(1)" [disabled]="currentPage === 1">
+            <i class="fas fa-angle-double-left"></i>
+          </button>
+        </li>
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <button class="page-link" (click)="onPageChange(currentPage - 1)" [disabled]="currentPage === 1">
+            <i class="fas fa-angle-left"></i>
+          </button>
+        </li>
+
+        <li *ngFor="let page of getPaginationArray()" class="page-item" [class.active]="page === currentPage">
+          <button class="page-link" (click)="onPageChange(page)">
+            {{ page }}
+          </button>
+        </li>
+
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+          <button class="page-link" (click)="onPageChange(currentPage + 1)" [disabled]="currentPage === totalPages">
+            <i class="fas fa-angle-right"></i>
+          </button>
+        </li>
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+          <button class="page-link" (click)="onPageChange(totalPages)" [disabled]="currentPage === totalPages">
+            <i class="fas fa-angle-double-right"></i>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>

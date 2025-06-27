@@ -1,0 +1,156 @@
+<div class="shipping-info-page">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <h1 class="hero-title">Shipping Information</h1>
+          <p class="hero-subtitle">Fast, reliable, and secure shipping options for all your orders</p>
+          <div class="hero-stats">
+            <div class="stat-item">
+              <i class="fas fa-shipping-fast"></i>
+              <span>Free shipping on $50+ orders</span>
+            </div>
+            <div class="stat-item">
+              <i class="fas fa-shield-alt"></i>
+              <span>Secure packaging</span>
+            </div>
+            <div class="stat-item">
+              <i class="fas fa-clock"></i>
+              <span>Real-time tracking</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="hero-image">
+            <i class="fas fa-truck hero-icon"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Shipping Options -->
+  <section class="shipping-options">
+    <div class="container">
+      <div class="section-header text-center">
+        <h2>Choose Your Shipping Speed</h2>
+        <p>Select the delivery option that works best for you</p>
+      </div>
+      <div class="row">
+        <div class="col-lg-4 col-md-6 mb-4" *ngFor="let option of shippingOptions">
+          <div class="shipping-card">
+            <div class="card-header">
+              <i [class]="option.icon"></i>
+              <h3>{{ option.title }}</h3>
+              <div class="price">{{ option.price }}</div>
+            </div>
+            <div class="card-body">
+              <div class="duration">{{ option.duration }}</div>
+              <p class="description">{{ option.description }}</p>
+              <ul class="features-list">
+                <li *ngFor="let feature of option.features">
+                  <i class="fas fa-check"></i>
+                  {{ feature }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Shipping Zones -->
+  <section class="shipping-zones">
+    <div class="container">
+      <div class="section-header text-center">
+        <h2>Shipping Zones & Times</h2>
+        <p>Delivery times by destination</p>
+      </div>
+      <div class="zones-table-wrapper">
+        <table class="zones-table">
+          <thead>
+            <tr>
+              <th>Shipping Zone</th>
+              <th>Countries/Regions</th>
+              <th>Standard</th>
+              <th>Express</th>
+              <th>Overnight</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let zone of shippingZones">
+              <td class="zone-name">{{ zone.zone }}</td>
+              <td class="countries">{{ zone.countries.join(', ') }}</td>
+              <td class="time-cell">{{ zone.standardTime }}</td>
+              <td class="time-cell">{{ zone.expressTime }}</td>
+              <td class="time-cell">{{ zone.overnightTime }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Important Notes -->
+  <section class="important-notes">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="note-card">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3>Processing Time</h3>
+            <p>Orders are typically processed within 1-2 business days before shipping. Orders placed after 2 PM EST will be processed the next business day.</p>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="note-card">
+            <i class="fas fa-calendar-alt"></i>
+            <h3>Business Days</h3>
+            <p>Business days are Monday through Friday, excluding federal holidays. Weekend and holiday deliveries may be available for express services.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="faq-section">
+    <div class="container">
+      <div class="section-header text-center">
+        <h2>Shipping FAQ</h2>
+        <p>Common questions about our shipping policies</p>
+      </div>
+      <div class="row">
+        <div class="col-lg-8 mx-auto">
+          <div class="faq-accordion">
+            <div class="faq-item" *ngFor="let item of faqItems; let i = index">
+              <div class="faq-question" (click)="toggleFaq(i)">
+                <h4>{{ item.question }}</h4>
+                <i class="fas fa-chevron-down"></i>
+              </div>
+              <div class="faq-answer" [class.active]="activeFaq === i">
+                <p>{{ item.answer }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-content text-center">
+        <h2>Ready to Shop?</h2>
+        <p>Browse our products and enjoy fast, reliable shipping</p>
+        <div class="cta-buttons">
+          <a routerLink="/products" class="btn btn-primary">Shop Now</a>
+          <a routerLink="/contact" class="btn btn-outline">Contact Support</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div> 

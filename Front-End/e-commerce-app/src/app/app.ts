@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, AfterViewInit, HostListener } from '@angular/core';
+import { Component, OnInit, inject, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -10,13 +10,11 @@ import { filter } from 'rxjs/operators';
 import { Product as ProductService } from './services/product';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { CartItem, Cart as CartService } from './services/cart';
-import { Alerts } from './components/shared/alerts/alerts';
 import { AuthService } from './services/auth';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
-  imports: [CommonModule, RouterOutlet, FormsModule, Alerts],
+  imports: [CommonModule, RouterOutlet, FormsModule],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
@@ -37,16 +35,7 @@ export class App implements OnInit, AfterViewInit {
   showCartPopover: boolean = false;
   isAuthenticated = false;
   user: any = null;
-  showScrollToTop = false;
 
-  @HostListener('window:scroll', [])
-  onWindowScroll() {
-    this.showScrollToTop = window.scrollY > 300;
-  }
-
-  scrollToTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
 
   ngOnInit() {
     this.setupTitleChange();

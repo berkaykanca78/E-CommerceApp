@@ -6,7 +6,6 @@ import { AlertService } from '../../services/alert';
 
 @Component({
   selector: 'app-checkout',
-  standalone: true,
   imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './checkout.html',
   styleUrls: ['./checkout.scss']

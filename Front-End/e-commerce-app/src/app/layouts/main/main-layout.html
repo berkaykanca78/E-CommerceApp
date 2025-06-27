@@ -1,0 +1,98 @@
+<div class="page-container">
+    <app-alerts></app-alerts>
+    <app-navbar></app-navbar>
+    <div class="content-wrapper">
+        <router-outlet></router-outlet>
+    </div>
+    <app-footer></app-footer>
+    
+    <!-- Chat Widget -->
+    <div class="chat-widget" [class.chat-open]="isChatOpen">
+        <!-- Chat Toggle Button -->
+        <div class="chat-toggle" (click)="toggleChat()" *ngIf="!isChatOpen">
+            <i class="fas fa-comments"></i>
+            <span class="chat-badge">Chat</span>
+        </div>
+
+        <!-- Chat Container -->
+        <div class="chat-container" *ngIf="isChatOpen">
+            <!-- Chat Header -->
+            <div class="chat-header">
+                <div class="chat-header-info">
+                    <div class="chat-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="chat-header-text">
+                        <h6 class="mb-0">Customer Support</h6>
+                        <small class="text-muted">Online now</small>
+                    </div>
+                </div>
+                <button class="chat-close" (click)="toggleChat()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Chat Messages -->
+            <div class="chat-messages">
+                <div class="message" 
+                     *ngFor="let message of chatMessages" 
+                     [class.message-user]="message.type === 'user'"
+                     [class.message-bot]="message.type === 'bot'">
+                    <div class="message-avatar" *ngIf="message.type === 'bot'">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-bubble">
+                            <p class="mb-0" [innerHTML]="message.message | nl2br"></p>
+                        </div>
+                        <small class="message-time">{{ message.time | date:'short' }}</small>
+                    </div>
+                    <div class="message-avatar" *ngIf="message.type === 'user'">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+
+                <!-- Typing Indicator -->
+                <div class="message message-bot" *ngIf="isTyping">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-bubble typing-indicator">
+                            <div class="typing-dots">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Input -->
+            <div class="chat-input">
+                <div class="input-group">
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        placeholder="Type your message..."
+                        [(ngModel)]="currentMessage"
+                        (keypress)="onChatKeyPress($event)"
+                        #chatInput>
+                    <button 
+                        class="btn btn-primary" 
+                        type="button" 
+                        (click)="sendMessage()"
+                        [disabled]="!currentMessage.trim()">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scroll to Top Button -->
+    <button class="scroll-to-top" title="Scroll to top" (click)="scrollToTop()" *ngIf="showScrollToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+</div>

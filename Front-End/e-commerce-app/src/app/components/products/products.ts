@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Pagination } from '../shared/pagination/pagination';
+import { Pagination, TableColumn } from '../shared/pagination/pagination';
 import { Product, Category } from '../../models';
 import { Product as ProductService } from '../../services/product';
 import { ActivatedRoute } from '@angular/router';
@@ -10,12 +10,13 @@ import { AlertService } from '../../services/alert';
 
 @Component({
   selector: 'app-products',
-  imports: [CommonModule, Pagination, FormsModule],
+  imports: [CommonModule, FormsModule, Pagination],
   templateUrl: './products.html',
   styleUrl: './products.scss'
 })
 export class Products implements OnInit {
   products = signal<Product[]>([]);
+  productsArray: Product[] = [];
   categories = signal<Category[]>([]);
   selectedCategory: number | null = null;
   currentPage = 1;
@@ -25,6 +26,62 @@ export class Products implements OnInit {
   hasNextPage = false;
   hasPreviousPage = false;
   searchQuery: string = '';
+  loading = false;
+  error = '';
+  viewMode: 'grid' | 'table' = 'grid';
+  
+  // Pagination columns for table view
+  tableColumns: TableColumn[] = [
+    {
+      key: 'imageUrl',
+      label: 'Image',
+      type: 'image',
+      altKey: 'name',
+      sortable: false
+    },
+    {
+      key: 'name',
+      label: 'Product Name',
+      type: 'product-name',
+      descriptionKey: 'description'
+    },
+    {
+      key: 'price',
+      label: 'Price',
+      type: 'price'
+    },
+    {
+      key: 'category',
+      label: 'Category',
+      type: 'badge',
+      badgeConfig: {
+        default: { class: 'bg-info', text: '' }
+      }
+    }
+  ];
+
+  // Pagination columns for grid view (minimal for card display)
+  gridColumns: TableColumn[] = [
+    {
+      key: 'imageUrl',
+      label: 'Image',
+      type: 'image',
+      altKey: 'name',
+      sortable: false
+    },
+    {
+      key: 'name',
+      label: 'Product Name',
+      type: 'text'
+    },
+    {
+      key: 'price',
+      label: 'Price',
+      type: 'price'
+    }
+  ];
+
+  
   private readonly productService = inject(ProductService);
   private readonly route = inject(ActivatedRoute);
   private readonly cartService = inject(CartService);
@@ -62,6 +119,9 @@ export class Products implements OnInit {
   }
 
   private loadProducts(): void {
+    this.loading = true;
+    this.error = '';
+    
     this.productService.getProducts(this.currentPage, this.pageSize, this.searchQuery).subscribe({
       next: (response) => {
         if (response && response.items["$values"]) {
@@ -69,24 +129,31 @@ export class Products implements OnInit {
             product && product.name && !product.$ref
           );
           this.products.set(validProducts);
+          this.productsArray = validProducts;
           this.totalItems = response.totalItems || validProducts.length;
           this.totalPages = response.totalPages || Math.ceil(this.totalItems / this.pageSize);
           this.hasNextPage = response.hasNextPage ?? (this.currentPage < this.totalPages);
           this.hasPreviousPage = response.hasPreviousPage ?? (this.currentPage > 1);
+          this.loading = false;
         } else {
           this.products.set([]);
+          this.productsArray = [];
           this.totalItems = 0;
           this.totalPages = 0;
           this.hasNextPage = false;
           this.hasPreviousPage = false;
+          this.loading = false;
         }
       },
       error: (error) => {
         this.products.set([]);
+        this.productsArray = [];
         this.totalItems = 0;
         this.totalPages = 0;
         this.hasNextPage = false;
         this.hasPreviousPage = false;
+        this.loading = false;
+        this.error = 'Failed to load products. Please try again.';
       }
     });
   }
@@ -96,6 +163,7 @@ export class Products implements OnInit {
       next: (response) => {
         if (response && response.items["$values"]) {
           this.products.set(response.items["$values"]);
+          this.productsArray = response.items["$values"];
           this.totalPages = response.totalPages;
           this.hasNextPage = response.hasNextPage;
           this.hasPreviousPage = response.hasPreviousPage;
@@ -103,6 +171,8 @@ export class Products implements OnInit {
       },
       error: (error) => {
         console.error('Error loading products by category:', error);
+        this.products.set([]);
+        this.productsArray = [];
       }
     });
   }
@@ -115,12 +185,14 @@ export class Products implements OnInit {
             product && product.name && !product.$ref
           );
           this.products.set(validProducts);
+          this.productsArray = validProducts;
           this.totalItems = response.totalItems || validProducts.length;
           this.totalPages = response.totalPages || Math.ceil(this.totalItems / this.pageSize);
           this.hasNextPage = response.hasNextPage ?? (this.currentPage < this.totalPages);
           this.hasPreviousPage = response.hasPreviousPage ?? (this.currentPage > 1);
         } else {
           this.products.set([]);
+          this.productsArray = [];
           this.totalItems = 0;
           this.totalPages = 0;
           this.hasNextPage = false;
@@ -130,6 +202,7 @@ export class Products implements OnInit {
       error: (error) => {
         console.error('Error searching products:', error);
         this.products.set([]);
+        this.productsArray = [];
         this.totalItems = 0;
         this.totalPages = 0;
         this.hasNextPage = false;
@@ -155,9 +228,17 @@ export class Products implements OnInit {
     return category.id;
   }
 
+  onPaginatedDataChange(paginatedData: Product[]) {
+    //this.productsArray = paginatedData;
+    this.products.set(paginatedData);
+  }
+
   onPageChange(page: number) {
     this.currentPage = page;
-    if (this.searchQuery) {
+    // Make API call for the new page
+    if (this.selectedCategory) {
+      this.loadProductsByCategory(this.selectedCategory);
+    } else if (this.searchQuery) {
       this.searchProducts(this.searchQuery);
     } else {
       this.loadProducts();
@@ -173,6 +254,8 @@ export class Products implements OnInit {
       this.loadProducts();
     }
   }
+
+
 
   private setupRatingRange() {
     const minRatingRange = document.getElementById('minRatingRange') as HTMLInputElement;

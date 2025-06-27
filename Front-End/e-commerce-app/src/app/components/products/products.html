@@ -13,18 +13,17 @@
               <div class="mb-3">
                 <h6 class="fw-bold">Categories</h6>
                 <div class="nav flex-column nav-pills" role="tablist">
-                  <a class="nav-link" [class.active]="!selectedCategory" (click)="onCategorySelect(null)" style="cursor: pointer;">All Categories</a>
+                  <a class="nav-link" [class.active]="!selectedCategory" (click)="onCategorySelect(null)"
+                    style="cursor: pointer;">All Categories</a>
                   @for (category of categories(); track category.id) {
-                    <a class="nav-link" 
-                       [class.active]="selectedCategory === category.id" 
-                       (click)="onCategorySelect(category.id)"
-                       style="cursor: pointer;">
-                      {{category.name}}
-                    </a>
+                  <a class="nav-link" [class.active]="selectedCategory === category.id"
+                    (click)="onCategorySelect(category.id)" style="cursor: pointer;">
+                    {{category.name}}
+                  </a>
                   }
                 </div>
               </div>
-              
+
               <!-- Price Range -->
               <div class="mb-3">
                 <h6 class="fw-bold">Price Range</h6>
@@ -42,11 +41,13 @@
                 <div class="nav flex-column">
                   <div class="rating-range">
                     <div class="mb-3">
-                      <label for="minRatingRange" class="form-label">Min Rating: <span id="minRatingValue">1</span> stars</label>
+                      <label for="minRatingRange" class="form-label">Min Rating: <span id="minRatingValue">1</span>
+                        stars</label>
                       <input type="range" class="form-range" id="minRatingRange" min="1" max="5" step="1" value="1">
                     </div>
                     <div class="mb-3">
-                      <label for="maxRatingRange" class="form-label">Max Rating: <span id="maxRatingValue">5</span> stars</label>
+                      <label for="maxRatingRange" class="form-label">Max Rating: <span id="maxRatingValue">5</span>
+                        stars</label>
                       <input type="range" class="form-range" id="maxRatingRange" min="1" max="5" step="1" value="5">
                     </div>
                     <div class="stars-display mt-2">
@@ -76,49 +77,55 @@
       </div>
 
       <!-- Products Grid -->
-      <div class="col-lg-9">
-        <div class="row g-4">
-          <div class="col-lg-4 col-md-6 col-sm-12" *ngFor="let product of products(); trackBy: trackByProductId">
-            <div class="card h-100 shadow-sm hover-card">
-              <div class="badge bg-danger position-absolute top-0 end-0 m-2 z-1">Sale</div>
-              <div class="card-img-container">
-                <img [src]="product.imageUrl || 'https://via.placeholder.com/300x200'" [alt]="product.name">
-              </div>
-              <div class="card-body">
-                <h5 class="card-title">{{product.name}}</h5>
-                <div class="d-flex justify-content-between align-items-center">
-                  <div>
-                    <span class="text-muted text-decoration-line-through">${{product.price}}</span>
-                    <span class="text-primary fw-bold ms-2">${{product.price * 0.8 | number:'1.2-2'}}</span>
-                  </div>
-                  <div class="text-warning">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star-half-alt"></i>
-                  </div>
+      <div class="col-lg-9 products-grid-offset">
+        <!-- Unified Pagination Component with View Toggle and Custom Grid Template -->
+        <app-pagination [data]="productsArray" [columns]="viewMode === 'table' ? tableColumns : gridColumns"
+          [viewMode]="viewMode" [showViewToggle]="true" [title]="'Product Catalog'" [showAddButton]="false"
+          [showStatusFilter]="false" [showCategoryFilter]="false" [showActions]="viewMode === 'table'" [actions]="['cart']"
+          [loading]="loading" [error]="error" [currentPage]="currentPage" [itemsPerPage]="pageSize"
+          [totalItems]="totalItems" [serverSidePagination]="true" [loadingText]="'Loading products...'"
+          [searchPlaceholder]="'Search products...'" [emptyStateIcon]="'fas fa-shopping-bag'"
+          [emptyStateTitle]="'No products found'" [emptyStateMessage]="'Try adjusting your search criteria'"
+          [paginationLabel]="'Products pagination'" (viewModeChange)="viewMode = $event"
+          (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)"
+          (paginatedDataChange)="onPaginatedDataChange($event)" (editItem)="addToCart($event)">
+          
+          <!-- Custom Grid Template for Products -->
+          <div grid-template class="row g-4 mb-4">
+            <div class="col-lg-4 col-md-6 col-sm-12" *ngFor="let product of products(); trackBy: trackByProductId">
+              <div class="card h-100 shadow-sm hover-card">
+                <div class="badge bg-danger position-absolute top-0 end-0 m-2 z-1">Sale</div>
+                <div class="card-img-container">
+                  <img [src]="product.imageUrl || 'https://via.placeholder.com/300x200'" [alt]="product.name">
                 </div>
-                <div class="card-footer bg-white border-top-0">
-                  <button class="btn btn-primary w-100" (click)="addToCart(product)">
-                    <i class="fas fa-shopping-cart me-2"></i>Add to Cart
-                  </button>
+                <div class="card-body">
+                  <h5 class="card-title">{{product.name}}</h5>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                      <span class="text-muted text-decoration-line-through">${{product.price}}</span>
+                      <span class="text-primary fw-bold ms-2">${{product.price * 0.8 | number:'1.2-2'}}</span>
+                    </div>
+                    <div class="text-warning">
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star"></i>
+                      <i class="fas fa-star-half-alt"></i>
+                    </div>
+                  </div>
+                  <div class="card-footer bg-white border-top-0">
+                    <button class="btn btn-primary w-100" (click)="addToCart(product)">
+                      <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <app-pagination
-        [currentPage]="currentPage"
-        [pageSize]="pageSize"
-        [totalItems]="totalItems"
-        [totalPages]="totalPages"
-        [hasNextPage]="hasNextPage"
-        [hasPreviousPage]="hasPreviousPage"
-        [searchQuery]="searchQuery"
-        (pageChange)="onPageChange($event)"
-        (pageSizeChange)="onPageSizeChange($event)">
-      </app-pagination>
+          
+        </app-pagination>
+
+
       </div>
     </div>
   </div>

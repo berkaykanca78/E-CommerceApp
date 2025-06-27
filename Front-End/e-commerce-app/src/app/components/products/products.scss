@@ -69,3 +69,11 @@
     }
   }
 }
+
+.products-grid-offset {
+  margin-top: -60px;
+  
+  @media (max-width: 991.98px) {
+    margin-top: 0; // Mobile'da offset kaldır
+  }
+}

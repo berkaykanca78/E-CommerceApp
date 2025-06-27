@@ -5,7 +5,6 @@ import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-alerts',
-  standalone: true,
   imports: [CommonModule],
   template: `
     <!-- Top Right -->
