@@ -1,0 +1,292 @@
+<div class="container-fluid py-4">
+  <!-- Page Header -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <h1 class="card-title mb-3">
+            <i class="fas fa-window-restore text-primary me-2"></i>
+            Modal Component Demo
+          </h1>
+          <p class="card-text text-muted">
+            Bootstrap 5 modal component'inin farklı konfigürasyonlarını test edin.
+            Bu sayfa modal component'inin tüm özelliklerini gösterir.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Demo Message Alert -->
+  <div class="row mb-4" *ngIf="demoMessage">
+    <div class="col-12">
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle me-2"></i>
+        {{ demoMessage }}
+        <button type="button" class="btn-close" (click)="demoMessage = ''" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Demo Buttons -->
+  <div class="row mb-5">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-light">
+          <h5 class="card-title mb-0">
+            <i class="fas fa-play-circle text-success me-2"></i>
+            Modal Örnekleri
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-6 col-lg-4" *ngFor="let config of modalConfigs">
+              <div class="d-grid">
+                <button 
+                  type="button" 
+                  [class]="'btn ' + config.buttonClass + ' btn-lg'"
+                  (click)="openModal(config.id)">
+                  <i class="fas fa-external-link-alt me-2"></i>
+                  {{ config.buttonText }}
+                </button>
+                <small class="text-muted mt-2">{{ config.description }}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features Section -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-light">
+          <h5 class="card-title mb-0">
+            <i class="fas fa-list-check text-info me-2"></i>
+            Modal Component Özellikleri
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <i class="fas fa-check text-success me-2"></i>
+                  Bootstrap 5 uyumlu
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check text-success me-2"></i>
+                  Farklı boyutlar (sm, lg, xl)
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check text-success me-2"></i>
+                  Ortalanmış modal
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check text-success me-2"></i>
+                  Kaydırılabilir içerik
+                </li>
+              </ul>
+            </div>
+            <div class="col-md-6">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <i class="fas fa-check text-success me-2"></i>
+                  Statik backdrop
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check text-success me-2"></i>
+                  Özelleştirilebilir butonlar
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check text-success me-2"></i>
+                  Event handling
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-check text-success me-2"></i>
+                  TypeScript desteği
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Components -->
+
+<!-- Basic Modal -->
+<app-modal 
+  #basicModal
+  id="basicModal"
+  title="Basic Modal"
+  primaryButtonText="Anladım"
+  secondaryButtonText="Kapat"
+  (primaryAction)="onModalAction('Primary', 'Basic')"
+  (secondaryAction)="onModalAction('Secondary', 'Basic')"
+  (modalShown)="onModalShown('Basic')"
+  (modalHidden)="onModalHidden('Basic')">
+  <div class="text-center">
+    <div class="mb-3">
+      <i class="fas fa-info-circle text-primary" style="font-size: 3rem;"></i>
+    </div>
+    <h6>Bu basit bir modal örneğidir</h6>
+    <p class="text-muted">
+      Modal component'inin temel kullanımını gösterir. 
+      Bootstrap 5'in tüm standart özelliklerini destekler.
+    </p>
+  </div>
+</app-modal>
+
+<!-- Large Modal -->
+<app-modal 
+  #largeModal
+  id="largeModal"
+  title="Large Modal"
+  size="lg"
+  primaryButtonText="Kaydet"
+  secondaryButtonText="İptal"
+  primaryButtonVariant="success"
+  (primaryAction)="onModalAction('Save', 'Large')"
+  (secondaryAction)="onModalAction('Cancel', 'Large')"
+  (modalShown)="onModalShown('Large')"
+  (modalHidden)="onModalHidden('Large')">
+  <div class="row">
+    <div class="col-md-6">
+      <h6>Büyük Modal</h6>
+      <p>Bu modal daha geniş içerik için tasarlanmıştır.</p>
+      <div class="mb-3">
+        <label for="demoInput" class="form-label">Demo Input:</label>
+        <input 
+          type="text" 
+          class="form-control" 
+          id="demoInput"
+          [(ngModel)]="demoInput"
+          placeholder="Bir şeyler yazın...">
+      </div>
+    </div>
+    <div class="col-md-6">
+      <h6>Özellikler</h6>
+      <ul class="list-unstyled">
+        <li><i class="fas fa-star text-warning me-2"></i>Geniş alan</li>
+        <li><i class="fas fa-star text-warning me-2"></i>Form desteği</li>
+        <li><i class="fas fa-star text-warning me-2"></i>Responsive tasarım</li>
+      </ul>
+    </div>
+  </div>
+</app-modal>
+
+<!-- Centered Modal -->
+<app-modal 
+  #centeredModal
+  id="centeredModal"
+  title="Centered Modal"
+  [centered]="true"
+  primaryButtonText="Tamam"
+  secondaryButtonText="Vazgeç"
+  primaryButtonVariant="info"
+  (primaryAction)="onModalAction('OK', 'Centered')"
+  (secondaryAction)="onModalAction('Cancel', 'Centered')"
+  (modalShown)="onModalShown('Centered')"
+  (modalHidden)="onModalHidden('Centered')">
+  <div class="text-center">
+    <div class="mb-3">
+      <i class="fas fa-crosshairs text-info" style="font-size: 2.5rem;"></i>
+    </div>
+    <h6>Ortalanmış Modal</h6>
+    <p class="text-muted">
+      Bu modal ekranın tam ortasında görünür. 
+      Daha iyi görsel deneyim için kullanılır.
+    </p>
+    <div class="alert alert-info">
+      <i class="fas fa-lightbulb me-2"></i>
+      Bu modal tam ortada konumlandırılmıştır!
+    </div>
+  </div>
+</app-modal>
+
+<!-- Static Modal -->
+<app-modal 
+  #staticModal
+  id="staticModal"
+  title="Static Backdrop Modal"
+  [staticBackdrop]="true"
+  primaryButtonText="Kapat"
+  secondaryButtonText="Geri"
+  primaryButtonVariant="warning"
+  secondaryButtonVariant="outline-warning"
+  (primaryAction)="staticModal.hide(); onModalAction('Close', 'Static')"
+  (secondaryAction)="onModalAction('Back', 'Static')"
+  (modalShown)="onModalShown('Static')"
+  (modalHidden)="onModalHidden('Static')">
+  <div class="alert alert-warning">
+    <i class="fas fa-exclamation-triangle me-2"></i>
+    <strong>Dikkat!</strong> Bu modal backdrop'a tıklayarak kapatılamaz.
+  </div>
+  <p>
+    Static backdrop özelliği ile modal dış alana tıklandığında kapanmaz. 
+    Kullanıcı sadece butonları kullanarak modal'ı kapatabilir.
+  </p>
+  <div class="list-group">
+    <div class="list-group-item">
+      <i class="fas fa-shield-alt text-warning me-2"></i>
+      Önemli işlemler için güvenlik
+    </div>
+    <div class="list-group-item">
+      <i class="fas fa-user-check text-warning me-2"></i>
+      Kullanıcı onayı gerekli
+    </div>
+  </div>
+</app-modal>
+
+<!-- Scrollable Modal -->
+<app-modal 
+  #scrollableModal
+  id="scrollableModal"
+  title="Scrollable Content Modal"
+  [scrollable]="true"
+  size="lg"
+  primaryButtonText="Okudum"
+  secondaryButtonText="Kapat"
+  primaryButtonVariant="secondary"
+  (primaryAction)="onModalAction('Read', 'Scrollable')"
+  (secondaryAction)="onModalAction('Close', 'Scrollable')"
+  (modalShown)="onModalShown('Scrollable')"
+  (modalHidden)="onModalHidden('Scrollable')">
+  <div class="mb-3">
+    <h6>Kaydırılabilir İçerikli Modal</h6>
+    <p class="text-muted">Bu modal uzun içeriği kaydırma ile gösterir.</p>
+  </div>
+  
+  <div class="mb-4">
+    <h6>Lorem Ipsum Metni</h6>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+    <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+  </div>
+
+  <div class="mb-4">
+    <h6>Daha Fazla İçerik</h6>
+    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.</p>
+    <p>Totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt.</p>
+    <p>Explicabo nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.</p>
+    <p>Sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+  </div>
+
+  <div class="mb-4">
+    <h6>Son Bölüm</h6>
+    <p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.</p>
+    <p>Sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
+    <p>Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam.</p>
+  </div>
+
+  <div class="alert alert-info">
+    <i class="fas fa-scroll me-2"></i>
+    Bu içerik kaydırma ile görüntülenir!
+  </div>
+</app-modal> 

@@ -1,0 +1,164 @@
+// Modal Demo Page Styles
+.container-fluid {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.card {
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+  }
+}
+
+.btn-lg {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+  }
+  
+  i {
+    transition: transform 0.2s ease;
+  }
+  
+  &:hover i {
+    transform: scale(1.1);
+  }
+}
+
+.alert {
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  
+  &.alert-success {
+    background-color: #d1e7dd;
+    color: #0a3622;
+    border-left: 4px solid #198754;
+  }
+  
+  &.alert-info {
+    background-color: #cff4fc;
+    color: #055160;
+    border-left: 4px solid #0dcaf0;
+  }
+  
+  &.alert-warning {
+    background-color: #fff3cd;
+    color: #664d03;
+    border-left: 4px solid #ffc107;
+  }
+}
+
+.list-group-item {
+  border: none;
+  background-color: transparent;
+  padding: 0.75rem 0;
+  
+  i {
+    width: 20px;
+  }
+}
+
+// Page Header Styles
+.card-title {
+  font-weight: 700;
+  color: #2c3e50;
+  
+  i {
+    font-size: 0.9em;
+  }
+}
+
+.card-header {
+  border-bottom: 2px solid #e9ecef;
+  
+  .card-title {
+    font-size: 1.1rem;
+    margin-bottom: 0;
+  }
+}
+
+// Button Grid
+.d-grid {
+  .btn {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  small {
+    font-size: 0.85rem;
+    line-height: 1.3;
+  }
+}
+
+// Modal Demo Specific Styles
+.modal-demo-content {
+  .row {
+    margin: 0;
+    
+    .col-md-6 {
+      padding: 0 15px;
+    }
+  }
+}
+
+// Animation for demo messages
+@keyframes slideInDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.alert.show {
+  animation: slideInDown 0.3s ease-out;
+}
+
+// Custom scrollbar for content
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+  
+  &:hover {
+    background: #a8a8a8;
+  }
+}
+
+// Responsive improvements
+@media (max-width: 768px) {
+  .container-fluid {
+    padding: 1rem;
+  }
+  
+  .btn-lg {
+    font-size: 1rem;
+    padding: 0.625rem 1.25rem;
+  }
+  
+  .card-title {
+    font-size: 1.5rem;
+  }
+} 

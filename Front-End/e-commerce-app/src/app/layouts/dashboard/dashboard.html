@@ -28,7 +28,7 @@
           </span>
         </li>
       </ul>
-      <li class="dropdown" [class.active]="componentsOpen || tab==='alerts' || tab==='pagination'"
+      <li class="dropdown" [class.active]="componentsOpen || tab==='alerts' || tab==='pagination' || tab==='modal'"
         (click)="toggleDropdown('components', $event)">
         <span class="icon-wrap"><i class="fas fa-cubes"></i></span> <span class="menu-label">Components</span>
         <i class="fas fa-chevron-right dropdown-arrow" [class.open]="componentsOpen"></i>
@@ -41,6 +41,10 @@
         <li [class.active]="tab==='pagination'" (click)="setTab('pagination', $event)">
           <span class="icon-wrap"><i class="fas fa-ellipsis-h"></i></span> <span class="menu-label"><a
             routerLink="/dashboard/pagination-demo" class="sidebar-link">Pagination</a></span>
+        </li>
+        <li [class.active]="tab==='modal'" (click)="setTab('modal', $event)">
+          <span class="icon-wrap"><i class="fas fa-window-restore"></i></span> <span class="menu-label"><a
+            routerLink="/dashboard/modal-demo" class="sidebar-link">Modal</a></span>
         </li>
       </ul>
     </ul>

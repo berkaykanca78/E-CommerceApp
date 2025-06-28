@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Pagination, TableColumn } from '../../shared/pagination/pagination';
+import { Modal } from '../../shared/modal/modal';
 
 interface Product {
   id: number;
@@ -17,11 +18,13 @@ interface Product {
 
 @Component({
   selector: 'app-dashboard-products',
-  imports: [CommonModule, FormsModule, Pagination],
+  imports: [CommonModule, FormsModule, Pagination, Modal],
   templateUrl: './dashboard-products.html',
   styleUrls: ['./dashboard-products.scss']
 })
 export class DashboardProducts implements OnInit {
+  @ViewChild('addProductModal') addProductModal!: Modal;
+  
   products: Product[] = [];
   categories: string[] = [];
   columns: TableColumn[] = [];
@@ -31,6 +34,19 @@ export class DashboardProducts implements OnInit {
   currentPage = 1;
   itemsPerPage = 12;
   paginatedProducts: Product[] = [];
+
+  // New product form data
+  newProduct: Partial<Product> = {
+    name: '',
+    description: '',
+    category: '',
+    price: 0,
+    stock: 0,
+    imageUrl: '',
+    isActive: true
+  };
+
+  availableCategories = ['Electronics', 'Clothing', 'Home & Kitchen', 'Sports', 'Books', 'Beauty', 'Toys', 'Automotive', 'Health', 'Music', 'Gaming', 'Accessories'];
 
   Math = Math;
 
@@ -289,8 +305,59 @@ export class DashboardProducts implements OnInit {
   }
 
   addProduct() {
-    console.log('Add product clicked');
-    // Implement add product logic
+    this.resetNewProductForm();
+    this.addProductModal.show();
+  }
+
+  resetNewProductForm() {
+    this.newProduct = {
+      name: '',
+      description: '',
+      category: '',
+      price: 0,
+      stock: 0,
+      imageUrl: '',
+      isActive: true
+    };
+  }
+
+  saveNewProduct() {
+    if (this.validateProductForm()) {
+      const newId = Math.max(...this.products.map(p => p.id)) + 1;
+      const productToAdd: Product = {
+        id: newId,
+        name: this.newProduct.name!,
+        description: this.newProduct.description!,
+        category: this.newProduct.category!,
+        price: this.newProduct.price!,
+        stock: this.newProduct.stock!,
+        imageUrl: this.newProduct.imageUrl || 'https://via.placeholder.com/400x300',
+        isActive: this.newProduct.isActive!,
+        createdDate: new Date()
+      };
+      
+      this.products.push(productToAdd);
+      this.addProductModal.hide();
+      this.resetNewProductForm();
+      
+      // Show success message
+      console.log('Product added successfully:', productToAdd);
+    }
+  }
+
+  validateProductForm(): boolean {
+    return !!(this.newProduct.name && 
+              this.newProduct.description && 
+              this.newProduct.category && 
+              this.newProduct.price !== undefined && 
+              this.newProduct.price > 0 &&
+              this.newProduct.stock !== undefined && 
+              this.newProduct.stock >= 0);
+  }
+
+  cancelAddProduct() {
+    this.addProductModal.hide();
+    this.resetNewProductForm();
   }
 
   editProduct(product: Product) {

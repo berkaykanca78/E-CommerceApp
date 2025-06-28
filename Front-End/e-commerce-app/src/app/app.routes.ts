@@ -12,6 +12,7 @@ import { ForgotPassword } from './components/auth/forgot-password/forgot-passwor
 import { Dashboard } from './layouts/dashboard/dashboard';
 import { MainLayout } from './layouts/main/main-layout';
 import { PaginationDemo } from './components/shared/pagination/pagination-demo';
+import { ModalDemo } from './components/shared/modal-demo/modal-demo';
 import { Faq } from './components/customer-services/faq/faq';
 import { About } from './components/about/about';
 import { Contact } from './components/contact/contact';
@@ -54,6 +55,7 @@ export const routes: Routes = [
       { path: 'categories', component: DashboardCategories },
       { path: 'alert-demo', component: AlertDemo },
       { path: 'pagination-demo', component: PaginationDemo },
+      { path: 'modal-demo', component: ModalDemo },
     ]
   },
   { path: '**', redirectTo: 'home' }

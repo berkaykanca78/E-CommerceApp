@@ -1,0 +1,27 @@
+<!-- Modal -->
+<div class="modal fade" [id]="id" tabindex="-1" [attr.aria-labelledby]="id + 'Label'" aria-hidden="true" #modalElement>
+  <div [class]="modalDialogClasses">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" [id]="id + 'Label'">{{ title }}</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <ng-content></ng-content>
+      </div>
+      
+      <!-- Modal Footer -->
+      <div class="modal-footer" *ngIf="showFooter">
+        <button type="button" [class]="'btn btn-' + secondaryButtonVariant" data-bs-dismiss="modal" (click)="onSecondaryClick()">
+          {{ secondaryButtonText }}
+        </button>
+        <button type="button" [class]="'btn btn-' + primaryButtonVariant" (click)="onPrimaryClick()">
+          {{ primaryButtonText }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div> 

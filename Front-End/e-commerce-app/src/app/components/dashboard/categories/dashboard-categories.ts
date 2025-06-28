@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Pagination, TableColumn } from '../../shared/pagination/pagination';
+import { Modal } from '../../shared/modal/modal';
 
 interface Category {
   id: number;
@@ -14,11 +15,13 @@ interface Category {
 
 @Component({
   selector: 'app-dashboard-categories',
-  imports: [CommonModule, FormsModule, Pagination],
+  imports: [CommonModule, FormsModule, Pagination, Modal],
   templateUrl: './dashboard-categories.html',
   styleUrls: ['./dashboard-categories.scss']
 })
 export class DashboardCategories implements OnInit {
+  @ViewChild('addCategoryModal') addCategoryModal!: Modal;
+  
   categories: Category[] = [];
   columns: TableColumn[] = [];
   loading = false;
@@ -27,6 +30,14 @@ export class DashboardCategories implements OnInit {
   currentPage = 1;
   itemsPerPage = 12;
   paginatedCategories: Category[] = [];
+
+  // New category form data
+  newCategory: Partial<Category> = {
+    name: '',
+    description: '',
+    imageUrl: '',
+    isActive: true
+  };
 
   Math = Math;
 
@@ -195,8 +206,54 @@ export class DashboardCategories implements OnInit {
   }
 
   addCategory() {
-    console.log('Add category clicked');
-    // Implement add category logic
+    this.resetNewCategoryForm();
+    this.addCategoryModal.show();
+  }
+
+  resetNewCategoryForm() {
+    this.newCategory = {
+      name: '',
+      description: '',
+      imageUrl: '',
+      isActive: true
+    };
+  }
+
+  saveNewCategory() {
+    if (this.validateCategoryForm()) {
+      const newId = Math.max(...this.categories.map(c => c.id)) + 1;
+      const categoryToAdd: Category = {
+        id: newId,
+        name: this.newCategory.name!,
+        description: this.newCategory.description!,
+        imageUrl: this.newCategory.imageUrl || 'https://via.placeholder.com/400x300',
+        isActive: this.newCategory.isActive!,
+        createdDate: new Date()
+      };
+      
+      this.categories.push(categoryToAdd);
+      this.addCategoryModal.hide();
+      this.resetNewCategoryForm();
+      
+      // Show success message
+      console.log('Category added successfully:', categoryToAdd);
+    }
+  }
+
+  validateCategoryForm(): boolean {
+    return !!(this.newCategory.name && this.newCategory.description);
+  }
+
+  cancelAddCategory() {
+    this.addCategoryModal.hide();
+    this.resetNewCategoryForm();
+  }
+
+  onImageError(event: Event) {
+    const target = event.target as HTMLImageElement;
+    if (target) {
+      target.src = 'https://via.placeholder.com/200x150';
+    }
   }
 
   editCategory(category: Category) {

@@ -87,3 +87,144 @@
       </app-pagination>
     </div>
   </div>
+
+<!-- Add Product Modal -->
+<app-modal 
+  #addProductModal
+  id="addProductModal"
+  title="Add New Product"
+  size="lg"
+  primaryButtonText="Save Product"
+  secondaryButtonText="Cancel"
+  primaryButtonVariant="success"
+  (primaryAction)="saveNewProduct()"
+  (secondaryAction)="cancelAddProduct()">
+  
+  <form class="row g-3">
+    <!-- Product Name -->
+    <div class="col-md-6">
+      <label for="productName" class="form-label">
+        <i class="fas fa-tag me-1"></i>Product Name *
+      </label>
+      <input 
+        type="text" 
+        class="form-control" 
+        id="productName"
+        [(ngModel)]="newProduct.name"
+        name="productName"
+        placeholder="Enter product name"
+        required>
+    </div>
+
+    <!-- Category -->
+    <div class="col-md-6">
+      <label for="productCategory" class="form-label">
+        <i class="fas fa-list me-1"></i>Category *
+      </label>
+      <select 
+        class="form-select" 
+        id="productCategory"
+        [(ngModel)]="newProduct.category"
+        name="productCategory"
+        required>
+        <option value="">Select a category</option>
+        <option *ngFor="let category of availableCategories" [value]="category">
+          {{category}}
+        </option>
+      </select>
+    </div>
+
+    <!-- Price -->
+    <div class="col-md-6">
+      <label for="productPrice" class="form-label">
+        <i class="fas fa-dollar-sign me-1"></i>Price ($) *
+      </label>
+      <input 
+        type="number" 
+        class="form-control" 
+        id="productPrice"
+        [(ngModel)]="newProduct.price"
+        name="productPrice"
+        min="0"
+        step="0.01"
+        placeholder="0.00"
+        required>
+    </div>
+
+    <!-- Stock -->
+    <div class="col-md-6">
+      <label for="productStock" class="form-label">
+        <i class="fas fa-boxes me-1"></i>Stock Quantity *
+      </label>
+      <input 
+        type="number" 
+        class="form-control" 
+        id="productStock"
+        [(ngModel)]="newProduct.stock"
+        name="productStock"
+        min="0"
+        placeholder="0"
+        required>
+    </div>
+
+    <!-- Description -->
+    <div class="col-12">
+      <label for="productDescription" class="form-label">
+        <i class="fas fa-align-left me-1"></i>Description *
+      </label>
+      <textarea 
+        class="form-control" 
+        id="productDescription"
+        [(ngModel)]="newProduct.description"
+        name="productDescription"
+        rows="3"
+        placeholder="Enter product description"
+        required></textarea>
+    </div>
+
+    <!-- Image URL -->
+    <div class="col-12">
+      <label for="productImageUrl" class="form-label">
+        <i class="fas fa-image me-1"></i>Image URL
+      </label>
+      <input 
+        type="url" 
+        class="form-control" 
+        id="productImageUrl"
+        [(ngModel)]="newProduct.imageUrl"
+        name="productImageUrl"
+        placeholder="https://example.com/image.jpg">
+      <div class="form-text">Leave empty to use a placeholder image</div>
+    </div>
+
+    <!-- Status -->
+    <div class="col-12">
+      <div class="form-check">
+        <input 
+          class="form-check-input" 
+          type="checkbox" 
+          id="productActive"
+          [(ngModel)]="newProduct.isActive"
+          name="productActive">
+        <label class="form-check-label" for="productActive">
+          <i class="fas fa-eye me-1"></i>Active Product
+        </label>
+        <div class="form-text">Active products will be visible to customers</div>
+      </div>
+    </div>
+  </form>
+
+  <!-- Form Validation Alert -->
+  <div class="alert alert-warning mt-3" *ngIf="!validateProductForm() && (newProduct.name || newProduct.description || newProduct.category)">
+    <i class="fas fa-exclamation-triangle me-2"></i>
+    <strong>Please fill in all required fields</strong>
+    <ul class="mb-0 mt-2">
+      <li *ngIf="!newProduct.name">Product name is required</li>
+      <li *ngIf="!newProduct.description">Description is required</li>
+      <li *ngIf="!newProduct.category">Category is required</li>
+      <li *ngIf="!newProduct.price || newProduct.price <= 0">Valid price is required</li>
+      <li *ngIf="newProduct.stock === undefined || newProduct.stock < 0">Valid stock quantity is required</li>
+    </ul>
+  </div>
+
+</app-modal>
