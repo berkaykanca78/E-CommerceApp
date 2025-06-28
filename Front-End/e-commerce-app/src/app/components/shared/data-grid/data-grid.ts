@@ -13,12 +13,12 @@ export interface TableColumn {
 }
 
 @Component({
-  selector: 'app-pagination',
+  selector: 'app-data-grid',
   imports: [CommonModule, FormsModule],
-  templateUrl: './pagination.html',
-  styleUrls: ['./pagination.scss']
+  templateUrl: './data-grid.html',
+  styleUrls: ['./data-grid.scss']
 })
-export class Pagination implements OnInit, OnChanges {
+export class DataGrid implements OnInit, OnChanges {
   // Data Properties
   @Input() data: any[] = [];
   @Input() columns: TableColumn[] = [];
@@ -38,7 +38,7 @@ export class Pagination implements OnInit, OnChanges {
   @Input() itemsPerPage: number = 6;
   @Input() pageSizeOptions: number[] = [6, 12, 18, 24];
   @Input() totalItems: number = 0;
-  @Input() serverSidePagination: boolean = false; // For API pagination
+  @Input() serverSideDataGrid: boolean = false; // For API data grid
   
   // Search and Filter Properties
   @Input() searchTerm: string = '';
@@ -74,8 +74,8 @@ export class Pagination implements OnInit, OnChanges {
   @Input() emptyStateTitle: string = 'No data found';
   @Input() emptyStateMessage: string = 'Try adjusting your search or filter criteria';
   
-  // Pagination Label
-  @Input() paginationLabel: string = 'Data pagination';
+  // Data Grid Label
+  @Input() dataGridLabel: string = 'Data grid';
   
   // Hide table (show only controls) - deprecated, use viewMode instead
   @Input() hideTable: boolean = false;
@@ -90,11 +90,11 @@ export class Pagination implements OnInit, OnChanges {
   @Output() editItem = new EventEmitter<any>();
   @Output() toggleStatus = new EventEmitter<any>();
   @Output() deleteItem = new EventEmitter<any>();
-  @Output() paginatedDataChange = new EventEmitter<any[]>();
+  @Output() dataGridDataChange = new EventEmitter<any[]>();
 
   // Computed Properties
   filteredData: any[] = [];
-  paginatedData: any[] = [];
+  dataGridData: any[] = [];
   totalPages: number = 0;
 
   Math = Math;
@@ -104,7 +104,7 @@ export class Pagination implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['data'] || changes['searchTerm'] || changes['statusFilter'] || changes['categoryFilter'] || changes['totalItems'] || changes['currentPage'] || changes['serverSidePagination']) {
+    if (changes['data'] || changes['searchTerm'] || changes['statusFilter'] || changes['categoryFilter'] || changes['totalItems'] || changes['currentPage'] || changes['serverSideDataGrid']) {
       this.updateData();
     }
   }
@@ -113,13 +113,13 @@ export class Pagination implements OnInit, OnChanges {
     // Handle empty data
     if (!this.data || this.data.length === 0) {
       this.filteredData = [];
-      this.paginatedData = [];
+      this.dataGridData = [];
       // Use input totalItems if provided, otherwise 0
       if (!this.totalItems) {
         this.totalItems = 0;
       }
       this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
-      this.paginatedDataChange.emit(this.paginatedData);
+      this.dataGridDataChange.emit(this.dataGridData);
       return;
     }
 
@@ -177,20 +177,20 @@ export class Pagination implements OnInit, OnChanges {
       this.currentPage = 1;
     }
 
-    // Apply pagination
+    // Apply data grid
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
     
-    if (this.serverSidePagination) {
-      // For API pagination, data is already paginated
-      this.paginatedData = this.filteredData;
+    if (this.serverSideDataGrid) {
+      // For API data grid, data is already paginated
+      this.dataGridData = this.filteredData;
     } else {
-      // For local pagination, slice the data
-      this.paginatedData = this.filteredData.slice(startIndex, endIndex);
+      // For local data grid, slice the data
+      this.dataGridData = this.filteredData.slice(startIndex, endIndex);
     }
     
-    // Emit paginated data
-    this.paginatedDataChange.emit(this.paginatedData);
+    // Emit data grid data
+    this.dataGridDataChange.emit(this.dataGridData);
   }
 
   // Event Handlers
@@ -230,14 +230,13 @@ export class Pagination implements OnInit, OnChanges {
   }
 
   onPageChange(page: number) {
-    if (page >= 1 && page <= this.totalPages) {
+    if (page >= 1 && page <= this.totalPages && page !== this.currentPage) {
       this.currentPage = page;
       this.updateData();
-      this.pageChange.emit(page);
+      this.pageChange.emit(this.currentPage);
     }
   }
 
-  // View Mode Handler
   onViewModeChange(mode: 'grid' | 'table') {
     this.viewMode = mode;
     this.viewModeChange.emit(mode);
@@ -247,12 +246,11 @@ export class Pagination implements OnInit, OnChanges {
     this.addButtonClick.emit();
   }
 
-  // Filter Toggle Handler
+  // Filter toggle
   toggleFilters() {
     this.filtersExpanded = !this.filtersExpanded;
   }
 
-  // Action Handlers
   onEdit(item: any) {
     this.editItem.emit(item);
   }
@@ -265,61 +263,54 @@ export class Pagination implements OnInit, OnChanges {
     this.deleteItem.emit(item);
   }
 
-  // Helper Methods
-  getPaginationArray(): number[] {
-    const pages: number[] = [];
+  // Helper methods
+  getDataGridArray(): number[] {
     const maxPagesToShow = 5;
-    let startPage = Math.max(1, this.currentPage - Math.floor(maxPagesToShow / 2));
-    let endPage = Math.min(this.totalPages, startPage + maxPagesToShow - 1);
+    const totalPages = this.totalPages;
+    const currentPage = this.currentPage;
 
-    if (endPage - startPage + 1 < maxPagesToShow) {
-      startPage = Math.max(1, endPage - maxPagesToShow + 1);
+    if (totalPages <= maxPagesToShow) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
     }
 
-    for (let i = startPage; i <= endPage; i++) {
-      pages.push(i);
-    }
+    const startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+    const endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+    const adjustedStartPage = Math.max(1, endPage - maxPagesToShow + 1);
 
-    return pages;
+    return Array.from({ length: endPage - adjustedStartPage + 1 }, (_, i) => adjustedStartPage + i);
   }
 
   trackByFn(index: number, item: any): any {
     return item.id || index;
   }
 
-  // Badge Helpers
   getBadgeClass(value: any, config?: { [key: string]: { class: string; text: string } }): string {
     if (config && config[value]) {
       return config[value].class;
     }
-    return 'bg-secondary';
+    return value ? 'bg-success' : 'bg-danger';
   }
 
   getBadgeText(value: any, config?: { [key: string]: { class: string; text: string } }): string {
     if (config && config[value]) {
       return config[value].text;
     }
-    return String(value);
+    return value ? 'Active' : 'Inactive';
   }
 
-  // Stock Helpers
   getStockBadgeClass(stock: number): string {
-    if (stock === 0) return 'bg-danger';
+    if (stock <= 0) return 'bg-danger';
     if (stock <= 10) return 'bg-warning';
     return 'bg-success';
   }
 
   getStockText(stock: number): string {
-    if (stock === 0) return 'Out of Stock';
+    if (stock <= 0) return 'Out of Stock';
     if (stock <= 10) return 'Low Stock';
     return 'In Stock';
   }
 
-  // Price Formatter
   formatPrice(price: number): string {
-    return new Intl.NumberFormat('tr-TR', {
-      style: 'currency',
-      currency: 'TRY'
-    }).format(price);
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price);
   }
 } 

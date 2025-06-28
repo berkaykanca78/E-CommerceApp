@@ -1,73 +1,145 @@
-<div class="admin-layout" [class.sidebar-collapsed]="sidebarCollapsed">
+<div class="admin-layout" [class.sidebar-collapsed]="sidebarCollapsed" [class.mobile-menu-open]="mobileMenuOpen">
   <app-alerts></app-alerts>
-  <aside class="sidebar">
+  
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu-overlay" *ngIf="mobileMenuOpen && isMobile" (click)="closeMobileMenu()"></div>
+  
+  <aside class="sidebar" [class.mobile-open]="mobileMenuOpen">
     <div class="sidebar-header">
       <i class="fas fa-bolt"></i>
-      <span class="brand"><small>E-Commerce Admin</small></span>
+      <span class="brand">Dashboard</span>
+      <button class="mobile-close-btn" *ngIf="isMobile" (click)="closeMobileMenu()">
+        <i class="fas fa-times"></i>
+      </button>
     </div>
-    <ul class="sidebar-menu">
-      <li [class.active]="tab==='home'" (click)="setTab('home')">
-        <span class="icon-wrap"><i class="fas fa-home"></i></span> <span class="menu-label">Home</span>
-      </li>
-      <li class="dropdown" [class.active]="datasOpen || tab==='products' || tab==='categories'"
-        (click)="toggleDropdown('datas', $event)">
-        <span class="icon-wrap"><i class="fas fa-database"></i></span> <span class="menu-label">Datas</span>
-        <i class="fas fa-chevron-right dropdown-arrow" [class.open]="datasOpen"></i>
-      </li>
-      <ul class="dropdown-menu" *ngIf="datasOpen">
-        <li [class.active]="tab==='products'" (click)="setTab('products', $event)">
-          <span class="icon-wrap"><i class="fas fa-box"></i></span> 
+    
+    <nav class="sidebar-menu">
+      <ul class="menu-list">
+        <li class="menu-item" [class.active]="tab==='home'" (click)="setTab('home')">
+          <span class="icon-wrap"><i class="fas fa-home"></i></span> 
           <span class="menu-label">
-            <a routerLink="/dashboard/products" class="sidebar-link">Products</a>
+            <a routerLink="/dashboard/home" class="sidebar-link">Home</a>
           </span>
         </li>
-        <li [class.active]="tab==='categories'" (click)="setTab('categories', $event)">
-          <span class="icon-wrap"><i class="fas fa-tags"></i></span> 
-          <span class="menu-label">
-            <a routerLink="/dashboard/categories" class="sidebar-link">Categories</a>
-          </span>
+        
+        <li class="menu-item dropdown-item">
+          <div class="dropdown-header" [class.active]="datasOpen || tab==='products' || tab==='categories'"
+            (click)="toggleDropdown('datas', $event)">
+            <span class="icon-wrap"><i class="fas fa-database"></i></span> 
+            <span class="menu-label">Data</span>
+            <i class="fas fa-chevron-down dropdown-arrow" [class.open]="datasOpen"></i>
+          </div>
+          
+          <div class="dropdown-content" [class.show]="datasOpen">
+            <ul class="submenu">
+              <li class="submenu-item" [class.active]="tab==='products'" (click)="setTab('products', $event)">
+                <span class="icon-wrap"><i class="fas fa-box"></i></span> 
+                <span class="menu-label">
+                  <a routerLink="/dashboard/products" class="sidebar-link">Products</a>
+                </span>
+              </li>
+              <li class="submenu-item" [class.active]="tab==='categories'" (click)="setTab('categories', $event)">
+                <span class="icon-wrap"><i class="fas fa-tags"></i></span> 
+                <span class="menu-label">
+                  <a routerLink="/dashboard/categories" class="sidebar-link">Categories</a>
+                </span>
+              </li>
+            </ul>
+          </div>
+        </li>
+        
+        <li class="menu-item dropdown-item">
+          <div class="dropdown-header" [class.active]="componentsOpen || tab==='alerts' || tab==='data-grid' || tab==='modal' || tab==='charts' || tab==='forms' || tab==='tables' || tab==='upload' || tab==='cards' || tab==='gallery'"
+            (click)="toggleDropdown('components', $event)">
+            <span class="icon-wrap"><i class="fas fa-tools"></i></span> 
+            <span class="menu-label">Components</span>
+            <i class="fas fa-chevron-down dropdown-arrow" [class.open]="componentsOpen"></i>
+          </div>
+          
+          <div class="dropdown-content" [class.show]="componentsOpen">
+            <ul class="submenu">
+              <li class="submenu-item" [class.active]="tab==='alerts'" (click)="setTab('alerts', $event)">
+                <span class="icon-wrap"><i class="fas fa-bell"></i></span> 
+                <span class="menu-label">
+                  <a routerLink="/dashboard/alert-demo" class="sidebar-link">Alerts</a>
+                </span>
+              </li>
+              <li class="submenu-item" [class.active]="tab==='data-grid'" (click)="setTab('data-grid', $event)">
+                <span class="icon-wrap"><i class="fas fa-table"></i></span> 
+                <span class="menu-label">
+                  <a routerLink="/dashboard/data-grid-demo" class="sidebar-link">Data Grid</a>
+                </span>
+              </li>
+              <li class="submenu-item" [class.active]="tab==='modal'" (click)="setTab('modal', $event)">
+                <span class="icon-wrap"><i class="fas fa-window-restore"></i></span> 
+                <span class="menu-label">
+                  <a routerLink="/dashboard/modal-demo" class="sidebar-link">Modals</a>
+                </span>
+              </li>
+              <li class="submenu-item" [class.active]="tab==='charts'" (click)="setTab('charts', $event)">
+                <span class="icon-wrap"><i class="fas fa-chart-line"></i></span> 
+                <span class="menu-label">
+                  <a routerLink="/dashboard/charts-demo" class="sidebar-link">Charts</a>
+                </span>
+              </li>
+              <li class="submenu-item" [class.active]="tab==='forms'" (click)="setTab('forms', $event)">
+                <span class="icon-wrap"><i class="fas fa-edit"></i></span> 
+                <span class="menu-label">
+                  <a routerLink="/dashboard/forms-demo" class="sidebar-link">Forms</a>
+                </span>
+              </li>
+              <li class="submenu-item" [class.active]="tab==='upload'" (click)="setTab('upload', $event)">
+                <span class="icon-wrap"><i class="fas fa-upload"></i></span> 
+                <span class="menu-label">
+                  <a routerLink="/dashboard/upload-demo" class="sidebar-link">File Upload</a>
+                </span>
+              </li>
+              <li class="submenu-item" [class.active]="tab==='cards'" (click)="setTab('cards', $event)">
+                <span class="icon-wrap"><i class="fas fa-credit-card"></i></span> 
+                <span class="menu-label">
+                  <a routerLink="/dashboard/cards-demo" class="sidebar-link">Cards</a>
+                </span>
+              </li>
+              <li class="submenu-item" [class.active]="tab==='carousel'" (click)="setTab('carousel', $event)">
+                <span class="icon-wrap"><i class="fas fa-images"></i></span> 
+                <span class="menu-label">
+                  <a routerLink="/dashboard/carousel-demo" class="sidebar-link">Carousel</a>
+                </span>
+              </li>
+            </ul>
+          </div>
         </li>
       </ul>
-      <li class="dropdown" [class.active]="componentsOpen || tab==='alerts' || tab==='pagination' || tab==='modal'"
-        (click)="toggleDropdown('components', $event)">
-        <span class="icon-wrap"><i class="fas fa-cubes"></i></span> <span class="menu-label">Components</span>
-        <i class="fas fa-chevron-right dropdown-arrow" [class.open]="componentsOpen"></i>
-      </li>
-      <ul class="dropdown-menu" *ngIf="componentsOpen">
-        <li [class.active]="tab==='alerts'" (click)="setTab('alerts', $event)">
-          <span class="icon-wrap"><i class="fas fa-bell"></i></span> <span class="menu-label"><a
-              routerLink="/dashboard/alert-demo" class="sidebar-link">Alert</a></span>
-        </li>
-        <li [class.active]="tab==='pagination'" (click)="setTab('pagination', $event)">
-          <span class="icon-wrap"><i class="fas fa-ellipsis-h"></i></span> <span class="menu-label"><a
-            routerLink="/dashboard/pagination-demo" class="sidebar-link">Pagination</a></span>
-        </li>
-        <li [class.active]="tab==='modal'" (click)="setTab('modal', $event)">
-          <span class="icon-wrap"><i class="fas fa-window-restore"></i></span> <span class="menu-label"><a
-            routerLink="/dashboard/modal-demo" class="sidebar-link">Modal</a></span>
-        </li>
-      </ul>
-    </ul>
+    </nav>
   </aside>
+  
   <div class="main-content">
     <header class="appbar">
       <button class="sidebar-toggle icon-btn" (click)="toggleSidebar()">
         <i class="fas fa-bars"></i>
       </button>
+      
       <div class="search-box">
         <input type="text" placeholder="Search..." />
         <i class="fas fa-search"></i>
       </div>
+      
       <div class="appbar-actions">
-        <button class="icon-btn"><i class="fas fa-bell"></i></button>
-        <button class="icon-btn"><i class="fas fa-user-circle"></i></button>
-        <button class="icon-btn" routerLink="/home" title="Logout">
-          <i class="fas fa-sign-out-alt"></i>
+        <button class="icon-btn" title="Notifications">
+          <i class="fas fa-bell"></i>
+          <span class="notification-badge">3</span>
+        </button>
+        <button class="icon-btn" title="Profile">
+          <i class="fas fa-user-circle"></i>
+        </button>
+        <button class="icon-btn" routerLink="/home" title="Exit to Store">
+          <i class="fas fa-store"></i>
         </button>
       </div>
     </header>
-    <div class="content-area">
+    
+    <main class="content-area">
       <router-outlet></router-outlet>
-    </div>
+    </main>
   </div>
 </div>

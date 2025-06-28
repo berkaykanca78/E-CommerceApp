@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Pagination, TableColumn } from '../shared/pagination/pagination';
+import { DataGrid, TableColumn } from '../shared/data-grid/data-grid';
 import { Product, Category } from '../../models';
 import { Product as ProductService } from '../../services/product';
 import { ActivatedRoute } from '@angular/router';
@@ -10,7 +10,7 @@ import { AlertService } from '../../services/alert';
 
 @Component({
   selector: 'app-products',
-  imports: [CommonModule, FormsModule, Pagination],
+  imports: [CommonModule, FormsModule, DataGrid],
   templateUrl: './products.html',
   styleUrl: './products.scss'
 })
@@ -20,7 +20,7 @@ export class Products implements OnInit {
   categories = signal<Category[]>([]);
   selectedCategory: number | null = null;
   currentPage = 1;
-  pageSize = 6;
+  itemsPerPage = 6;
   totalItems = 0;
   totalPages = 0;
   hasNextPage = false;
@@ -30,7 +30,7 @@ export class Products implements OnInit {
   error = '';
   viewMode: 'grid' | 'table' = 'grid';
   
-  // Pagination columns for table view
+  // Data grid columns for table view
   tableColumns: TableColumn[] = [
     {
       key: 'imageUrl',
@@ -60,7 +60,7 @@ export class Products implements OnInit {
     }
   ];
 
-  // Pagination columns for grid view (minimal for card display)
+  // Data grid columns for grid view (minimal for card display)
   gridColumns: TableColumn[] = [
     {
       key: 'imageUrl',
@@ -122,7 +122,7 @@ export class Products implements OnInit {
     this.loading = true;
     this.error = '';
     
-    this.productService.getProducts(this.currentPage, this.pageSize, this.searchQuery).subscribe({
+    this.productService.getProducts(this.currentPage, this.itemsPerPage, this.searchQuery).subscribe({
       next: (response) => {
         if (response && response.items["$values"]) {
           const validProducts = response.items["$values"].filter((product: Product & { $ref?: string }) =>
@@ -131,7 +131,7 @@ export class Products implements OnInit {
           this.products.set(validProducts);
           this.productsArray = validProducts;
           this.totalItems = response.totalItems || validProducts.length;
-          this.totalPages = response.totalPages || Math.ceil(this.totalItems / this.pageSize);
+          this.totalPages = response.totalPages || Math.ceil(this.totalItems / this.itemsPerPage);
           this.hasNextPage = response.hasNextPage ?? (this.currentPage < this.totalPages);
           this.hasPreviousPage = response.hasPreviousPage ?? (this.currentPage > 1);
           this.loading = false;
@@ -159,7 +159,7 @@ export class Products implements OnInit {
   }
 
   private loadProductsByCategory(categoryId: number): void {
-    this.productService.getProductsByCategory(categoryId, this.currentPage, this.pageSize).subscribe({
+    this.productService.getProductsByCategory(categoryId, this.currentPage, this.itemsPerPage).subscribe({
       next: (response) => {
         if (response && response.items["$values"]) {
           this.products.set(response.items["$values"]);
@@ -178,7 +178,7 @@ export class Products implements OnInit {
   }
 
   private searchProducts(query: string): void {
-    this.productService.getProducts(this.currentPage, this.pageSize, query).subscribe({
+    this.productService.getProducts(this.currentPage, this.itemsPerPage, query).subscribe({
       next: (response) => {
         if (response && response.items["$values"]) {
           const validProducts = response.items["$values"].filter((product: Product & { $ref?: string }) =>
@@ -187,7 +187,7 @@ export class Products implements OnInit {
           this.products.set(validProducts);
           this.productsArray = validProducts;
           this.totalItems = response.totalItems || validProducts.length;
-          this.totalPages = response.totalPages || Math.ceil(this.totalItems / this.pageSize);
+          this.totalPages = response.totalPages || Math.ceil(this.totalItems / this.itemsPerPage);
           this.hasNextPage = response.hasNextPage ?? (this.currentPage < this.totalPages);
           this.hasPreviousPage = response.hasPreviousPage ?? (this.currentPage > 1);
         } else {
@@ -228,9 +228,9 @@ export class Products implements OnInit {
     return category.id;
   }
 
-  onPaginatedDataChange(paginatedData: Product[]) {
-    //this.productsArray = paginatedData;
-    this.products.set(paginatedData);
+  onDataGridDataChange(dataGridData: Product[]) {
+    //this.productsArray = dataGridData;
+    this.products.set(dataGridData);
   }
 
   onPageChange(page: number) {
@@ -246,7 +246,7 @@ export class Products implements OnInit {
   }
 
   onPageSizeChange(newPageSize: number): void {
-    this.pageSize = newPageSize;
+    this.itemsPerPage = newPageSize;
     this.currentPage = 1;
     if (this.searchQuery) {
       this.searchProducts(this.searchQuery);

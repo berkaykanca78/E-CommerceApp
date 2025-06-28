@@ -1,0 +1,141 @@
+<div class="dashboard-home">
+  <!-- Header Section -->
+  <div class="dashboard-header">
+    <div class="header-content">
+      <h1 class="dashboard-title">Dashboard Overview</h1>
+      <p class="dashboard-subtitle">Welcome back! Here's what's happening with your store.</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-primary">
+        <i class="fas fa-plus"></i>
+        Add Product
+      </button>
+    </div>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="stats-grid">
+    <div class="stat-card" [style.border-left-color]="stat.color" *ngFor="let stat of stats">
+      <div class="stat-icon" [style.background-color]="stat.color + '20'">
+        <i [class]="stat.icon" [style.color]="stat.color"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-value">{{ stat.value }}</div>
+        <div class="stat-label">{{ stat.label }}</div>
+        <div class="stat-change" [class.positive]="stat.change > 0" [class.negative]="stat.change < 0">
+          <i class="fas" [class.fa-arrow-up]="stat.change > 0" [class.fa-arrow-down]="stat.change < 0"></i>
+          {{ Math.abs(stat.change) }}% from last month
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Row -->
+  <div class="charts-row">
+    <!-- Sales Chart -->
+    <div class="chart-card">
+      <div class="chart-header">
+        <h3>Sales Overview</h3>
+        <div class="chart-controls">
+          <button class="btn-sm" [class.active]="salesPeriod === 'week'" (click)="setSalesPeriod('week')">Week</button>
+          <button class="btn-sm" [class.active]="salesPeriod === 'month'" (click)="setSalesPeriod('month')">Month</button>
+          <button class="btn-sm" [class.active]="salesPeriod === 'year'" (click)="setSalesPeriod('year')">Year</button>
+        </div>
+      </div>
+      <div class="chart-container">
+        <canvas #salesChart width="400" height="200"></canvas>
+      </div>
+    </div>
+
+    <!-- Orders Chart -->
+    <div class="chart-card">
+      <div class="chart-header">
+        <h3>Order Status</h3>
+      </div>
+      <div class="chart-container">
+        <canvas #ordersChart width="400" height="200"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Analytics Row -->
+  <div class="analytics-row">
+    <!-- Top Products -->
+    <div class="analytics-card">
+      <div class="analytics-header">
+        <h3>Top Products</h3>
+        <a href="/dashboard/products" class="view-all">View All</a>
+      </div>
+      <div class="analytics-content">
+        <div class="product-item" *ngFor="let product of topProducts; let i = index">
+          <div class="product-rank">{{ i + 1 }}</div>
+          <div class="product-info">
+            <div class="product-name">{{ product.name }}</div>
+            <div class="product-category">{{ product.category }}</div>
+          </div>
+          <div class="product-stats">
+            <div class="product-sales">${{ product.sales }}</div>
+            <div class="product-units">{{ product.units }} sold</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Orders -->
+    <div class="analytics-card">
+      <div class="analytics-header">
+        <h3>Recent Orders</h3>
+        <a href="/dashboard/orders" class="view-all">View All</a>
+      </div>
+      <div class="analytics-content">
+        <div class="order-item" *ngFor="let order of recentOrders">
+          <div class="order-info">
+            <div class="order-id">#{{ order.id }}</div>
+            <div class="order-customer">{{ order.customer }}</div>
+          </div>
+          <div class="order-details">
+            <div class="order-amount">${{ order.amount }}</div>
+            <div class="order-status" [class]="order.status.toLowerCase()">
+              {{ order.status }}
+            </div>
+          </div>
+          <div class="order-date">{{ order.date }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Revenue Distribution -->
+    <div class="analytics-card">
+      <div class="analytics-header">
+        <h3>Revenue by Category</h3>
+      </div>
+      <div class="analytics-content">
+        <div class="category-item" *ngFor="let category of revenueByCategory">
+          <div class="category-name">{{ category.name }}</div>
+          <div class="category-bar">
+            <div class="category-fill" [style.width.%]="category.percentage" [style.background-color]="category.color"></div>
+          </div>
+          <div class="category-amount">${{ category.amount }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Activity Feed -->
+  <div class="activity-section">
+    <div class="activity-header">
+      <h3>Recent Activity</h3>
+    </div>
+    <div class="activity-feed">
+      <div class="activity-item" *ngFor="let activity of recentActivity">
+        <div class="activity-icon" [style.background-color]="activity.color + '20'">
+          <i [class]="activity.icon" [style.color]="activity.color"></i>
+        </div>
+        <div class="activity-content">
+          <div class="activity-text">{{ activity.text }}</div>
+          <div class="activity-time">{{ activity.time }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Pagination, TableColumn } from '../../shared/pagination/pagination';
+import { DataGrid, TableColumn } from '../../shared/data-grid/data-grid';
 import { Modal } from '../../shared/modal/modal';
 
 interface Category {
@@ -15,7 +15,7 @@ interface Category {
 
 @Component({
   selector: 'app-dashboard-categories',
-  imports: [CommonModule, FormsModule, Pagination, Modal],
+  imports: [CommonModule, FormsModule, DataGrid, Modal],
   templateUrl: './dashboard-categories.html',
   styleUrls: ['./dashboard-categories.scss']
 })
@@ -201,8 +201,8 @@ export class DashboardCategories implements OnInit {
     this.viewMode = mode;
   }
 
-  onPaginatedDataChange(paginatedData: Category[]) {
-    this.paginatedCategories = paginatedData;
+  onDataGridDataChange(dataGridData: Category[]) {
+    this.paginatedCategories = dataGridData;
   }
 
   addCategory() {

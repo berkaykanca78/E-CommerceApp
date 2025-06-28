@@ -1,5 +1,5 @@
   <!-- View Mode Toggle -->
-  <div class="pagination-header-minimal" *ngIf="showViewToggle">
+  <div class="data-grid-header-minimal mb-1" *ngIf="showViewToggle">
     <div class="d-flex justify-content-between align-items-center">
       <span *ngIf="title" class="title-minimal">{{ title }}</span>
       
@@ -22,7 +22,7 @@
   </div>
 
 <!-- Search and Filters -->
-<div class="filter-container mb-4" *ngIf="showSearchAndFilters">
+<div class="filter-container my-2" *ngIf="showSearchAndFilters">
   <!-- Filter Header -->
   <div class="filter-header" (click)="toggleFilters()" role="button">
     <div class="d-flex align-items-center justify-content-between">
@@ -105,7 +105,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let row of paginatedData; trackBy: trackByFn" class="align-middle">
+        <tr *ngFor="let row of dataGridData; trackBy: trackByFn" class="align-middle">
           <td *ngFor="let column of columns">
             <ng-container [ngSwitch]="column.type">
               <!-- Badge Type -->
@@ -180,7 +180,7 @@
   </div>
 
   <!-- Empty State -->
-  <div *ngIf="paginatedData.length === 0" class="text-center py-5">
+  <div *ngIf="dataGridData.length === 0" class="text-center py-5">
     <i [class]="emptyStateIcon" class="fa-3x text-muted mb-3"></i>
     <h5 class="text-muted">{{ emptyStateTitle }}</h5>
     <p class="text-muted">{{ emptyStateMessage }}</p>
@@ -188,70 +188,58 @@
 </div>
 
 <!-- Empty State for Grid View -->
-<div *ngIf="viewMode === 'grid' && paginatedData.length === 0 && !loading && !error" class="text-center py-5">
+<div *ngIf="viewMode === 'grid' && dataGridData.length === 0 && !loading && !error" class="text-center py-5">
   <i [class]="emptyStateIcon" class="fa-3x text-muted mb-3"></i>
   <h5 class="text-muted">{{ emptyStateTitle }}</h5>
   <p class="text-muted">{{ emptyStateMessage }}</p>
 </div>
 
 <!-- Empty State for Hidden Table (backward compatibility) -->
-<div *ngIf="hideTable && paginatedData.length === 0 && !loading && !error && viewMode !== 'grid'"
+<div *ngIf="hideTable && dataGridData.length === 0 && !loading && !error && viewMode !== 'grid'"
   class="text-center py-5">
   <i [class]="emptyStateIcon" class="fa-3x text-muted mb-3"></i>
   <h5 class="text-muted">{{ emptyStateTitle }}</h5>
   <p class="text-muted">{{ emptyStateMessage }}</p>
 </div>
 
-<!-- Pagination Controls -->
-<div class="d-flex justify-content-between align-items-center mt-4" *ngIf="!loading && !error">
-  <!-- Left Side: Show X entries -->
+<!-- Data Grid Controls -->
+<div class="d-flex justify-content-between align-items-center mt-3" 
+     *ngIf="totalPages > 0 && !loading && !error">
+  
+  <!-- Left Side: Items per page -->
   <div class="d-flex align-items-center gap-2">
-    <span class="text-muted">Show</span>
-    <select class="form-select form-select-sm" style="width: auto;" [(ngModel)]="itemsPerPage"
-      (change)="onItemsPerPageChange()">
+    <label class="form-label mb-0 text-muted small">Items per page:</label>
+    <select class="form-select form-select-sm" style="width: auto;" [(ngModel)]="itemsPerPage" 
+            (change)="onItemsPerPageChange()">
       <option *ngFor="let option of pageSizeOptions" [value]="option">{{ option }}</option>
     </select>
-    <span class="text-muted">entries</span>
   </div>
 
-  <!-- Right Side: Showing info and Pagination Controls -->
+  <!-- Right Side: Showing info and Data Grid Controls -->
   <div class="d-flex align-items-center gap-3">
-    <div class="text-muted">
-      Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to
-      {{ Math.min(currentPage * itemsPerPage, totalItems) }} of
-      {{ totalItems }} entries
-    </div>
+    <small class="text-muted">
+      Showing {{ Math.min((currentPage - 1) * itemsPerPage + 1, totalItems) }} to 
+      {{ Math.min(currentPage * itemsPerPage, totalItems) }} of {{ totalItems }} entries
+    </small>
 
-    <nav [attr.aria-label]="paginationLabel" *ngIf="totalPages > 1">
-      <ul class="pagination mb-0 pagination-sm">
-        <li class="page-item" [class.disabled]="currentPage === 1">
-          <button class="page-link" (click)="onPageChange(1)" [disabled]="currentPage === 1">
-            <i class="fas fa-angle-double-left"></i>
-          </button>
-        </li>
+    <nav [attr.aria-label]="dataGridLabel" *ngIf="totalPages > 1">
+      <ul class="data-grid mb-0 data-grid-sm">
         <li class="page-item" [class.disabled]="currentPage === 1">
           <button class="page-link" (click)="onPageChange(currentPage - 1)" [disabled]="currentPage === 1">
-            <i class="fas fa-angle-left"></i>
+            <i class="fas fa-chevron-left"></i>
           </button>
         </li>
-
-        <li *ngFor="let page of getPaginationArray()" class="page-item" [class.active]="page === currentPage">
-          <button class="page-link" (click)="onPageChange(page)">
-            {{ page }}
-          </button>
+        
+        <li *ngFor="let page of getDataGridArray()" class="page-item" [class.active]="page === currentPage">
+          <button class="page-link" (click)="onPageChange(page)">{{ page }}</button>
         </li>
-
+        
         <li class="page-item" [class.disabled]="currentPage === totalPages">
           <button class="page-link" (click)="onPageChange(currentPage + 1)" [disabled]="currentPage === totalPages">
-            <i class="fas fa-angle-right"></i>
-          </button>
-        </li>
-        <li class="page-item" [class.disabled]="currentPage === totalPages">
-          <button class="page-link" (click)="onPageChange(totalPages)" [disabled]="currentPage === totalPages">
-            <i class="fas fa-angle-double-right"></i>
+            <i class="fas fa-chevron-right"></i>
           </button>
         </li>
       </ul>
     </nav>
   </div>
-</div>
+</div> 

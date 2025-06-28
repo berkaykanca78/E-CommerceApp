@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
 import { Product } from '../models';
-import { PaginatedResult } from '../models/pagination.model';
+import { PaginatedResult } from '../models/data-grid.model';
 
 @Injectable({
   providedIn: 'root'

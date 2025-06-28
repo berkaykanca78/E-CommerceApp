@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Pagination, TableColumn } from '../../shared/pagination/pagination';
+import { DataGrid, TableColumn } from '../../shared/data-grid/data-grid';
 import { Modal } from '../../shared/modal/modal';
 
 interface Product {
@@ -18,7 +18,7 @@ interface Product {
 
 @Component({
   selector: 'app-dashboard-products',
-  imports: [CommonModule, FormsModule, Pagination, Modal],
+  imports: [CommonModule, FormsModule, DataGrid, Modal],
   templateUrl: './dashboard-products.html',
   styleUrls: ['./dashboard-products.scss']
 })
@@ -300,8 +300,8 @@ export class DashboardProducts implements OnInit {
     this.viewMode = mode;
   }
 
-  onPaginatedDataChange(paginatedData: Product[]) {
-    this.paginatedProducts = paginatedData;
+  onDataGridDataChange(dataGridData: Product[]) {
+    this.paginatedProducts = dataGridData;
   }
 
   addProduct() {

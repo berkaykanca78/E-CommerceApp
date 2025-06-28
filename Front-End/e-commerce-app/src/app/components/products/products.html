@@ -78,17 +78,17 @@
 
       <!-- Products Grid -->
       <div class="col-lg-9 products-grid-offset">
-        <!-- Unified Pagination Component with View Toggle and Custom Grid Template -->
-        <app-pagination [data]="productsArray" [columns]="viewMode === 'table' ? tableColumns : gridColumns"
+          <!-- Unified Data Grid Component with View Toggle and Custom Grid Template -->
+  <app-data-grid [data]="productsArray" [columns]="viewMode === 'table' ? tableColumns : gridColumns"
           [viewMode]="viewMode" [showViewToggle]="true" [title]="'Product Catalog'" [showAddButton]="false"
           [showStatusFilter]="false" [showCategoryFilter]="false" [showActions]="viewMode === 'table'" [actions]="['cart']"
-          [loading]="loading" [error]="error" [currentPage]="currentPage" [itemsPerPage]="pageSize"
-          [totalItems]="totalItems" [serverSidePagination]="true" [loadingText]="'Loading products...'"
+          [loading]="loading" [error]="error" [currentPage]="currentPage" [itemsPerPage]="itemsPerPage"
+          [totalItems]="totalItems" [serverSideDataGrid]="true" [loadingText]="'Loading products...'"
           [searchPlaceholder]="'Search products...'" [emptyStateIcon]="'fas fa-shopping-bag'"
           [emptyStateTitle]="'No products found'" [emptyStateMessage]="'Try adjusting your search criteria'"
-          [paginationLabel]="'Products pagination'" (viewModeChange)="viewMode = $event"
+          [dataGridLabel]="'Data grid'" (viewModeChange)="viewMode = $event"
           (pageChange)="onPageChange($event)" (pageSizeChange)="onPageSizeChange($event)"
-          (paginatedDataChange)="onPaginatedDataChange($event)" (editItem)="addToCart($event)">
+          (dataGridDataChange)="onDataGridDataChange($event)" (editItem)="addToCart($event)">
           
           <!-- Custom Grid Template for Products -->
           <div grid-template class="row g-4 mb-4">
@@ -123,7 +123,7 @@
             </div>
           </div>
           
-        </app-pagination>
+        </app-data-grid>
 
 
       </div>

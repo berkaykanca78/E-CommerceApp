@@ -1,7 +1,7 @@
 <div class="dashboard-content">
     <div class="content-body">
-      <!-- Pagination Component with Custom Grid Template -->
-      <app-pagination
+      <!-- Data Grid Component with Custom Grid Template -->
+<app-data-grid
         [data]="products"
         [columns]="columns"
         [categories]="categories"
@@ -13,7 +13,7 @@
         [showAddButton]="true"
         [addButtonIcon]="'fas fa-plus'"
         (viewModeChange)="onViewModeChange($event)"
-        (paginatedDataChange)="onPaginatedDataChange($event)"
+        (dataGridDataChange)="onDataGridDataChange($event)"
         (addButtonClick)="addProduct()"
         [loading]="loading"
         [error]="error"
@@ -23,7 +23,7 @@
         [showSearchAndFilters]="true"
         [emptyStateTitle]="'No products found'"
         [emptyStateMessage]="'Try adjusting your search or filter criteria'"
-        [paginationLabel]="'Products pagination'"
+        [dataGridLabel]="'Products data grid'"
         (editItem)="editProduct($event)"
         (toggleStatus)="toggleStatus($event)"
         (deleteItem)="deleteProduct($event)">
@@ -84,7 +84,7 @@
           </div>
         </div>
         
-      </app-pagination>
+              </app-data-grid>
     </div>
   </div>
 
