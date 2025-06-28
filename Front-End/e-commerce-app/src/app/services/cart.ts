@@ -109,4 +109,12 @@ export class Cart {
   getCartItems(): CartItem[] {
     return this.cartItems.value;
   }
+
+  clearCart(): void {
+    this.cartItems.next([]);
+    this.cartCount.next(0);
+    this._totalPrice.next(0);
+    localStorage.removeItem('cartCount');
+    localStorage.removeItem('cartItems');
+  }
 } 

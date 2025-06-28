@@ -73,13 +73,12 @@
 
             <!-- Billing Address -->
             <div class="form-check">
-              <input type="checkbox" class="form-check-input" id="sameAddress" [(ngModel)]="useSameAddress"
-                (change)="toggleBillingAddressValidators()">
+              <input type="checkbox" class="form-check-input" id="sameAddress" formControlName="useSameAddress">
               <label class="form-check-label" for="sameAddress">Billing address is the same as my shipping
                 address</label>
             </div>
 
-            <div *ngIf="!useSameAddress" formGroupName="billingAddress" class="row g-3 mt-3">
+            <div *ngIf="!checkoutForm.get('useSameAddress')?.value" formGroupName="billingAddress" class="row g-3 mt-3">
               <h4 class="mb-3">
                 <i class="fas fa-file-invoice-dollar me-2 text-primary"></i>Billing Address
               </h4>

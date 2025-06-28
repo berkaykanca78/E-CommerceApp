@@ -1,0 +1,183 @@
+<div class="order-confirmation-container">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="loading-spinner"></div>
+    <p>Preparing your order...</p>
+  </div>
+
+  <!-- Order Confirmation Content -->
+  <div *ngIf="!isLoading && orderDetails" class="confirmation-content">
+    <!-- Success Header -->
+    <div class="success-header">
+      <div class="success-icon">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 6L9 17l-5-5"/>
+        </svg>
+      </div>
+      <h1>Order Received!</h1>
+      <p class="success-message">
+        Thank you! Your order has been successfully received and is being processed.
+      </p>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="order-summary">
+      <div class="summary-header">
+        <h2>Order Summary</h2>
+        <div class="order-number">
+          <span class="label">Order No:</span>
+          <span class="value">{{ orderDetails.orderNumber }}</span>
+        </div>
+      </div>
+
+      <div class="summary-details">
+        <div class="detail-item">
+          <span class="label">Order Date:</span>
+          <span class="value">{{ orderDetails.orderDate | date:'dd/MM/yyyy HH:mm' }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="label">Estimated Delivery:</span>
+          <span class="value">{{ orderDetails.estimatedDelivery | date:'dd/MM/yyyy' }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="label">Customer:</span>
+          <span class="value">{{ orderDetails.customerName }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order Items -->
+    <div class="order-items">
+      <h3>Ordered Items</h3>
+      <div class="items-list">
+        <div *ngFor="let item of orderDetails.items" class="item-card">
+          <div class="item-image">
+            <img [src]="item.image" [alt]="item.name">
+          </div>
+          <div class="item-details">
+            <h4>{{ item.name }}</h4>
+            <div class="item-meta">
+              <span class="quantity">Qty: {{ item.quantity }}</span>
+              <span class="price">{{ item.price | currency:'USD':'symbol':'1.2-2' }}</span>
+            </div>
+          </div>
+          <div class="item-total">
+            {{ (item.price * item.quantity) | currency:'USD':'symbol':'1.2-2' }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Price Breakdown -->
+    <div class="price-breakdown">
+      <h3>Price Details</h3>
+      <div class="breakdown-list">
+        <div class="breakdown-item">
+          <span>Subtotal:</span>
+          <span>{{ orderDetails.subtotal | currency:'USD':'symbol':'1.2-2' }}</span>
+        </div>
+        <div class="breakdown-item">
+          <span>Shipping:</span>
+          <span>{{ orderDetails.shipping | currency:'USD':'symbol':'1.2-2' }}</span>
+        </div>
+        <div class="breakdown-item">
+          <span>Tax:</span>
+          <span>{{ orderDetails.tax | currency:'USD':'symbol':'1.2-2' }}</span>
+        </div>
+        <div class="breakdown-item total">
+          <span>Total:</span>
+          <span>{{ orderDetails.total | currency:'USD':'symbol':'1.2-2' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delivery Address -->
+    <div class="delivery-info">
+      <div class="address-section">
+        <h3>Delivery Address</h3>
+        <div class="address-card">
+          <p class="name">{{ orderDetails.shippingAddress.fullName }}</p>
+          <p>{{ orderDetails.shippingAddress.addressLine1 }}</p>
+          <p>{{ orderDetails.shippingAddress.city }}, {{ orderDetails.shippingAddress.zipCode }}</p>
+          <p>{{ orderDetails.shippingAddress.country }}</p>
+        </div>
+      </div>
+
+      <div class="payment-section">
+        <h3>Payment Information</h3>
+        <div class="payment-card">
+          <div class="payment-method">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+              <line x1="1" y1="10" x2="23" y2="10"/>
+            </svg>
+            <span>Credit Card: {{ orderDetails.paymentMethod }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <button class="btn btn-primary" (click)="trackOrder()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+        Track Order
+      </button>
+      
+      <button class="btn btn-secondary" (click)="downloadInvoice()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14,2 14,8 20,8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10,9 9,9 8,9"/>
+        </svg>
+        Download Invoice
+      </button>
+      
+      <button class="btn btn-outline" (click)="continueShopping()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 3h2l.4 2M7 13h10l4-8H5.4m-.4-2L2 1m5 4v4a4 4 0 0 0 8 0V9M9 19a1 1 0 1 0 2 0 1 1 0 0 0-2 0m8 0a1 1 0 1 0 2 0 1 1 0 0 0-2 0"/>
+        </svg>
+        Continue Shopping
+      </button>
+    </div>
+
+    <!-- Additional Info -->
+    <div class="additional-info">
+      <div class="info-card">
+        <h4>📧 Email Notification</h4>
+        <p>Your order confirmation has been sent to your email address.</p>
+      </div>
+      
+      <div class="info-card">
+        <h4>📱 SMS Notification</h4>
+        <p>You will be notified via SMS about your shipment status.</p>
+      </div>
+      
+      <div class="info-card">
+        <h4>🔄 Return Guarantee</h4>
+        <p>You have an unconditional return right within 30 days.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="!isLoading && !orderDetails" class="error-container">
+    <div class="error-icon">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="15" y1="9" x2="9" y2="15"/>
+        <line x1="9" y1="9" x2="15" y2="15"/>
+      </svg>
+    </div>
+    <h2>Order Not Found</h2>
+    <p>An error occurred while loading your order information.</p>
+    <button class="btn btn-primary" (click)="continueShopping()">
+      Go to Homepage
+    </button>
+  </div>
+</div> 

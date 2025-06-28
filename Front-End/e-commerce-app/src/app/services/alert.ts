@@ -166,7 +166,7 @@ export class AlertService {
   error(message: string, title?: string, options?: Partial<AlertOptions>): string {
     return this.addAlert({
       message,
-      title: title || 'Hata',
+      title: title || 'Error',
       type: 'error',
       icon: 'exclamation-triangle',
       duration: 8000, // Hatalar daha uzun süre gösterilsin
@@ -212,7 +212,7 @@ export class AlertService {
    */
   showApiError(error: any, defaultMessage: string = 'Bir hata oluştu'): string {
     let message = defaultMessage;
-    let title = 'Hata';
+    let title = 'Error';
 
     if (error?.error?.message) {
       message = error.error.message;

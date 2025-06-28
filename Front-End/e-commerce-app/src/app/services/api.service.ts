@@ -223,10 +223,10 @@ export class ApiService {
     if (error.error && typeof error.error === 'object' && error.error.message) {
       // Client-side error (only if ErrorEvent exists)
       if (typeof ErrorEvent !== 'undefined' && error.error instanceof ErrorEvent) {
-        errorMessage = `Hata: ${error.error.message}`;
+        errorMessage = `Error: ${error.error.message}`;
       } else {
         // Generic error object
-        errorMessage = `Hata: ${error.error.message}`;
+        errorMessage = `Error: ${error.error.message}`;
       }
     } else {
       // Server-side error

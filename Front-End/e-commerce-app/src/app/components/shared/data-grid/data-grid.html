@@ -4,7 +4,7 @@
       <span *ngIf="title" class="title-minimal">{{ title }}</span>
       
       <div class="d-flex align-items-center gap-2">
-        <button *ngIf="showAddButton" class="btn btn-add-minimal" (click)="onAddButtonClick()">
+        <button *ngIf="showAddButton" class="btn btn-success btn-sm" (click)="onAddButtonClick()">
           <i [class]="addButtonIcon"></i>
         </button>
         <div class="btn-group view-toggle-minimal" role="group">

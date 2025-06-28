@@ -27,6 +27,7 @@ import { TrackOrder } from './components/customer-services/track-order/track-ord
 import { DashboardProducts } from './components/dashboard/products/dashboard-products';
 import { DashboardCategories } from './components/dashboard/categories/dashboard-categories';
 import { DashboardHome } from './components/dashboard/home/dashboard-home';
+import { OrderConfirmation } from './components/order-confirmation/order-confirmation';
 
 export const routes: Routes = [
   {
@@ -43,6 +44,7 @@ export const routes: Routes = [
       { path: 'forgot-password', component: ForgotPassword },
       { path: 'cart', component: Cart },
       { path: 'checkout', component: Checkout}, //, canActivate: [AuthGuard] },
+      { path: 'order-confirmation', component: OrderConfirmation },
       { path: 'about', component: About },
       { path: 'contact', component: Contact },
       { path: 'customer-services/faq', component: Faq },

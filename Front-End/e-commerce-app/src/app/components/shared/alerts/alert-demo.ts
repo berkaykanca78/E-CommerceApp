@@ -162,7 +162,7 @@ export class AlertDemo {
   }
 
   showError(): void {
-    this.alertService.error('Bir hata oluştu. Lütfen tekrar deneyin.', 'Hata');
+    this.alertService.error('Bir hata oluştu. Lütfen tekrar deneyin.', 'Error');
   }
 
   showWarning(): void {
@@ -229,7 +229,7 @@ export class AlertDemo {
 
   clearByType(type: 'warning' | 'error'): void {
     this.alertService.clearByType(type);
-    this.alertService.info(`${type === 'warning' ? 'Uyarı' : 'Hata'} alert'leri temizlendi.`);
+    this.alertService.info(`${type === 'warning' ? 'Uyarı' : 'Error'} alert'leri temizlendi.`);
   }
 
   clearAll(): void {
