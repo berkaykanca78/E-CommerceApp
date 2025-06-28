@@ -52,6 +52,9 @@ export class Pagination implements OnInit, OnChanges {
   @Input() showCategoryFilter: boolean = true;
   @Input() showSearchAndFilters: boolean = false;
   
+  // Filter Expand/Collapse State
+  filtersExpanded: boolean = false;
+  
   // Sorting Properties
   @Input() sortField: string = '';
   @Input() sortDirection: 'asc' | 'desc' = 'asc';
@@ -242,6 +245,11 @@ export class Pagination implements OnInit, OnChanges {
 
   onAddButtonClick() {
     this.addButtonClick.emit();
+  }
+
+  // Filter Toggle Handler
+  toggleFilters() {
+    this.filtersExpanded = !this.filtersExpanded;
   }
 
   // Action Handlers
