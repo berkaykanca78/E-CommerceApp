@@ -55,17 +55,17 @@ jobs:
         echo "DB_SERVER from secrets: '$DB_SERVER'"
         
         echo "Replacing placeholders in appsettings.Release.json..."
-        # Use perl for better backslash handling
-        perl -pi -e "s/\\\$\(DB_SERVER\)/$DB_SERVER/g" appsettings.Release.json
-        perl -pi -e "s/\\\$\(DB_NAME\)/$DB_NAME/g" appsettings.Release.json
-        perl -pi -e "s/\\\$\(DB_USER\)/$DB_USER/g" appsettings.Release.json
-        perl -pi -e "s/\\\$\(DB_PASSWORD\)/$DB_PASSWORD/g" appsettings.Release.json
+        # Use sed for simple replacement
+        sed -i "s|\$(DB_SERVER)|$DB_SERVER|g" appsettings.Release.json
+        sed -i "s|\$(DB_NAME)|$DB_NAME|g" appsettings.Release.json
+        sed -i "s|\$(DB_USER)|$DB_USER|g" appsettings.Release.json
+        sed -i "s|\$(DB_PASSWORD)|$DB_PASSWORD|g" appsettings.Release.json
         
         echo "Replacing placeholders in appsettings.json..."
-        perl -pi -e "s/\\\$\(DB_SERVER\)/$DB_SERVER/g" appsettings.json
-        perl -pi -e "s/\\\$\(DB_NAME\)/$DB_NAME/g" appsettings.json
-        perl -pi -e "s/\\\$\(DB_USER\)/$DB_USER/g" appsettings.json
-        perl -pi -e "s/\\\$\(DB_PASSWORD\)/$DB_PASSWORD/g" appsettings.json
+        sed -i "s|\$(DB_SERVER)|$DB_SERVER|g" appsettings.json
+        sed -i "s|\$(DB_NAME)|$DB_NAME|g" appsettings.json
+        sed -i "s|\$(DB_USER)|$DB_USER|g" appsettings.json
+        sed -i "s|\$(DB_PASSWORD)|$DB_PASSWORD|g" appsettings.json
         
         echo "Final connection string check:"
         echo "DB_SERVER value: '$DB_SERVER'"
