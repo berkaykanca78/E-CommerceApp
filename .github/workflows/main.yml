@@ -20,19 +20,21 @@ jobs:
         dotnet-version: '9.0.x'
 
     - name: Restore dependencies
-      run: dotnet restore Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj
+      run: dotnet restore Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj --runtime win-x64
 
     - name: Build
-      run: dotnet build Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj --no-restore --configuration Release
+      run: dotnet build Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj --no-restore --configuration Release --runtime win-x64
 
     - name: Publish
-      run: dotnet publish Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj --no-build --configuration Release --output ./publish-backend --verbosity normal
+      run: dotnet publish Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj --no-build --configuration Release --output ./publish-backend --self-contained true --runtime win-x64 --verbosity normal
 
     - name: List published files
       run: |
         echo "Published files:"
         ls -la ./publish-backend/
-        echo "Main executable:"
+        echo "Windows executable:"
+        find ./publish-backend -name "*.exe" | head -5
+        echo "Main application:"
         find ./publish-backend -name "ECommerce.WebAPI*" -type f | head -5
         echo "DLL files:"
         find ./publish-backend -name "*.dll" | head -5
@@ -62,6 +64,11 @@ jobs:
         sed -i "s|\$(DB_NAME)|$DB_NAME|g" appsettings.json
         sed -i "s|\$(DB_USER)|$DB_USER|g" appsettings.json
         sed -i "s|\$(DB_PASSWORD)|$DB_PASSWORD|g" appsettings.json
+        
+        echo "Final connection string check:"
+        echo "DB_SERVER value: '$DB_SERVER'"
+        echo "Connection string in appsettings.Release.json:"
+        grep -A 2 "ConnectionStrings" appsettings.Release.json
         
         echo "Connection strings after replacement:"
         echo "appsettings.Release.json:"
