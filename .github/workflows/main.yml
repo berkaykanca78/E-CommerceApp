@@ -26,20 +26,29 @@ jobs:
       run: dotnet build Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj --no-restore --configuration Release
 
     - name: Publish
-      run: dotnet publish Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj --no-build --configuration Release --output ./publish-backend
+      run: dotnet publish Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj --no-build --configuration Release --output ./publish-backend --self-contained true --runtime win-x64 --verbosity normal
+
+    - name: List published files
+      run: |
+        echo "Published files:"
+        ls -la ./publish-backend/
+        echo "Executable files:"
+        find ./publish-backend -name "*.exe" -o -name "*.dll" | head -10
 
     - name: Replace connection string placeholders
       run: |
         cd ./publish-backend
         echo "Replacing placeholders in appsettings.Release.json..."
         # Use a different delimiter for sed to handle backslashes properly
-        sed -i 's|\$(DB_SERVER)|${{ secrets.DB_SERVER }}|g' appsettings.Release.json
+        # Escape backslashes in the replacement string
+        DB_SERVER_ESCAPED=$(echo "${{ secrets.DB_SERVER }}" | sed 's/\\/\\\\/g')
+        sed -i "s|\$(DB_SERVER)|$DB_SERVER_ESCAPED|g" appsettings.Release.json
         sed -i 's|\$(DB_NAME)|${{ secrets.DB_NAME }}|g' appsettings.Release.json
         sed -i 's|\$(DB_USER)|${{ secrets.DB_USER }}|g' appsettings.Release.json
         sed -i 's|\$(DB_PASSWORD)|${{ secrets.DB_PASSWORD }}|g' appsettings.Release.json
         
         echo "Replacing placeholders in appsettings.json..."
-        sed -i 's|\$(DB_SERVER)|${{ secrets.DB_SERVER }}|g' appsettings.json
+        sed -i "s|\$(DB_SERVER)|$DB_SERVER_ESCAPED|g" appsettings.json
         sed -i 's|\$(DB_NAME)|${{ secrets.DB_NAME }}|g' appsettings.json
         sed -i 's|\$(DB_USER)|${{ secrets.DB_USER }}|g' appsettings.json
         sed -i 's|\$(DB_PASSWORD)|${{ secrets.DB_PASSWORD }}|g' appsettings.json
