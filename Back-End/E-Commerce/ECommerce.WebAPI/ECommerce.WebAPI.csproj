@@ -4,6 +4,14 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <PublishProfile>FolderProfile</PublishProfile>
+    <PublishUrl>$(MSBuildProjectDirectory)\bin\Release\net9.0\publish\</PublishUrl>
+    <DeleteExistingFiles>true</DeleteExistingFiles>
+    <PublishProtocol>FileSystem</PublishProtocol>
+    <PublishReadyToRun>false</PublishReadyToRun>
+    <PublishSingleFile>false</PublishSingleFile>
+    <SelfContained>false</SelfContained>
+    <PublishTrimmed>false</PublishTrimmed>
   </PropertyGroup>
 
   <!-- Debug Configuration = Development Environment -->
