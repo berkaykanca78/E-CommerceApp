@@ -31,10 +31,23 @@ jobs:
     - name: Replace connection string placeholders
       run: |
         cd ./publish-backend
+        echo "Replacing placeholders in appsettings.Release.json..."
         sed -i 's/\$(DB_SERVER)/${{ secrets.DB_SERVER }}/g' appsettings.Release.json
         sed -i 's/\$(DB_NAME)/${{ secrets.DB_NAME }}/g' appsettings.Release.json
         sed -i 's/\$(DB_USER)/${{ secrets.DB_USER }}/g' appsettings.Release.json
         sed -i 's/\$(DB_PASSWORD)/${{ secrets.DB_PASSWORD }}/g' appsettings.Release.json
+        
+        echo "Replacing placeholders in appsettings.json..."
+        sed -i 's/\$(DB_SERVER)/${{ secrets.DB_SERVER }}/g' appsettings.json
+        sed -i 's/\$(DB_NAME)/${{ secrets.DB_NAME }}/g' appsettings.json
+        sed -i 's/\$(DB_USER)/${{ secrets.DB_USER }}/g' appsettings.json
+        sed -i 's/\$(DB_PASSWORD)/${{ secrets.DB_PASSWORD }}/g' appsettings.json
+        
+        echo "Connection strings after replacement:"
+        echo "appsettings.Release.json:"
+        cat appsettings.Release.json | grep -A 1 "ConnectionStrings"
+        echo "appsettings.json:"
+        cat appsettings.json | grep -A 1 "ConnectionStrings"
 
 # Alternative SFTP deployment (more reliable than FTP)
 #    - name: Deploy to SFTP
