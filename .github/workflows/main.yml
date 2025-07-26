@@ -60,7 +60,7 @@ jobs:
       working-directory: Front-End/e-commerce-app
 
     - name: Build application
-      run: npm run build
+      run: npm run build:prod
       working-directory: Front-End/e-commerce-app
 
     - name: Deploy to FTP
