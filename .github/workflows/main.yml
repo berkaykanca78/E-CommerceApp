@@ -47,7 +47,8 @@ jobs:
 #        remote_path: ${{ secrets.BCKNDSRVRDIR }}
 #        delete_remote_files: true
 
-    - name: Deploy to FTP
+    - name: Deploy to FTP (Attempt 1)
+      id: deploy-attempt-1
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
         server: ${{ secrets.SRVR }}
@@ -63,7 +64,45 @@ jobs:
           **/Thumbs.db
         dangerous-clean-slate: true
         timeout: 300000
-      retries: 3
+      continue-on-error: true
+
+    - name: Deploy to FTP (Attempt 2)
+      if: steps.deploy-attempt-1.outcome == 'failure'
+      id: deploy-attempt-2
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.SRVR }}
+        username: ${{ secrets.USRNM }}
+        password: ${{ secrets.PWD }}
+        port: ${{ secrets.PRT }}
+        local-dir: ${{ secrets.BCKNDLCLDIR }}
+        server-dir: ${{ secrets.BCKNDSRVRDIR }}
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
+          **/Thumbs.db
+        dangerous-clean-slate: true
+        timeout: 300000
+      continue-on-error: true
+
+    - name: Deploy to FTP (Final Attempt)
+      if: steps.deploy-attempt-1.outcome == 'failure' && steps.deploy-attempt-2.outcome == 'failure'
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.SRVR }}
+        username: ${{ secrets.USRNM }}
+        password: ${{ secrets.PWD }}
+        port: ${{ secrets.PRT }}
+        local-dir: ${{ secrets.BCKNDLCLDIR }}
+        server-dir: ${{ secrets.BCKNDSRVRDIR }}
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
+          **/Thumbs.db
+        dangerous-clean-slate: true
+        timeout: 300000
 
   deploy-frontend:
     runs-on: ubuntu-latest
@@ -87,7 +126,47 @@ jobs:
       run: npm run build:prod
       working-directory: Front-End/e-commerce-app
 
-    - name: Deploy to FTP
+    - name: Deploy to FTP (Attempt 1)
+      id: deploy-frontend-attempt-1
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.SRVR }}
+        username: ${{ secrets.USRNM }}
+        password: ${{ secrets.PWD }}
+        port: ${{ secrets.PRT }}
+        local-dir: ${{ secrets.FRNTLCLDIR }}
+        server-dir: ${{ secrets.FRNTSRVRDIR }}
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
+          **/Thumbs.db
+        dangerous-clean-slate: true
+        timeout: 300000
+      continue-on-error: true
+
+    - name: Deploy to FTP (Attempt 2)
+      if: steps.deploy-frontend-attempt-1.outcome == 'failure'
+      id: deploy-frontend-attempt-2
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.SRVR }}
+        username: ${{ secrets.USRNM }}
+        password: ${{ secrets.PWD }}
+        port: ${{ secrets.PRT }}
+        local-dir: ${{ secrets.FRNTLCLDIR }}
+        server-dir: ${{ secrets.FRNTSRVRDIR }}
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
+          **/Thumbs.db
+        dangerous-clean-slate: true
+        timeout: 300000
+      continue-on-error: true
+
+    - name: Deploy to FTP (Final Attempt)
+      if: steps.deploy-frontend-attempt-1.outcome == 'failure' && steps.deploy-frontend-attempt-2.outcome == 'failure'
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
         server: ${{ secrets.SRVR }}
