@@ -69,7 +69,7 @@ jobs:
         username: ${{ secrets.USRNM }}
         password: ${{ secrets.PWD }}
         port: ${{ secrets.PRT }}
-        local-dir: ./publish-backend
+        local-dir: ./publish-backend/
         server-dir: ${{ secrets.BCKNDSRVRDIR }}
         exclude: |
           **/.git*
@@ -88,7 +88,7 @@ jobs:
         username: ${{ secrets.USRNM }}
         password: ${{ secrets.PWD }}
         port: ${{ secrets.PRT }}
-        local-dir: ./publish-backend
+        local-dir: ./publish-backend/
         server-dir: ${{ secrets.BCKNDSRVRDIR }}
         exclude: |
           **/.git*
@@ -106,7 +106,7 @@ jobs:
         username: ${{ secrets.USRNM }}
         password: ${{ secrets.PWD }}
         port: ${{ secrets.PRT }}
-        local-dir: ./publish-backend
+        local-dir: ./publish-backend/
         server-dir: ${{ secrets.BCKNDSRVRDIR }}
         exclude: |
           **/.git*
