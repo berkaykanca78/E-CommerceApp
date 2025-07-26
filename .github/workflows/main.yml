@@ -27,6 +27,14 @@ jobs:
     - name: Publish
       run: dotnet publish Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj --no-build --configuration Release --output ./publish-backend
 
+    - name: Replace connection string placeholders
+      run: |
+        cd ./publish-backend
+        sed -i 's/\$(DB_SERVER)/${{ secrets.DB_SERVER }}/g' appsettings.Release.json
+        sed -i 's/\$(DB_NAME)/${{ secrets.DB_NAME }}/g' appsettings.Release.json
+        sed -i 's/\$(DB_USER)/${{ secrets.DB_USER }}/g' appsettings.Release.json
+        sed -i 's/\$(DB_PASSWORD)/${{ secrets.DB_PASSWORD }}/g' appsettings.Release.json
+
     - name: Deploy to FTP
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
