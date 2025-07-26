@@ -9,6 +9,7 @@ on:
 jobs:
   deploy-backend:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -35,6 +36,17 @@ jobs:
         sed -i 's/\$(DB_USER)/${{ secrets.DB_USER }}/g' appsettings.Release.json
         sed -i 's/\$(DB_PASSWORD)/${{ secrets.DB_PASSWORD }}/g' appsettings.Release.json
 
+# Alternative SFTP deployment (more reliable than FTP)
+#    - name: Deploy to SFTP
+#      uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+#      with:
+#        username: ${{ secrets.USRNM }}
+#        server: ${{ secrets.SRVR }}
+#        ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+#        local_path: './publish-backend/*'
+#        remote_path: ${{ secrets.BCKNDSRVRDIR }}
+#        delete_remote_files: true
+
     - name: Deploy to FTP
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
@@ -49,9 +61,13 @@ jobs:
           **/.git*/**
           **/node_modules/**
           **/Thumbs.db
+        dangerous-clean-slate: true
+        timeout: 300000
+      retries: 3
 
   deploy-frontend:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -84,4 +100,6 @@ jobs:
           **/.git*
           **/.git*/**
           **/node_modules/**
-          **/Thumbs.db 
+          **/Thumbs.db
+        dangerous-clean-slate: true
+        timeout: 300000 
