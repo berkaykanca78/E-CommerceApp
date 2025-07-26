@@ -80,37 +80,6 @@ jobs:
         
         echo "Full connection string for debugging:"
         cat appsettings.Release.json | grep -A 5 "ConnectionStrings"
-        
-        # Create web.config for IIS hosting (if needed)
-        echo "Creating web.config..."
-        cat > web.config << 'EOF'
-<?xml version="1.0" encoding="utf-8"?>
-<configuration>
-  <location path="." inheritInChildApplications="false">
-    <system.webServer>
-      <handlers>
-        <add name="aspNetCore" path="*" verb="*" modules="AspNetCoreModuleV2" resourceType="Unspecified" />
-      </handlers>
-      <aspNetCore processPath="dotnet" arguments=".\ECommerce.WebAPI.dll" stdoutLogEnabled="true" stdoutLogFile=".\logs\stdout" hostingModel="inprocess">
-        <environmentVariables>
-          <environmentVariable name="ASPNETCORE_ENVIRONMENT" value="Release" />
-        </environmentVariables>
-      </aspNetCore>
-    </system.webServer>
-  </location>
-</configuration>
-EOF
-        cp web.config ./publish-backend/
-        
-        # Create startup script for direct execution
-        echo "Creating startup script..."
-        cat > start.bat << 'EOF'
-@echo off
-echo Starting E-Commerce WebAPI...
-dotnet ECommerce.WebAPI.dll
-pause
-EOF
-        cp start.bat ./publish-backend/
 
 # Alternative SFTP deployment (more reliable than FTP)
 #    - name: Deploy to SFTP
