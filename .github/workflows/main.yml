@@ -1,0 +1,79 @@
+name: Deploy E-Commerce Application
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  deploy-backend:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj
+
+    - name: Build
+      run: dotnet build Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj --no-restore --configuration Release
+
+    - name: Publish
+      run: dotnet publish Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj --no-build --configuration Release --output ./publish-backend
+
+    - name: Deploy to FTP
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.SRVR }}
+        username: ${{ secrets.USRNM }}
+        password: ${{ secrets.PWD }}
+        port: ${{ secrets.PRT }}
+        local-dir: ${{ secrets.BCKNDLCLDIR }}
+        server-dir: ${{ secrets.BCKNDSRVRDIR }}
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
+          **/Thumbs.db
+
+  deploy-frontend:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: Front-End/e-commerce-app/package-lock.json
+
+    - name: Install dependencies
+      run: npm ci
+      working-directory: Front-End/e-commerce-app
+
+    - name: Build application
+      run: npm run build
+      working-directory: Front-End/e-commerce-app
+
+    - name: Deploy to FTP
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.SRVR }}
+        username: ${{ secrets.USRNM }}
+        password: ${{ secrets.PWD }}
+        port: ${{ secrets.PRT }}
+        local-dir: ${{ secrets.FRNTLCLDIR }}
+        server-dir: ${{ secrets.FRNTSRVRDIR }}
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
+          **/Thumbs.db 
