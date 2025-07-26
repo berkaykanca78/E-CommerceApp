@@ -20,24 +20,26 @@ jobs:
         dotnet-version: '9.0.x'
 
     - name: Restore dependencies
-      run: dotnet restore Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj --runtime win-x64
+      run: dotnet restore Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj
 
     - name: Build
-      run: dotnet build Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj --no-restore --configuration Release --runtime win-x64
+      run: dotnet build Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj --no-restore --configuration Release
 
     - name: Publish
-      run: dotnet publish Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj --no-build --configuration Release --output ./publish-backend --self-contained true --runtime win-x64 --verbosity normal
+      run: dotnet publish Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj --no-build --configuration Release --output ./publish-backend --verbosity normal
 
     - name: List published files
       run: |
         echo "Published files:"
         ls -la ./publish-backend/
-        echo "Windows executable:"
-        find ./publish-backend -name "*.exe" | head -5
-        echo "Main application:"
-        find ./publish-backend -name "ECommerce.WebAPI*" -type f | head -5
-        echo "DLL files:"
-        find ./publish-backend -name "*.dll" | head -5
+        echo "Main application DLL:"
+        find ./publish-backend -name "ECommerce.WebAPI.dll" -type f
+        echo "Configuration files:"
+        find ./publish-backend -name "*.json" -type f
+        echo "Startup files:"
+        find ./publish-backend -name "*.bat" -o -name "web.config" -type f
+        echo "Total files count:"
+        find ./publish-backend -type f | wc -l
 
     - name: Replace connection string placeholders
       run: |
@@ -59,18 +61,25 @@ jobs:
           echo "Added backslash prefix: $DB_SERVER"
         fi
         
+        echo "Original DB_SERVER from secrets: '$DB_SERVER'"
+        
+        # Extract IP from secrets or use default
+        IP_PART=$(echo "$DB_SERVER" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+')
+        export DB_SERVER="${IP_PART}\\\\MSSQLSERVER2022"
+        echo "Final DB_SERVER format: '$DB_SERVER'"
+        
         echo "Replacing placeholders in appsettings.Release.json..."
-        # Simple string replacement with proper escaping
-        sed -i "s|\$(DB_SERVER)|$DB_SERVER|g" appsettings.Release.json
-        sed -i "s|\$(DB_NAME)|$DB_NAME|g" appsettings.Release.json
-        sed -i "s|\$(DB_USER)|$DB_USER|g" appsettings.Release.json
-        sed -i "s|\$(DB_PASSWORD)|$DB_PASSWORD|g" appsettings.Release.json
+        # Use perl for better backslash handling
+        perl -pi -e "s/\\\$\(DB_SERVER\)/$DB_SERVER/g" appsettings.Release.json
+        perl -pi -e "s/\\\$\(DB_NAME\)/$DB_NAME/g" appsettings.Release.json
+        perl -pi -e "s/\\\$\(DB_USER\)/$DB_USER/g" appsettings.Release.json
+        perl -pi -e "s/\\\$\(DB_PASSWORD\)/$DB_PASSWORD/g" appsettings.Release.json
         
         echo "Replacing placeholders in appsettings.json..."
-        sed -i "s|\$(DB_SERVER)|$DB_SERVER|g" appsettings.json
-        sed -i "s|\$(DB_NAME)|$DB_NAME|g" appsettings.json
-        sed -i "s|\$(DB_USER)|$DB_USER|g" appsettings.json
-        sed -i "s|\$(DB_PASSWORD)|$DB_PASSWORD|g" appsettings.json
+        perl -pi -e "s/\\\$\(DB_SERVER\)/$DB_SERVER/g" appsettings.json
+        perl -pi -e "s/\\\$\(DB_NAME\)/$DB_NAME/g" appsettings.json
+        perl -pi -e "s/\\\$\(DB_USER\)/$DB_USER/g" appsettings.json
+        perl -pi -e "s/\\\$\(DB_PASSWORD\)/$DB_PASSWORD/g" appsettings.json
         
         echo "Final connection string check:"
         echo "DB_SERVER value: '$DB_SERVER'"
@@ -85,6 +94,37 @@ jobs:
         
         echo "Full connection string for debugging:"
         cat appsettings.Release.json | grep -A 5 "ConnectionStrings"
+        
+        # Create web.config for IIS hosting (if needed)
+        echo "Creating web.config..."
+        cat > web.config << 'EOF'
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <location path="." inheritInChildApplications="false">
+    <system.webServer>
+      <handlers>
+        <add name="aspNetCore" path="*" verb="*" modules="AspNetCoreModuleV2" resourceType="Unspecified" />
+      </handlers>
+      <aspNetCore processPath="dotnet" arguments=".\ECommerce.WebAPI.dll" stdoutLogEnabled="true" stdoutLogFile=".\logs\stdout" hostingModel="inprocess">
+        <environmentVariables>
+          <environmentVariable name="ASPNETCORE_ENVIRONMENT" value="Release" />
+        </environmentVariables>
+      </aspNetCore>
+    </system.webServer>
+  </location>
+</configuration>
+EOF
+        cp web.config ./publish-backend/
+        
+        # Create startup script for direct execution
+        echo "Creating startup script..."
+        cat > start.bat << 'EOF'
+@echo off
+echo Starting E-Commerce WebAPI...
+dotnet ECommerce.WebAPI.dll
+pause
+EOF
+        cp start.bat ./publish-backend/
 
 # Alternative SFTP deployment (more reliable than FTP)
 #    - name: Deploy to SFTP
