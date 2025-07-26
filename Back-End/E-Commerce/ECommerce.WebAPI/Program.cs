@@ -16,7 +16,7 @@ builder.Configuration
     .AddEnvironmentVariables();
 
 Console.WriteLine($"🚀 Application starting in {environment} environment");
-Console.WriteLine($"📁 Configuration files: appsettings.json, appsettings.{environment}.json"); 
+Console.WriteLine($"📁 Configuration files: appsettings.json, appsettings.{environment}.json");
 
 // Add services to the container.
 
