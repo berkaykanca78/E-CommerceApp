@@ -26,7 +26,7 @@ jobs:
       run: dotnet build Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj --no-restore --configuration Release --runtime win-x64
 
     - name: Publish
-      run: dotnet publish Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj --no-build --configuration Release --output ./publish-backend --self-contained true --runtime win-x64 --verbosity normal
+      run: dotnet publish Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj --no-build --configuration Release --output ./publish-backend --self-contained true --runtime win-x64 --verbosity normal --publish-single-file false
 
     - name: List published files
       run: |
@@ -52,6 +52,13 @@ jobs:
         
         echo "DB_SERVER env var: $DB_SERVER"
         
+        # Ensure backslash is preserved in connection string
+        # If DB_SERVER doesn't start with \\, add it
+        if [[ ! "$DB_SERVER" =~ ^\\\\ ]]; then
+          export DB_SERVER="\\\\$DB_SERVER"
+          echo "Added backslash prefix: $DB_SERVER"
+        fi
+        
         echo "Replacing placeholders in appsettings.Release.json..."
         # Simple string replacement with proper escaping
         sed -i "s|\$(DB_SERVER)|$DB_SERVER|g" appsettings.Release.json
@@ -75,6 +82,9 @@ jobs:
         cat appsettings.Release.json | grep -A 1 "ConnectionStrings"
         echo "appsettings.json:"
         cat appsettings.json | grep -A 1 "ConnectionStrings"
+        
+        echo "Full connection string for debugging:"
+        cat appsettings.Release.json | grep -A 5 "ConnectionStrings"
 
 # Alternative SFTP deployment (more reliable than FTP)
 #    - name: Deploy to SFTP
