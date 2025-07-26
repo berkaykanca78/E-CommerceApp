@@ -46,27 +46,13 @@ jobs:
         cd ./publish-backend
         echo "Original DB_SERVER value: ${{ secrets.DB_SERVER }}"
         
-        # Set environment variables with proper escaping
+        # Set environment variables directly from secrets
         export DB_SERVER="${{ secrets.DB_SERVER }}"
         export DB_NAME="${{ secrets.DB_NAME }}"
         export DB_USER="${{ secrets.DB_USER }}"
         export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
         
-        echo "DB_SERVER env var: $DB_SERVER"
-        
-        # Ensure backslash is preserved in connection string
-        # If DB_SERVER doesn't start with \\, add it
-        if [[ ! "$DB_SERVER" =~ ^\\\\ ]]; then
-          export DB_SERVER="\\\\$DB_SERVER"
-          echo "Added backslash prefix: $DB_SERVER"
-        fi
-        
-        echo "Original DB_SERVER from secrets: '$DB_SERVER'"
-        
-        # Extract IP from secrets or use default
-        IP_PART=$(echo "$DB_SERVER" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+')
-        export DB_SERVER="${IP_PART}\\\\MSSQLSERVER2022"
-        echo "Final DB_SERVER format: '$DB_SERVER'"
+        echo "DB_SERVER from secrets: '$DB_SERVER'"
         
         echo "Replacing placeholders in appsettings.Release.json..."
         # Use perl for better backslash handling
