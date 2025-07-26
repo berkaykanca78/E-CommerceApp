@@ -49,11 +49,6 @@ jobs:
         echo "appsettings.json:"
         cat appsettings.json | grep -A 1 "ConnectionStrings"
 
-    - name: Wait before deployment
-      run: |
-        echo "Waiting 10 seconds before deployment to avoid file conflicts..."
-        sleep 10
-
 # Alternative SFTP deployment (more reliable than FTP)
 #    - name: Deploy to SFTP
 #      uses: wlixcc/SFTP-Deploy-Action@v1.2.4
@@ -80,9 +75,7 @@ jobs:
           **/.git*/**
           **/node_modules/**
           **/Thumbs.db
-        dangerous-clean-slate: false
         timeout: 300000
-        log-level: verbose
       continue-on-error: true
 
     - name: Deploy to FTP (Attempt 2)
@@ -101,9 +94,7 @@ jobs:
           **/.git*/**
           **/node_modules/**
           **/Thumbs.db
-        dangerous-clean-slate: false
         timeout: 300000
-        log-level: verbose
       continue-on-error: true
 
     - name: Deploy to FTP (Final Attempt)
@@ -121,9 +112,7 @@ jobs:
           **/.git*/**
           **/node_modules/**
           **/Thumbs.db
-        dangerous-clean-slate: false
         timeout: 300000
-        log-level: verbose
 
   deploy-frontend:
     runs-on: ubuntu-latest
@@ -147,11 +136,6 @@ jobs:
       run: npm run build:prod
       working-directory: Front-End/e-commerce-app
 
-    - name: Wait before deployment
-      run: |
-        echo "Waiting 10 seconds before deployment to avoid file conflicts..."
-        sleep 10
-
     - name: Deploy to FTP (Attempt 1)
       id: deploy-frontend-attempt-1
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
@@ -167,9 +151,7 @@ jobs:
           **/.git*/**
           **/node_modules/**
           **/Thumbs.db
-        dangerous-clean-slate: false
         timeout: 300000
-        log-level: verbose
       continue-on-error: true
 
     - name: Deploy to FTP (Attempt 2)
@@ -188,9 +170,7 @@ jobs:
           **/.git*/**
           **/node_modules/**
           **/Thumbs.db
-        dangerous-clean-slate: false
         timeout: 300000
-        log-level: verbose
       continue-on-error: true
 
     - name: Deploy to FTP (Final Attempt)
@@ -208,6 +188,4 @@ jobs:
           **/.git*/**
           **/node_modules/**
           **/Thumbs.db
-        dangerous-clean-slate: false
-        timeout: 300000
-        log-level: verbose 
+        timeout: 300000 
