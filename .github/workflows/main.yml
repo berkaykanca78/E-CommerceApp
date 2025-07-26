@@ -20,38 +20,48 @@ jobs:
         dotnet-version: '9.0.x'
 
     - name: Restore dependencies
-      run: dotnet restore Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj --runtime linux-x64
+      run: dotnet restore Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj
 
     - name: Build
-      run: dotnet build Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj --no-restore --configuration Release --runtime linux-x64
+      run: dotnet build Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj --no-restore --configuration Release
 
     - name: Publish
-      run: dotnet publish Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj --no-build --configuration Release --output ./publish-backend --self-contained true --runtime linux-x64 --verbosity normal
+      run: dotnet publish Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj --no-build --configuration Release --output ./publish-backend --verbosity normal
 
     - name: List published files
       run: |
         echo "Published files:"
         ls -la ./publish-backend/
-        echo "Executable files:"
-        find ./publish-backend -name "*.exe" -o -name "*.dll" | head -10
+        echo "Main executable:"
+        find ./publish-backend -name "ECommerce.WebAPI*" -type f | head -5
+        echo "DLL files:"
+        find ./publish-backend -name "*.dll" | head -5
 
     - name: Replace connection string placeholders
       run: |
         cd ./publish-backend
+        echo "Original DB_SERVER value: ${{ secrets.DB_SERVER }}"
+        
+        # Set environment variables with proper escaping
+        export DB_SERVER="${{ secrets.DB_SERVER }}"
+        export DB_NAME="${{ secrets.DB_NAME }}"
+        export DB_USER="${{ secrets.DB_USER }}"
+        export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
+        
+        echo "DB_SERVER env var: $DB_SERVER"
+        
         echo "Replacing placeholders in appsettings.Release.json..."
-        # Use a different delimiter for sed to handle backslashes properly
-        # Escape backslashes in the replacement string
-        DB_SERVER_ESCAPED=$(echo "${{ secrets.DB_SERVER }}" | sed 's/\\/\\\\/g')
-        sed -i "s|\$(DB_SERVER)|$DB_SERVER_ESCAPED|g" appsettings.Release.json
-        sed -i 's|\$(DB_NAME)|${{ secrets.DB_NAME }}|g' appsettings.Release.json
-        sed -i 's|\$(DB_USER)|${{ secrets.DB_USER }}|g' appsettings.Release.json
-        sed -i 's|\$(DB_PASSWORD)|${{ secrets.DB_PASSWORD }}|g' appsettings.Release.json
+        # Simple string replacement with proper escaping
+        sed -i "s|\$(DB_SERVER)|$DB_SERVER|g" appsettings.Release.json
+        sed -i "s|\$(DB_NAME)|$DB_NAME|g" appsettings.Release.json
+        sed -i "s|\$(DB_USER)|$DB_USER|g" appsettings.Release.json
+        sed -i "s|\$(DB_PASSWORD)|$DB_PASSWORD|g" appsettings.Release.json
         
         echo "Replacing placeholders in appsettings.json..."
-        sed -i "s|\$(DB_SERVER)|$DB_SERVER_ESCAPED|g" appsettings.json
-        sed -i 's|\$(DB_NAME)|${{ secrets.DB_NAME }}|g' appsettings.json
-        sed -i 's|\$(DB_USER)|${{ secrets.DB_USER }}|g' appsettings.json
-        sed -i 's|\$(DB_PASSWORD)|${{ secrets.DB_PASSWORD }}|g' appsettings.json
+        sed -i "s|\$(DB_SERVER)|$DB_SERVER|g" appsettings.json
+        sed -i "s|\$(DB_NAME)|$DB_NAME|g" appsettings.json
+        sed -i "s|\$(DB_USER)|$DB_USER|g" appsettings.json
+        sed -i "s|\$(DB_PASSWORD)|$DB_PASSWORD|g" appsettings.json
         
         echo "Connection strings after replacement:"
         echo "appsettings.Release.json:"
