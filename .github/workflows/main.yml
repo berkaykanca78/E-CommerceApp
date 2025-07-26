@@ -20,13 +20,13 @@ jobs:
         dotnet-version: '9.0.x'
 
     - name: Restore dependencies
-      run: dotnet restore Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj
+      run: dotnet restore Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj --runtime linux-x64
 
     - name: Build
-      run: dotnet build Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj --no-restore --configuration Release
+      run: dotnet build Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj --no-restore --configuration Release --runtime linux-x64
 
     - name: Publish
-      run: dotnet publish Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj --no-build --configuration Release --output ./publish-backend --self-contained true --runtime win-x64 --verbosity normal
+      run: dotnet publish Back-End/E-Commerce/ECommerce.WebAPI/ECommerce.WebAPI.csproj --no-build --configuration Release --output ./publish-backend --self-contained true --runtime linux-x64 --verbosity normal
 
     - name: List published files
       run: |
