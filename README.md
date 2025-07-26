@@ -232,7 +232,7 @@ Backend API şu temel endpoint'leri sağlar:
 - **Products Management:** `/dashboard/products`
 - **Categories Management:** `/dashboard/categories`
 
-### Build Komutları
+### Build Komutları 
 ```bash
 # Backend production build
 dotnet publish -c Release -o ./publish
