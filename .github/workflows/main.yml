@@ -32,16 +32,17 @@ jobs:
       run: |
         cd ./publish-backend
         echo "Replacing placeholders in appsettings.Release.json..."
-        sed -i 's/\$(DB_SERVER)/${{ secrets.DB_SERVER }}/g' appsettings.Release.json
-        sed -i 's/\$(DB_NAME)/${{ secrets.DB_NAME }}/g' appsettings.Release.json
-        sed -i 's/\$(DB_USER)/${{ secrets.DB_USER }}/g' appsettings.Release.json
-        sed -i 's/\$(DB_PASSWORD)/${{ secrets.DB_PASSWORD }}/g' appsettings.Release.json
+        # Use a different delimiter for sed to handle backslashes properly
+        sed -i 's|\$(DB_SERVER)|${{ secrets.DB_SERVER }}|g' appsettings.Release.json
+        sed -i 's|\$(DB_NAME)|${{ secrets.DB_NAME }}|g' appsettings.Release.json
+        sed -i 's|\$(DB_USER)|${{ secrets.DB_USER }}|g' appsettings.Release.json
+        sed -i 's|\$(DB_PASSWORD)|${{ secrets.DB_PASSWORD }}|g' appsettings.Release.json
         
         echo "Replacing placeholders in appsettings.json..."
-        sed -i 's/\$(DB_SERVER)/${{ secrets.DB_SERVER }}/g' appsettings.json
-        sed -i 's/\$(DB_NAME)/${{ secrets.DB_NAME }}/g' appsettings.json
-        sed -i 's/\$(DB_USER)/${{ secrets.DB_USER }}/g' appsettings.json
-        sed -i 's/\$(DB_PASSWORD)/${{ secrets.DB_PASSWORD }}/g' appsettings.json
+        sed -i 's|\$(DB_SERVER)|${{ secrets.DB_SERVER }}|g' appsettings.json
+        sed -i 's|\$(DB_NAME)|${{ secrets.DB_NAME }}|g' appsettings.json
+        sed -i 's|\$(DB_USER)|${{ secrets.DB_USER }}|g' appsettings.json
+        sed -i 's|\$(DB_PASSWORD)|${{ secrets.DB_PASSWORD }}|g' appsettings.json
         
         echo "Connection strings after replacement:"
         echo "appsettings.Release.json:"
@@ -68,7 +69,7 @@ jobs:
         username: ${{ secrets.USRNM }}
         password: ${{ secrets.PWD }}
         port: ${{ secrets.PRT }}
-        local-dir: ${{ secrets.BCKNDLCLDIR }}
+        local-dir: ./publish-backend
         server-dir: ${{ secrets.BCKNDSRVRDIR }}
         exclude: |
           **/.git*
@@ -87,7 +88,7 @@ jobs:
         username: ${{ secrets.USRNM }}
         password: ${{ secrets.PWD }}
         port: ${{ secrets.PRT }}
-        local-dir: ${{ secrets.BCKNDLCLDIR }}
+        local-dir: ./publish-backend
         server-dir: ${{ secrets.BCKNDSRVRDIR }}
         exclude: |
           **/.git*
@@ -105,7 +106,7 @@ jobs:
         username: ${{ secrets.USRNM }}
         password: ${{ secrets.PWD }}
         port: ${{ secrets.PRT }}
-        local-dir: ${{ secrets.BCKNDLCLDIR }}
+        local-dir: ./publish-backend
         server-dir: ${{ secrets.BCKNDSRVRDIR }}
         exclude: |
           **/.git*
