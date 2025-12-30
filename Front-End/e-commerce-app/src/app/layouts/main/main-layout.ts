@@ -5,6 +5,7 @@ import { RouterOutlet } from '@angular/router';
 import { Alerts } from '../../components/shared/alerts/alerts';
 import { Navbar } from '../../components/shared/navbar/navbar';
 import { Footer } from '../../components/shared/footer/footer';
+import { SnowEffect } from '../../components/shared/snow-effect/snow-effect';
 
 @Pipe({
   name: 'nl2br'
@@ -18,7 +19,7 @@ export class Nl2brPipe implements PipeTransform {
 
 @Component({
   selector: 'main-layout',
-  imports: [CommonModule, FormsModule, RouterOutlet, Alerts, Navbar, Footer, Nl2brPipe],
+  imports: [CommonModule, FormsModule, RouterOutlet, Alerts, Navbar, Footer, Nl2brPipe, SnowEffect],
   templateUrl: './main-layout.html',
   styleUrls: ['./main-layout.scss']
 })

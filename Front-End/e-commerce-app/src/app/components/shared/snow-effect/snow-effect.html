@@ -1,0 +1,9 @@
+<div class="snow-container">
+  @for (flake of snowflakes; track $index) {
+    <div class="snowflake" 
+         [style.left.%]="flake.left" 
+         [style.animation-delay.s]="flake.delay" 
+         [style.animation-duration.s]="flake.duration"></div>
+  }
+</div>
+
